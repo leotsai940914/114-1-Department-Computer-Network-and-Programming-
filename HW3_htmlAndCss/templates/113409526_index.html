@@ -1,44 +1,53 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <title>113409526_蔡晟郁</title>
-    <link rel="stylesheet" href="../static/css/113409526_css.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>113409526_蔡晟郁</title>
+  <link rel="stylesheet" href="../static/css/113409526_css.css" />
 </head>
 <body>
-    <h1>嗨HTML!我是CHENGYU!</h1>
-    <table border="1">
-        <tr cellpadding="10">
-            <th>照片</th>
-            <th>關於我</th>
-        </tr>
-        <tr>
-            <td>
-                <img src="../static/img/page1/09coy-image-master1050.jpg" alt="我的照片" width="300px">
-            </td>
-            <td>
-                來自嘉義，目前就讀中央經濟大二
-            </td>
-        </tr>
-        <tr>
-            <td>    
-                <img src="../static/img/page1/378a0c33ffde7f3bb1352f4.jpg" alt="我的照片" width="300px">
-            </td>
-            <td>
-                我喜歡慢跑，每次回嘉義沒有一次不慢跑的
-            </td>
-        </tr>
-        <tr>
-            <td>    
-                <img src="../static/img/page1/-qpeemo9of084vuiwkiijcnu9afmgxl2cn0nqa10tts.jpeg" alt="我的照片" width="300px">
-            </td>
-            <td>
-                我喜歡HYBS，一組世界知名的雙人Rnb團體，因為他們的歌聲很有特色，圖為他們的最佳專輯
-            </td>  
-        </tr> 
-    </table> 
-    <p>
-        <a href="113409526_detail.html">點我看更多關於我的資訊</a>
-    </p>
+  <h1>嗨 HTML！我是 CHENGYU！</h1>
+
+  <!-- 自我介紹 table（每列的圖片＋文字共用一個連結） -->
+  <table border="1" cellpadding="10">
+    <thead>
+      <tr>
+        <th>照片</th>
+        <th>關於我</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 第 1 列：把圖片與文字一起放在同一個 <td>，用 a 包起來 -->
+      <tr>
+        <td colspan="2">
+          <a href="113409526_detail.html" class="intro-link">
+            <img src="../static/img/page1/09coy-image-master1050.jpg" alt="我的照片" width="300" />
+            <p>來自嘉義，目前就讀中央經濟大二</p>
+          </a>
+        </td>
+      </tr>
+
+      <!-- 第 2 列 -->
+      <tr>
+        <td colspan="2">
+          <a href="113409526_detail.html" class="intro-link">
+            <img src="../static/img/page1/378a0c33ffde7f3bb1352f4.jpg" alt="我在慢跑" width="300" />
+            <p>我喜歡慢跑，每次回嘉義沒有一次不慢跑的</p>
+          </a>
+        </td>
+      </tr>
+
+      <!-- 第 3 列 -->
+      <tr>
+        <td colspan="2">
+          <a href="113409526_detail.html" class="intro-link">
+            <img src="../static/img/page1/-qpeemo9of084vuiwkiijcnu9afmgxl2cn0nqa10tts.jpeg" alt="HYBS 最佳專輯封面" width="300" />
+            <p>我喜歡 HYBS（雙人 R&amp;B 團體），他們的歌聲很有特色，圖為最佳專輯</p>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </body>
 </html>
