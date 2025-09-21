@@ -35,6 +35,37 @@
         <li>HYBS 的音樂常常探討情感、關係和個人成長等主題，讓聽眾能夠產生共鳴。</li>
     </ul>
 
+    <h2>📝 請幫我填寫歌曲回饋表單</h2>
 
+    <form action="113409526_index.html" method="get">
+        <label for="mood">你聽這首歌時的心情是？</label><br>
+        <select id="mood" name="mood">
+            <option value="happy">開心</option>
+            <option value="relax">放鬆</option>
+            <option value="nostalgic">懷舊</option>
+            <option value="energetic">有活力</option>
+        </select><br><br>
+
+    <p>你會推薦這首歌給朋友嗎？</p>
+    <input type="radio" id="yes" name="recommend" value="yes">
+    <label for="yes">會</label><br>
+    <input type="radio" id="no" name="recommend" value="no">
+    <label for="no">不會</label><br><br>
+
+    <p>你喜歡這首歌的哪些部分？（可複選）</p>
+    <input type="checkbox" id="melody" name="like[]" value="melody">
+    <label for="melody">旋律</label><br>
+    <input type="checkbox" id="lyrics" name="like[]" value="lyrics">
+    <label for="lyrics">歌詞</label><br>
+    <input type="checkbox" id="vocal" name="like[]" value="vocal">
+    <label for="vocal">主唱</label><br>
+    <input type="checkbox" id="beat" name="like[]" value="beat">
+    <label for="beat">節奏</label><br><br>
+
+    <label for="comment">你的其他想法：</label><br>
+    <textarea id="comment" name="comment" rows="4" cols="50" placeholder="歡迎留言..."></textarea><br><br>
+
+    <button type="submit">送出回饋</button>
+</form>
 </body>
 </html>
