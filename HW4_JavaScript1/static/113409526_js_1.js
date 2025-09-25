@@ -8,11 +8,26 @@
     let answer = Math.floor(Math.random() * 101);//產生 0 到 100 的整數
     console.log("答案", answer); //先印出答案在 console
 
+
     //監聽表單送出事件
     form.addEventListener("submit", (e) => {
         e.preventDefault(); //防止表單送出後頁面重新整理
 
-        const val = input.value; //取得輸入的數字
+        const valStr = input.value.trim(); //取得輸入的字串
+        const val = Number(valStr); //轉成數字
+
+        if (valStr === "" || Number.isNaN(val)) {
+            alert("請輸入數字"); //如果不是數字就跳警告視窗
+            return; //結束函式
+        }
+        if (val === answer) {
+            alert("恭喜你答對了!"); //答對就跳出恭喜視窗
+        }   else if (val < answer) {
+            alert("太小了!"); //比答案小就跳出太小視窗
+        }   else {
+            alert("太大了!"); //比答案大就跳出太大視窗
+        }
+
         console.log("你輸入的是", val); //印出輸入的數字在 console
     });
 
