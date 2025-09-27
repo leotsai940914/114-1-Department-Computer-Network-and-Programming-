@@ -19,6 +19,19 @@
             }   
     }
 
+    //等 dom 準備好再綁事件
+    window.addEventListener('DOMContentLoaded', () => {
+        const display = document.getElementById('display');
+        const buttons = document.querySelectorAll('.btn');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const val = btn.getAttribute('data-val');
+                display.value += val;
+            });
+        });
+    });
+
     
     
 })();
