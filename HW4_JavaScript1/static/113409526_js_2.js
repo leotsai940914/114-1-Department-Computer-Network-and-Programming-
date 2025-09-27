@@ -9,6 +9,7 @@
         </div>
     `);
 
+
     //迴圈生成0-9按鈕
     for (let i = 0; i <=9; i++) {
         document.write(`
@@ -19,6 +20,15 @@
             }   
     }
 
+    document.write("<br/>"); //數字按鈕和功能按鈕間隔一行
+
+    //功能按鈕
+    const ops = ['+', '-', '*', '/', '(',')', '=', 'C'];
+    for (let op of ops) {
+        document.write(`
+            <button class="btn" data-val="${op}">${op}</button>`);
+    }
+
     //等 dom 準備好再綁事件
     window.addEventListener('DOMContentLoaded', () => {
         const display = document.getElementById('display');
@@ -27,11 +37,27 @@
         buttons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const val = btn.getAttribute('data-val');
-                display.value += val;
+
+                if (val === 'C') {
+                    display.value = '';//清除
+                }   else if (val === '=') {
+                    try {
+                        const expr = display.value;
+                        const result = eval(expr);  //計算結果
+                        alert(`${expr} = ${result}`);
+                        display.value = result; //顯示結果
+                    } catch (e) {
+                        alert('錯誤的運算式');
+                        display.value = '';
+                    }
+                }else {
+                    display.value += val; //顯示按鈕值
+                }
             });
         });
     });
 
+        
     
-    
+
 })();
