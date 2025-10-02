@@ -50,7 +50,7 @@
         if (val === answer) {
             stopTimer(); //停止計時
 
-            alert(`恭喜你答對了!你共猜了 ${tries} 次，耗時 ${elapsedTime} \n下一題，繼續挑戰!`); //答對就跳出恭喜視窗
+            alert(`恭喜你答對了!你共猜了 ${tries} 次，耗時 ${elapsedTime}秒 \n下一題，繼續挑戰!`); //答對就跳出恭喜視窗
            
             //重設遊戲
             answer = Math.floor(Math.random() * 101); //產生新答案
@@ -59,12 +59,15 @@
             input.value = ""; //清空輸入框
             $("#timer").textContent = "時間:0 秒"; //重設時間顯示
             elapsedTime = 0; //重設經過時間
+            $("#hint").textContent = ""; //清空提示文字
             console.log("答案", answer); //印出新答案在 console
             
-        }   else if (val < answer) {
-            alert("太小了!"); //比答案小就跳出太小視窗
-        }   else {
-            alert("太大了!"); //比答案大就跳出太大視窗
+        }   
+        else if (val < answer) {
+            $("#hint").textContent = "太小了!"; //比答案小就跳出太小視窗
+        }   
+        else {
+            $("#hint").textContent = "太大了!"; //比答案大就跳出太大視窗
         }
 
         input.focus(); //讓輸入框重新取得焦點
