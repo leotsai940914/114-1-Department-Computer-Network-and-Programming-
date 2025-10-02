@@ -9,6 +9,23 @@
     let answer = Math.floor(Math.random() * 101);//產生 0 到 100 的整數
     let tries = 0; //記住輸入的次數
 
+    let startTime = null;
+    let timerID = null;
+    let elapsedTime = 0;
+    
+    function startTimer() {
+        startTime = Date.now();
+        timerID = setInterval(() => {
+            elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            $("#timer").textContent = "時間:" + elapsedTime + " 秒";
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerID);
+        timerID = null;
+    }
+
     console.log("答案", answer); //先印出答案在 console
 
     //監聽表單送出事件
@@ -21,6 +38,10 @@
         if (valStr === "" || Number.isNaN(val)) {
             alert("請輸入數字"); //如果不是數字就跳警告視窗
             return; //結束函式
+        }
+
+        if (tries === 0) {
+            startTimer(); //開始計時
         }
 
         tries += 1; //輸入次數 +1
