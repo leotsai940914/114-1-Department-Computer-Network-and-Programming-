@@ -52,6 +52,11 @@
 
             alert(`恭喜你答對了!你共猜了 ${tries} 次，耗時 ${elapsedTime}秒 \n下一題，繼續挑戰!`); //答對就跳出恭喜視窗
            
+            const record = document.createElement("div");
+            const now = new Date().toLocaleTimeString();
+            record.textContent = `次數: ${tries}，耗時: ${elapsedTime} 秒，時間: ${now}`;
+            $("#records").appendChild(record); //把紀錄加到 records 裡面
+
             //重設遊戲
             answer = Math.floor(Math.random() * 101); //產生新答案
             tries = 0; //重設輸入次數
