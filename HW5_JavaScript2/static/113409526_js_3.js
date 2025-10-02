@@ -48,12 +48,17 @@
         triesEl.textContent = String(tries); //更新畫面上的輸入次數
 
         if (val === answer) {
-            alert(`恭喜你答對了!你共猜了 ${tries} 次 \n下一題，繼續挑戰!`); //答對就跳出恭喜視窗
+            stopTimer(); //停止計時
+
+            alert(`恭喜你答對了!你共猜了 ${tries} 次，耗時 ${elapsedTime} \n下一題，繼續挑戰!`); //答對就跳出恭喜視窗
+           
             //重設遊戲
             answer = Math.floor(Math.random() * 101); //產生新答案
             tries = 0; //重設輸入次數
             triesEl.textContent = "0"; //更新畫面上的輸入次數
             input.value = ""; //清空輸入框
+            $("#timer").textContent = "時間:0 秒"; //重設時間顯示
+            elapsedTime = 0; //重設經過時間
             console.log("答案", answer); //印出新答案在 console
             
         }   else if (val < answer) {
