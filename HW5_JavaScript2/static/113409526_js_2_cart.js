@@ -7,11 +7,7 @@
   const master = $("#checkbox_all");
   const itemCheckboxes = $$(".item-checkbox");
 
-  const rows = document.querySelectorAll(".item-row");
-
-
-  //calculate the total price
-  function calcTotal(){
+  function calcTotal() {
     let total = 0;
     $$(".item-row").forEach((row) => {
       const price = Number(row.querySelector(".item-price").textContent);
@@ -19,8 +15,6 @@
       const subtotal = price * qty;
       row.querySelector(".subtotal").textContent = subtotal;
 
-
-      //only selected number would be calculated into total
       if (row.querySelector(".item-checkbox").checked) {
         total += subtotal;
       }
@@ -28,7 +22,6 @@
     $("#total").textContent = total;
   }
 
-  //master checkbox control all item checkboxes
   master.addEventListener("change", (e) => {
     const checked = e.target.checked;
     itemCheckboxes.forEach((cb) => (cb.checked = checked));
@@ -39,24 +32,21 @@
     cb.addEventListener("change", () => {
       const total = itemCheckboxes.length;
       const checkedCount = itemCheckboxes.filter(cb => cb.checked).length;
-
       master.checked = (checkedCount === total);
       master.indeterminate = (checkedCount > 0 && checkedCount < total);
       calcTotal();
     });  
   });
 
-  //quantity change
   $$(".item-row").forEach((row) => {
     const plusBtn = row.querySelector(".plus");
     const minusBtn = row.querySelector(".minus");
     const qtyInput = row.querySelector(".qty");
-    const stock = Number(row.querySelector(".item-stock").textContent);
-
 
     plusBtn.addEventListener("click", () => {
+      const currentStock = Number(row.querySelector(".item-stock").textContent);
       let qty = Number(qtyInput.value);
-      if (qty < stock) {
+      if (qty < currentStock) {
         qtyInput.value = qty + 1;
         calcTotal();
       }
@@ -72,42 +62,30 @@
 
     qtyInput.addEventListener("blur", () => {
       let qty = Number(qtyInput.value);
-
+      const currentStock = Number(row.querySelector(".item-stock").textContent);
       if (isNaN(qty) || qty < 1) qty = 1;
-      if (qty > stock) qty = stock;
-
+      if (qty > currentStock) qty = currentStock;
       qtyInput.value = qty;
       calcTotal();
     });
 
-
-    document.querySelector("#checkout").addEventListener("click",() => {
-      const totalText = document.querySelector("#total").textContent;
-      const total = Number(totalText);
-
-      if  (total <= 0){
-        return;
-      };
-            
-    })
-
     qtyInput.addEventListener("input", () => {
       let qty = Number(qtyInput.value);
+      const currentStock = Number(row.querySelector(".item-stock").textContent);
       if (isNaN(qty) || qty < 0) qty = 0;
-      if (qty > stock) qty = stock;
+      if (qty > currentStock) qty = currentStock;
       qtyInput.value = qty;
       calcTotal();
     });
   });
-  
-  calcTotal();
-  document.querySelector("#checkout").addEventListener("click", () => {
-    const total = Number(document.querySelector("#total").textContent);
+
+  $("#checkout").addEventListener("click", () => {
+    const total = Number($("#total").textContent);
     if (total <= 0) return;
 
     let details = "";
 
-    document.querySelectorAll(".item-row").forEach((row) => {
+    $$(".item-row").forEach((row) => {
       const checkbox = row.querySelector(".item-checkbox");
       if (!checkbox.checked) return;
 
@@ -118,7 +96,6 @@
       const subtotal = price * qty;
 
       details += `📦 ${name}\n數量: ${qty} x 價格: ${price} = 小計: ${subtotal}\n\n`;
-    
 
       checkbox.checked = false;
 
@@ -135,13 +112,15 @@
         qtyInput.disabled = true;
       }
     });
-    const master = document.querySelector("#checkbox_all");
+
     master.checked = false;
     master.indeterminate = false;
 
     details += `🧾 總金額：${total}`;
     alert(details);
+    calcTotal(); // 重新計算
   });
 
-
+  calcTotal();
 })();
+
