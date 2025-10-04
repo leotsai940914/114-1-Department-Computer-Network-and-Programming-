@@ -27,8 +27,22 @@
   }
 
   //master checkbox control all item checkboxes
-  
+  master.addEventListener("change", () => {
+    const checked = e.target.checked;
+    itemCheckboxes.forEach((cb) => (cb.checked = checked));
+    calcTotal();
+  });
 
+  itemCheckboxes.forEach(cb => {
+    cb.addEventListener("change", () => {
+      const total = itemCheckboxes.length;
+      const checkedCount = itemCheckboxes.filter(cb => cb.checked).length;
 
+      master.checked = (checkedCount === total);
+      master.indeterminate = (checkedCount > 0 && checkedCount < total);
+      calcTotal();
+    });  
+  });
 
-}
+  calcTotal();
+})();
