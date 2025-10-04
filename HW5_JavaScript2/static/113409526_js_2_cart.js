@@ -60,13 +60,22 @@
       }
     });
 
-     minusBtn.addEventListener("click", () => {
+    minusBtn.addEventListener("click", () => {
       let qty = Number(qtyInput.value);
       if (qty > 0) {
         qtyInput.value = qty - 1;
         calcTotal();
       }
     });
+
+    document.querySelector("#checkout").addEventListener("click",() => {
+      const totalText = document.querySelector("#total").textContent;
+      const total = Number(totalText);
+
+      if  (total <= 0){
+        return;
+      }
+    })
 
     qtyInput.addEventListener("input", () => {
       let qty = Number(qtyInput.value);
