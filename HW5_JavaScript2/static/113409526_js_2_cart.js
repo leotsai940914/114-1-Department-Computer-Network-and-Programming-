@@ -107,26 +107,26 @@
       const subtotal = price * qty;
 
       details += `📦 ${name}\n數量: ${qty} x 價格: ${price} = 小計: ${subtotal}\n\n`;
-    });
-
-    checkbox.checked = false;
-
-    const stockEl = row.querySelector(".item-stock");
-    let stock = Number(stockEl.textContent);
-    stock = Math.max(0, stock - qty);
-    stockEl.textContent = stock;
-
-    if (stock > 0) {
-      qtyInput.value = 1;
-      qtyInput.disabled = false;
-    } else {
-      qtyInput.value = 0;
-      qtyInput.disabled = true;
-    }
-  });
-
     
 
+      checkbox.checked = false;
+
+      const stockEl = row.querySelector(".item-stock");
+      let stock = Number(stockEl.textContent);
+      stock = Math.max(0, stock - qty);
+      stockEl.textContent = stock;
+
+      if (stock > 0) {
+        qtyInput.value = 1;
+        qtyInput.disabled = false;
+      } else {
+        qtyInput.value = 0;
+        qtyInput.disabled = true;
+      }
+    });
+    const master = document.querySelector("#checkbox_all");
+    master.checked = false;
+    master.indeterminate = false;
 
     details += `🧾 總金額：${total}`;
     alert(details);
