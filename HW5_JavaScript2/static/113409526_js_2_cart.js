@@ -64,11 +64,22 @@
 
     minusBtn.addEventListener("click", () => {
       let qty = Number(qtyInput.value);
-      if (qty > 0) {
+      if (qty > 1) {
         qtyInput.value = qty - 1;
         calcTotal();
       }
     });
+
+    qtyInput.addEventListener("blur", () => {
+      let qty = Number(qtyInput.value);
+
+      if (isNaN(qty) || qty < 1) qty = 1;
+      if (qty > stock) qty = stock;
+
+      qtyInput.value = qty;
+      calcTotal();
+    });
+
 
     document.querySelector("#checkout").addEventListener("click",() => {
       const totalText = document.querySelector("#total").textContent;
