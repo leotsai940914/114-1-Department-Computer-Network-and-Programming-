@@ -44,5 +44,38 @@
     });  
   });
 
+  //quantity change
+  $$(".item-row").forEach((row) => {
+    const plusBtn = row.querySelector(".plus");
+    const minusBtn = row.querySelector(".minus");
+    const qtyInput = row.querySelector(".qty");
+    const stock = Number(row.querySelector(".item-stock").textContent);
+
+
+    plusBtn.addEventListener("click", () => {
+      let qty = Number(qtyInput.value);
+      if (qty < stock) {
+        qtyInput.value = qty + 1;
+        calcTotal();
+      }
+    });
+
+     minusBtn.addEventListener("click", () => {
+      let qty = Number(qtyInput.value);
+      if (qty > 0) {
+        qtyInput.value = qty - 1;
+        calcTotal();
+      }
+    });
+
+    qtyInput.addEventListener("input", () => {
+      let qty = Number(qtyInput.value);
+      if (isNaN(qty) || qty < 0) qty = 0;
+      if (qty > stock) qty = stock;
+      qtyInput.value = qty;
+      calcTotal();
+    });
+  });
+  
   calcTotal();
 })();
