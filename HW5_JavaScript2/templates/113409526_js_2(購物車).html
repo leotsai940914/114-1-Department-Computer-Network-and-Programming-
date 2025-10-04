@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>購物車</title>
+  <link rel="stylesheet" href="../113409526_js_2(購物車).css">
+  <script defer src="../113409526_js_2(購物車).js"></script>
+</head>
+<body>
+  <h1>化學老師選貨店</h1>
 
+  <table class="cart">
+    <thead>
+      <tr>
+        <th>商品名稱</th>
+        <th>商品庫存</th>
+        <th>單價</th>
+        <th>數量</th>
+        <th>小計</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="item-row">
+        <td><input type="checkbox" class="item-checkbox"></td>
+        <td>
+          <img src="../static/img/1280px-Opium_poppy-800x600.jpg" width="80">
+          特選南亞多肉植物
+        </td>
+        <td class="item-stock">18</td>
+        <td class="item-price">9890</td>
+        <td>
+          <button class="minus">-</button>
+          <input type="text" class="qty" value="0">
+          <button class="plus">+</button>
+        </td> 
+        <td class="subtotal">0</td>
+      </tr>
+      <tr class="item-row">
+        <td><input type="checkbox" class="item-checkbox"></td>
+        <td>
+          <img src="../static/img/739-1_cbd-hemp-seeds-3pcs.webp" width="80">
+          美洲進口室內美化植栽
+        </td>
+        <td class="item-stock">67</td>
+        <td class="item-price">1198</td>
+        <td>
+          <button class="minus">-</button>
+          <input type="text" class="qty" value="0">
+          <button class="plus">+</button>
+        </td> 
+        <td class="subtotal">0</td>
+      </tr>
+      <tr class="item-row">
+        <td><input type="checkbox" class="item-checkbox"></td>
+        <td>
+          <img src="../static/img/d3153592.gif" width="80">
+          化學老師精釀美味冰糖
+        </td>
+        <td class="item-stock">7</td>
+        <td class="item-price">19880</td>
+        <td>
+          <button class="minus">-</button>
+          <input type="text" class="qty" value="0">
+          <button class="plus">+</button>
+        </td> 
+        <td class="subtotal">0</td>
+      </tr>
+  </table>
+
+  <div class="summary">
+    total: <span id="total">0</span>
+    <button id="checkout">結帳</button>
+  </div>
+</body>
+</html>
