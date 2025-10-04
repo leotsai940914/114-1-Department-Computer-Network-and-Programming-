@@ -7,6 +7,8 @@
   const master = $("#checkbox_all");
   const itemCheckboxes = $$(".item-checkbox");
 
+  const rows = document.querySelectorAll(".item-row");
+
 
   //calculate the total price
   function calcTotal(){
@@ -74,7 +76,8 @@
 
       if  (total <= 0){
         return;
-      }
+      };
+            
     })
 
     qtyInput.addEventListener("input", () => {
@@ -87,4 +90,27 @@
   });
   
   calcTotal();
+  document.querySelector("#checkout").addEventListener("click", () => {
+    const total = Number(document.querySelector("#total").textContent);
+    if (total <= 0) return;
+
+    let details = "";
+
+    document.querySelectorAll(".item-row").forEach((row) => {
+      const checkbox = row.querySelector(".item-checkbox");
+      if (!checkbox.checked) return;
+
+      const name = row.querySelector("td:nth-child(2)").innerText.trim();
+      const price = Number(row.querySelector(".item-price").textContent);
+      const qty = Number(row.querySelector(".qty").value);
+      const subtotal = price * qty;
+
+      details += `📦 ${name}\n數量: ${qty} x 價格: ${price} = 小計: ${subtotal}\n\n`;
+    });
+
+    details += `🧾 總金額：${total}`;
+    alert(details);
+  });
+
+
 })();
