@@ -110,11 +110,22 @@
     });
 
     checkbox.checked = false;
-    
+
     const stockEl = row.querySelector(".item-stock");
     let stock = Number(stockEl.textContent);
     stock = Math.max(0, stock - qty);
     stockEl.textContent = stock;
+
+    if (stock > 0) {
+      qtyInput.value = 1;
+      qtyInput.disabled = false;
+    } else {
+      qtyInput.value = 0;
+      qtyInput.disabled = true;
+    }
+  });
+
+    
 
 
     details += `🧾 總金額：${total}`;
