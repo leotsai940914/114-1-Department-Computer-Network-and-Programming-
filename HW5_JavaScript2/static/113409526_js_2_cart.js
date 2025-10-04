@@ -102,11 +102,20 @@
 
       const name = row.querySelector("td:nth-child(2)").innerText.trim();
       const price = Number(row.querySelector(".item-price").textContent);
-      const qty = Number(row.querySelector(".qty").value);
+      const qtyInput = row.querySelector(".qty");
+      const qty = Number(qtyInput.value);
       const subtotal = price * qty;
 
       details += `📦 ${name}\n數量: ${qty} x 價格: ${price} = 小計: ${subtotal}\n\n`;
     });
+
+    checkbox.checked = false;
+    
+    const stockEl = row.querySelector(".item-stock");
+    let stock = Number(stockEl.textContent);
+    stock = Math.max(0, stock - qty);
+    stockEl.textContent = stock;
+
 
     details += `🧾 總金額：${total}`;
     alert(details);
