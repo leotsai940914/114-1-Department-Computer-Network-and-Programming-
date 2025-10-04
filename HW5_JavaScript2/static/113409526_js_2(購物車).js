@@ -5,7 +5,7 @@
   const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
   const master = $("#checkbox_all");
-  const itemCheckboxes = $$(".item_checkbox");
+  const itemCheckboxes = $$(".item-checkbox");
 
 
   //calculate the total price
@@ -13,9 +13,9 @@
     let total = 0;
     $$(".item-row").forEach((row) => {
       const price = Number(row.querySelector(".item-price").textContent);
-      const qty = Number(row.querySelector(".item-qty").value);
+      const qty = Number(row.querySelector(".qty").value);
       const subtotal = price * qty;
-      row.querySelector(".item-checkbox").textContent = subtotal;
+      row.querySelector(".subtotal").textContent = subtotal;
 
 
       //only selected number would be calculated into total
@@ -27,7 +27,7 @@
   }
 
   //master checkbox control all item checkboxes
-  master.addEventListener("change", () => {
+  master.addEventListener("change", (e) => {
     const checked = e.target.checked;
     itemCheckboxes.forEach((cb) => (cb.checked = checked));
     calcTotal();
