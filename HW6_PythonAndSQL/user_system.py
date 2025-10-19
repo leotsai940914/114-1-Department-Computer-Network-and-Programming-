@@ -26,19 +26,19 @@ def validate_email(email: str) -> bool:
 def validate_password(pw: str) -> bool:
     # 至少 8 字、含大小寫、特殊字元、不能連號
     if len(pw) < 8:
-        print("❌ 密碼必須超過 8 個字元")
+        print("密碼必須超過 8 個字元")
         return False
     if not re.search(r'[A-Z]', pw):
-        print("❌ 密碼需包含大寫英文字母")
+        print("密碼需包含大寫英文字母")
         return False
     if not re.search(r'[a-z]', pw):
-        print("❌ 密碼需包含小寫英文字母")
+        print("密碼需包含小寫英文字母")
         return False
     if not re.search(r'[^A-Za-z0-9]', pw):
-        print("❌ 密碼需包含至少一個特殊字元")
+        print("密碼需包含至少一個特殊字元")
         return False
     if re.search(r'(123|234|345|456|567|678|789|abc|bcd|cde)', pw.lower()):
-        print("❌ 密碼不可包含連號（如123、abc）")
+        print("密碼不可包含連號（如123、abc）")
         return False
     return True
 
@@ -48,7 +48,7 @@ def sign_up():
 
     name = input("請輸入姓名：").strip()
     while not name:
-        name = input("❌ 姓名不可為空，請重新輸入：").strip()
+        name = input("姓名不可為空，請重新輸入：").strip()
 
     # 驗證 Email
     while True:
@@ -68,7 +68,7 @@ def sign_up():
     print(f"\nsave {name} | {email} | {password} | Y / N ?")
     confirm = input("是否儲存？(Y/N)：").upper()
     if confirm != "Y":
-        print("🚫 已取消註冊。返回主選單。\n")
+        print("已取消註冊。返回主選單。\n")
         conn.close()
         return
 
@@ -77,15 +77,15 @@ def sign_up():
     exists = cursor.fetchone()
 
     if exists:
-        update = input("⚠️ 此 Email 已存在，是否更新此 Email 資訊？(Y/N)：").upper()
+        update = input("此 Email 已存在，是否更新此 Email 資訊？(Y/N)：").upper()
         if update == "Y":
             cursor.execute("UPDATE users SET name=?, password=? WHERE email=?", (name, password, email))
-            print("✅ 使用者資料已更新成功！")
+            print("使用者資料已更新成功！")
         else:
-            print("🚫 已取消更新。返回主選單。")
+            print("已取消更新。返回主選單。")
     else:
         cursor.execute("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", (name, email, password))
-        print("✅ 新使用者已註冊成功！")
+        print("新使用者已註冊成功！")
 
     conn.commit()
     conn.close()
@@ -102,7 +102,7 @@ def sign_in():
     user = cursor.fetchone()
 
     if not user:
-        print("⚠️ 名字或 Email 錯誤。")
+        print("名字或 Email 錯誤。")
         conn.close()
         return
 
@@ -113,13 +113,13 @@ def sign_in():
         stored_pw = cursor.fetchone()[0]
 
         if password == stored_pw:
-            print("✅ 登入成功！\n")
+            print("登入成功！\n")
             break
         else:
-            print("❌ 密碼錯誤。忘記密碼？(Y/N)")
+            print("密碼錯誤。忘記密碼？(Y/N)")
             choice = input().upper()
             if choice == "Y":
-                print("🔁 進入註冊模式以重設密碼。\n")
+                print("進入註冊模式以重設密碼。\n")
                 conn.close()
                 sign_up()
                 return
@@ -143,10 +143,10 @@ def main_menu():
         elif mode == "b":
             sign_in()
         elif mode == "q":
-            print("👋 程式結束，再見！")
+            print("程式結束，再見！")
             break
         else:
-            print("❌ 無效輸入，請重新選擇。")
+            print("無效輸入，請重新選擇。")
 
 if __name__ == "__main__":
     main_menu()
