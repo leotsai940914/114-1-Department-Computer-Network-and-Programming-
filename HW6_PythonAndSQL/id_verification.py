@@ -1,3 +1,5 @@
+import os
+print("目前連線的資料庫路徑：", os.path.abspath("ID_data.db"))
 import sqlite3
 
 # --- A.基礎資料設定 ---
