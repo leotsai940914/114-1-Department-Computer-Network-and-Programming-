@@ -23,7 +23,6 @@ def login():
         if teacher:
             session['username'] = username_from_form
             return redirect(url_for('grades'))
-        
         else:
             error = "錯誤的名稱或錯誤的密碼"
 
@@ -31,8 +30,15 @@ def login():
     return render_template('login.html', error=error)
 
 
-def show_login_page():
-    return render_template('login.html')
+@app.route('/grades')
+def grades():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    logged_in_user = session['username']
+    return render_template('grades.html', username=logged_in_user)
+
 
 if  __name__ == '__main__':
     app.run(debug=True)
+
+
