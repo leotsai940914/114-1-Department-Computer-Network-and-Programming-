@@ -89,6 +89,18 @@ def delete_grade():
     return redirect(url_for('grades'))
 
 
+@app.route('/grades_ajax')
+def grades_ajax_page():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    logged_in_user = session['username']
+
+    return render_template(
+        'grades_ajax.html',
+        username=logged_in_user
+    )
+
+
 if  __name__ == '__main__':
     app.run(debug=True, port=5001)
 
