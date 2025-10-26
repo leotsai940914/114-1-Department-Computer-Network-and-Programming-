@@ -17,7 +17,7 @@ def login():
         c = conn.cursor()
         query = "SELECT * FROM teachers WHERE username = ? AND password = ?"
         c.execute(query, (username_from_form, password_from_form))
-        teacher = c.fetchone
+        teacher = c.fetchone()
         conn.close()
 
         if teacher:
