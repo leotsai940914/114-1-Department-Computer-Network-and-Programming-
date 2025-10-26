@@ -71,6 +71,21 @@ def grades():
             grades_list=all_grades
         )
 
+@app.route('/delete', methods=['POST'])
+def delete_grade():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if request.method =='POST':
+        student_id_to_delete = request.form['delete_id']
+        conn = sqlite3.connect('users.db')
+        c = conn.cursor()
+        query = "DELETE FROM grades WHERE student_id = ?"
+        c.execute(query, (student_id_to_delete,))
+
+        conn.close()
+
+    return redirect(url_for('grades'))
+
 
 if  __name__ == '__main__':
     app.run(debug=True)
