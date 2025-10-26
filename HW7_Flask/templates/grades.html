@@ -5,8 +5,29 @@
     <title>成績系統</title>
 </head>
 <body>
-    <h1>成績輸入系統</h1>
     <p>歡迎, {{ username }}!</p>
+    <h1>成績輸入系統</h1>
 
-</body>
+    <hr>
+    
+    <h2>目前已儲存的資料</h2>
+    <table border="1"> <thead>
+            <tr>
+                <th>Name</th>
+                <th>Student ID</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in grades_list %}
+            <tr>
+                <td>{{ grade[0] }}</td>
+                <td>{{ grade[1] }}</td>
+                <td>{{ grade[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    </body>
 </html>
