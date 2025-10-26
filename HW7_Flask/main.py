@@ -35,7 +35,18 @@ def grades():
     if 'username' not in session:
         return redirect(url_for('login'))
     logged_in_user = session['username']
-    return render_template('grades.html', username=logged_in_user)
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    query = "SELECT name, student_id, score FROM grades ORDER BY student_id ASC"
+    c.execute(query)
+    all_grades = c.fetchall()
+    conn.close()
+
+    return render_template(
+        'grades.html', 
+        username=logged_in_user,
+        grades_list=all_grades
+        )
 
 
 if  __name__ == '__main__':
