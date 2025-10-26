@@ -82,12 +82,14 @@ def delete_grade():
         query = "DELETE FROM grades WHERE student_id = ?"
         c.execute(query, (student_id_to_delete,))
 
+        conn.commit()
+
         conn.close()
 
     return redirect(url_for('grades'))
 
 
 if  __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
 
 
