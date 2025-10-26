@@ -43,9 +43,9 @@ def grades():
 
     # 檢查請求為 POST 還是 GET
     if request.method == 'POST':
-        name = request.form['student_id']
-        student_id = request.form['score']
-        score = request.form['users.db']
+        name = request.form['name']
+        student_id = request.form['student_id']
+        score = request.form['score']
 
         conn = sqlite3.connect('users.db')
         c = conn.cursor()
