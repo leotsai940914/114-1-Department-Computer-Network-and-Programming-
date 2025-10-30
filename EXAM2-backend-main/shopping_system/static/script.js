@@ -302,7 +302,7 @@ function refreshSummary() {
 (function bindOrderButton() {
   const btnOrder = document.getElementById('place-order');
   if (!btnOrder) return;
-  btnOrder.addEventListener('click', () => {
+  btnOrder.addEventListener('click', async() => {
     const tbody = document.querySelector('#products table tbody');
     if (!tbody) return;
 
@@ -321,9 +321,11 @@ function refreshSummary() {
     });
 
     if (!orderItems.length) return;
-
-    console.log('下單內容：', orderItems);
-    alert('下單成功！詳情請見主控台 (Console)。');
+    try {
+    } catch (error) {
+      console.error('下單時發生錯誤:', error);
+      alert('下單時發生網路錯誤');
+    }
   });
 })();
 
