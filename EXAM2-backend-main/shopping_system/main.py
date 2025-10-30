@@ -32,7 +32,6 @@ def page_register():
         password = data.get('password')
         email = data.get('email') 
 
-       # 補齊空缺程式碼
         # 密碼驗證: 8 位以上
         if len(password) < 8:
             return jsonify({"status": "error", "message": "密碼必須超過8個字元"})
@@ -54,16 +53,16 @@ def page_register():
             
             cursor = conn.cursor()
 
-            # 檢查帳號是否已存在
-            cursor.execute("SELECT * FROM user_table WHERE username = ?", (username,))
+            # 檢查帳號是否已存在 (修正 1)
+            cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
             existing_user = cursor.fetchone()
 
             if existing_user:
                 # 帳號已存在
                 return jsonify({"status": "error", "message": "帳號已存在，成功修改密碼或信箱"})
 
-            # 寫入新資料
-            cursor.execute("INSERT INTO user_table (username, password, email) VALUES (?, ?, ?)",
+            # 寫入新資料 (修正 2)
+            cursor.execute("INSERT INTO users (username, password, email) VALUES (?, ?, ?)",
                            (username, password, email))
             conn.commit()
 
