@@ -15,6 +15,11 @@ const products = [
 
 (function showUsername() {
 // === 顯示登入使用者於導行列，補齊程式碼 ===
+  const username = localStorage.getItem('username') || 'Guest';
+  const displayElement = document.getElementById('username-display');
+  if (displayElement) {
+    displayElement.textContent = username;
+  }
 })();
 
 
