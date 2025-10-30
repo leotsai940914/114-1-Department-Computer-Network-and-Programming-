@@ -28,12 +28,54 @@ def index():
 def page_register():
     if request.method == 'POST':
         data = request.get_json()
-       # 補齊空缺程式碼
-        if ...
-            return jsonify({"status": "error", "message": "此名稱已被使用"})
+        username = data.get('username')
+        password = data.get('password')
+        email = data.get('email') 
 
+       # 補齊空缺程式碼
+        # 密碼驗證: 8 位以上
         if len(password) < 8:
-       ...
+            return jsonify({"status": "error", "message": "密碼必須超過8個字元"})
+        
+        # 密碼驗證: 包含英文大小寫
+        if not re.search(r'[a-z]', password) or not re.search(r'[A-Z]', password):
+            return jsonify({"status": "error", "message": "密碼必須包含英文大小寫"})
+
+        # 信箱驗證: XXX@gmail.com 格式
+        if not re.match(r'[^@]+@gmail\.com', email):
+            return jsonify({"status": "error", "message": "Email 格式不符重新輸入"})
+
+        # 資料庫操作：檢查帳號重複並寫入
+        conn = None
+        try:
+            conn = get_db_connection()
+            if conn is None:
+                return jsonify({"status": "error", "message": "資料庫連線失敗"})
+            
+            cursor = conn.cursor()
+
+            # 檢查帳號是否已存在
+            cursor.execute("SELECT * FROM user_table WHERE username = ?", (username,))
+            existing_user = cursor.fetchone()
+
+            if existing_user:
+                # 帳號已存在
+                return jsonify({"status": "error", "message": "帳號已存在，成功修改密碼或信箱"})
+
+            # 寫入新資料
+            cursor.execute("INSERT INTO user_table (username, password, email) VALUES (?, ?, ?)",
+                           (username, password, email))
+            conn.commit()
+
+            # 註冊成功
+            return jsonify({"status": "success", "message": "註冊成功"})
+
+        except sqlite3.Error as e:
+            return jsonify({"status": "error", "message": f"資料庫錯誤: {e}"})
+        
+        finally:
+            if conn:
+                conn.close()
        
     return render_template('page_register.html')
 
@@ -77,6 +119,5 @@ def page_login():
 
 # 補齊空缺程式碼
 if __name__ == '__main__':
-    app.run()
     app.run(debug=True)
 
