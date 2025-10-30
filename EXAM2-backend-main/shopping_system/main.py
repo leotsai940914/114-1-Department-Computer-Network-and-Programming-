@@ -84,7 +84,7 @@ def login_user(username, password):
     if conn is not None:
         try:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM user_table WHERE username = ? AND password = ?", (username, password))
+            cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
             user = cursor.fetchone()
             if user:
                 return {"status": "success", "message": "Login successful"}
