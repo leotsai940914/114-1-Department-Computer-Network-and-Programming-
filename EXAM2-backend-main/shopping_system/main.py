@@ -85,7 +85,7 @@ def login_user(username, password):
     if conn is not None:
         try:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+            cursor.execute("SELECT * FROM user_table WHERE username = ? AND password = ?", (username, password))
             user = cursor.fetchone()
             if user:
                 return {"status": "success", "message": "Login successful"}
@@ -115,6 +115,10 @@ def page_login():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 # 補齊剩餘副程式
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('page_login'))
 
 
 # 補齊空缺程式碼
