@@ -22,7 +22,6 @@ def get_db_connection():
 # 補齊空缺程式碼
 @app.route('/')
 def index():
-    # [導師修正]：加入「登入保護」
     # 檢查 'username' 是否存在於 'session' (伺服器的記憶) 中
     if 'username' not in session:
         # 如果使用者「尚未登入」，就將他們「重新導向」到 'page_login' (登入頁面)
