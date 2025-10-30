@@ -367,5 +367,38 @@ async function handleLogin(event) {
   }
 }
 
+// [導師修正]：我們需要這個新函式來處理「註冊」
+async function handleRegister(event) {
+  // 1. 阻止瀏覽器預設的 'GET' 提交行為
+  event.preventDefault(); 
+  
+  // 2. 從表單獲取資料
+  const username = document.getElementById('username')?.value ?? '';
+  const password = document.getElementById('password')?.value ?? '';
+  const email = document.getElementById('email')?.value ?? '';
+
+  // 3. 將資料 'fetch' (POST) 到 Python 的 '/page_register' API
+  try {
+    const response = await fetch('/page_register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password, email })
+    });
+
+    const result = await response.json();
+
+    // 4. 顯示 Python 傳回來的 alert 訊息
+    alert(result.message); 
+
+    if (response.ok && result.status === 'success') {
+      // 5. (作業要求) 註冊成功後，跳轉到登入頁面
+      window.location.href = '/page_login'; 
+    }
+  } catch (error) {
+    console.error('註冊時發生錯誤:', error);
+    alert('註冊時發生網路錯誤');
+  }
+}
+
 // === 首次渲染 ===
 display_products(products);
