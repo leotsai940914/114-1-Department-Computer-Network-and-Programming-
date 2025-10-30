@@ -22,7 +22,14 @@ def get_db_connection():
 # 補齊空缺程式碼
 @app.route('/')
 def index():
-        return render_template('index.html')
+    # [導師修正]：加入「登入保護」
+    # 檢查 'username' 是否存在於 'session' (伺服器的記憶) 中
+    if 'username' not in session:
+        # 如果使用者「尚未登入」，就將他們「重新導向」到 'page_login' (登入頁面)
+        return redirect(url_for('page_login'))
+    
+    # 如果 'username' 存在 (已登入)，才顯示購物介面
+    return render_template('index.html')
     
 @app.route('/page_register', methods=['GET', 'POST'])
 def page_register():
