@@ -361,7 +361,7 @@ async function handleLogin(event) {
 
   // 依你後端邏輯處理導向
   if (response.ok) {
-    // location.href = '/'; // 例如登入成功返回首頁
+    location.href = '/'; // 例如登入成功返回首頁
   } else {
     alert('登入失敗');
   }
