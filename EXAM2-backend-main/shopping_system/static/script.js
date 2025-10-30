@@ -322,6 +322,12 @@ function refreshSummary() {
 
     if (!orderItems.length) return;
     try {
+      // [導師修正]：1. 將訂單資料 'fetch' (傳送) 到 Python 的 '/place_order' API
+      const response = await fetch('/place_order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: orderItems }) // 將訂單包裝在 'items' 裡
+      });
     } catch (error) {
       console.error('下單時發生錯誤:', error);
       alert('下單時發生網路錯誤');
