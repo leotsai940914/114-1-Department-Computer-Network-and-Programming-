@@ -174,8 +174,25 @@ function apply_filter(products_to_filter) {
 
     // 列 checkbox
     if (e.target.classList.contains('row-check')) {
-      st.checked = e.target.checked;
+      const isChecked = e.target.checked;
+      st.checked = isChecked;
+
+      const input = tr.querySelector('.qty-input');
+
+      if (isChecked) {
+        if (st.qty === 0) {
+          st.qty = 1;
+        }
+      } else {
+        st.qty = 0;
+      }
+
+      if (input) {
+        input.value = st.qty;
+      }
+
       rowState.set(key, st);
+      updateRowTotal(tr);
       refreshSummary();
       return;
     }
