@@ -6,7 +6,7 @@ import re
 import os
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 app.secret_key = 'your_very_secret_key_change_this'
 
