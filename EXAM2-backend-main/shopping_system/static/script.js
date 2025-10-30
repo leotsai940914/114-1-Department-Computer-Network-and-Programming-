@@ -353,7 +353,7 @@ async function handleLogin(event) {
   // 先把使用者名稱記起來供前端顯示
   if (username) localStorage.setItem('username', username);
 
-  const response = await fetch('/', {
+  const response = await fetch('/page_login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password })
