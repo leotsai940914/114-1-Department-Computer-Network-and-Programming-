@@ -106,8 +106,9 @@ def login_user(username, password):
 
 @app.route('/page_login' , methods=['GET', 'POST'])
 def page_login():
-    try:
-        if request.method == 'POST':
+
+    if request.method == 'POST':
+        try: 
             data = request.get_json()
             username = data.get('username')
             password = data.get('password')
@@ -115,9 +116,10 @@ def page_login():
             if result["status"] == "success":
                 session['username'] = username
             return jsonify(result)
-        return render_template('page_login.html')
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)}), 500
+
+    return render_template('page_login.html')
 
 # 補齊剩餘副程式
 @app.route('/logout')
