@@ -5,9 +5,10 @@ import logging
 import re 
 import os
 
-
-app = Flask(__name__, template_folder='templates', static_folder='static')
-
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_PATH = os.path.join(APP_ROOT, 'templates')
+STATIC_PATH = os.path.join(APP_ROOT, 'static')
+app = Flask(__name__, template_folder=TEMPLATE_PATH, static_folder=STATIC_PATH)
 app.secret_key = 'your_very_secret_key_change_this'
 
 # 路徑修改
