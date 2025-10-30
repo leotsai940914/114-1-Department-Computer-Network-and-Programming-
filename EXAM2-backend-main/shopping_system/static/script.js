@@ -275,6 +275,14 @@ function refreshSummary() {
     const btnDec = tr.querySelector('.btn-dec');
     const btnInc = tr.querySelector('.btn-inc');
 
+    if (chk.checked) {
+      if (btnInc) btnInc.disabled = false;
+      if (btnDec) btnDec.disabled = (qty <= 1); 
+    } else {
+      if (btnInc) btnInc.disabled = true;
+      if (btnDec) btnDec.disabled = true;
+    }
+
     if (chk?.checked && qty > 0) {
       selectedCount += 1;
       totalQty += qty;
