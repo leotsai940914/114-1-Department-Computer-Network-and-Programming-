@@ -119,8 +119,78 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('page_login'))
 
+# 最後的 API (Python 購物介面 30%)
+@app.route('/place_order', methods=['POST'])
+def place_order():
+    # 1. 檢查使用者是否登入
+    if 'username' not in session:
+        return jsonify({"status": "error", "message": "請先登入"}), 401
+
+    conn = None
+    try:
+        # 2. 獲取 JS 傳來的訂單列表
+        data = request.get_json()
+        items = data.get('items') # 記得 JS 是傳 'items'
+        
+        # 3. 獲取目前時間 (符合作業 alert 範例)
+        now = datetime.now()
+        # 格式化日期 '2025-10-29'
+        order_date_str = now.strftime('%Y-%m-%d')
+        # 格式化時間 '21:59'
+        order_time_str = now.strftime('%H:%M') 
+        
+        conn = get_db_connection()
+        if conn is None:
+            return jsonify({"status": "error", "message": "資料庫連線失敗"})
+        
+        cursor = conn.cursor()
+
+        total_order_amount = 0
+        alert_message_items = [] # 準備用來放 "T-Shirt: ..."
+
+        # 4. (作業要求 4) 將資料寫入資料庫
+        for item in items:
+            product_name = item.get('name')
+            price = item.get('price')
+            quantity = item.get('qty')
+            total_price = item.get('total')
+
+            # 寫入 'shop_list_table' (使用 .db 檔案中的正確名稱)
+            cursor.execute(
+                """
+                INSERT INTO shop_list_table 
+                (Product, Price, Number, "Total Price", Date, Time)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (product_name, price, quantity, total_price, order_date_str, order_time_str)
+            )
+
+            #準備 alert 訊息
+            total_order_amount += total_price
+            alert_message_items.append(
+                f" {product_name}:  {price} NT/件 x{quantity}  共 {total_price} NT "
+            )
+
+        conn.commit() # 執行所有 SQL 寫入
+
+        # 6. 組合完整的 alert 訊息
+        items_details = "\n".join(alert_message_items)
+        final_message = f"""{order_time_str}，已成功下單:
+{items_details}
+此單花費總金額: {total_order_amount} NT"""
+
+        return jsonify({"status": "success", "message": final_message})
+
+    except sqlite3.Error as e:
+        # 處理資料庫 UNIQUE constraint failed (如果 Product 是 PRIMARY KEY)
+        if "UNIQUE constraint failed" in str(e):
+             return jsonify({"status": "error", "message": "訂單中已有重複商品 (主鍵衝突)，請重新下單"})
+        return jsonify({"status": "error", "message": f"資料庫錯誤: {e}"})
+    
+    finally:
+        if conn:
+            conn.close()
 
 # 補齊空缺程式碼
 if __name__ == '__main__':
     app.run(debug=True)
-
