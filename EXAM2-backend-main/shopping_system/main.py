@@ -23,7 +23,7 @@ def get_db_connection():
     return conn
 
 # 補齊空缺程式碼
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     # 檢查 'username' 是否存在於 'session' (伺服器的記憶) 中
     if 'username' not in session:
