@@ -8,6 +8,8 @@ import os
 
 app = Flask(__name__)
 
+app.secret_key = 'your_very_secret_key_change_this'
+
 # 路徑修改
 def get_db_connection():
     conn = sqlite3.connect('shopping_data.db')
@@ -18,11 +20,11 @@ def get_db_connection():
     return conn
 
 # 補齊空缺程式碼
-@app.route()
-def page_login():
-        return 
+@app.route('/')
+def index():
+        return render_template('index.html')
     
-@app.route('/page_register', methods=[])
+@app.route('/page_register', methods=['GET', 'POST'])
 def page_register():
     if request.method == 'POST':
         data = request.get_json()
@@ -76,5 +78,5 @@ def page_login():
 # 補齊空缺程式碼
 if __name__ == '__main__':
     app.run()
-
+    app.run(debug=True)
 
