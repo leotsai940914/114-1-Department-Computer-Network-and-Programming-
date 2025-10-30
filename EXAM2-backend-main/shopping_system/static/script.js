@@ -271,6 +271,10 @@ function refreshSummary() {
     const chk = tr.querySelector('.row-check');
     const qty = Number(tr.querySelector('.qty-input')?.value || 0);
     const price = Number(tr.querySelector('[data-price]')?.dataset?.price || 0);
+
+    const btnDec = tr.querySelector('.btn-dec');
+    const btnInc = tr.querySelector('.btn-inc');
+
     if (chk?.checked && qty > 0) {
       selectedCount += 1;
       totalQty += qty;
