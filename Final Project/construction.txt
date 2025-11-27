@@ -1,0 +1,42 @@
+final_project/
+│
+├── app.py
+├── config.py
+├── requirements.txt
+├── .gitignore
+│
+├── instance/
+│   └── blog.db                # SQLite 資料庫（自動產生）
+│
+├── templates/
+│   ├── base.html              # 共同佈局（導覽列＋主體）
+│   ├── index.html             # 首頁 → 最新攝影文章列表
+│   ├── post_detail.html       # 單篇作品解析/影評
+│   ├── new_post.html          # 新增文章（登入者限定）
+│   ├── login.html
+│   ├── register.html
+│   ├── category_posts.html    # 類別頁（例如：攝影史/器材/影評）
+│   ├── about.html             # 可選：關於攝影理念/自介
+│   └── error.html             # 錯誤頁
+│
+├── static/
+│   ├── css/
+│   │   └── style.css          # 主樣式（乾淨簡約攝影風）
+│   ├── js/
+│   │   └── main.js            # 表單檢查、前端互動
+│   └── images/
+│       └── (空)               # 之後放照片縮圖/LOGO
+│
+├── models/
+│   ├── __init__.py
+│   ├── user_model.py
+│   ├── post_model.py
+│   ├── category_model.py
+│   └── comment_model.py
+│
+└── routes/
+    ├── __init__.py
+    ├── auth_routes.py         # 登入、註冊、登出
+    ├── post_routes.py         # 作品文章 / 影評
+    ├── category_routes.py     # 分類展示（攝影史/器材/影評）
+    └── comment_routes.py      # 留言功能
