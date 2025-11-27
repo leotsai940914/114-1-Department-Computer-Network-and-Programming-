@@ -7,6 +7,37 @@ class Database():
     def __init__(self, db_filename="order_management.db"):
         base_dir = os.path.dirname(os.path.abspath(__file__))
         self.db_path = os.path.join(base_dir, db_filename)
+        self._init_tables()  # ★ 自動建立資料表（確保 test.database 能跑）
+
+    # ★ 自動建立資料表
+    def _init_tables(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cur = conn.cursor()
+
+            # 建 commodity
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS commodity (
+                    product TEXT PRIMARY KEY NOT NULL,
+                    category TEXT NOT NULL,
+                    price NUMERIC NOT NULL
+                ) WITHOUT ROWID;
+            """)
+
+            # 建 order_list
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS order_list (
+                    order_id TEXT PRIMARY KEY,
+                    product_date TEXT,
+                    customer_name TEXT,
+                    product_name TEXT,
+                    product_amount INTEGER,
+                    product_total INTEGER,
+                    product_status TEXT,
+                    product_note TEXT
+                );
+            """)
+
+            conn.commit()
 
     @staticmethod
     def generate_order_id() -> str:
@@ -17,10 +48,6 @@ class Database():
 
     # 1. 根據種類拿商品名稱列表
     def get_product_names_by_category(self, category):
-        """
-        回傳格式：[(product1,), (product2,), ...]
-        測試裡會寫 [r[0] for r in results] 來拿名稱字串
-        """
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
             cur.execute(
@@ -30,11 +57,8 @@ class Database():
             rows = cur.fetchall()
         return rows
 
-    # 2. 根據商品名稱拿單價
+    # 2. 根據商品拿單價
     def get_product_price(self, product):
-        """
-        回傳單一價格 (int/float)，如果商品不存在則回傳 None
-        """
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
             cur.execute(
@@ -42,25 +66,10 @@ class Database():
                 (product,)
             )
             row = cur.fetchone()
-        if row:
-            return row[0]
-        return None
+        return row[0] if row else None
 
     # 3. 新增一筆訂單
     def add_order(self, order_data):
-        """
-        order_data 格式：
-        {
-            'product_date': '2023-12-01',
-            'customer_name': 'TestUser',
-            'product_name': '咖哩飯',
-            'product_amount': 2,
-            'product_total': 180,
-            'product_status': '未付款',
-            'product_note': 'Test Note'
-        }
-        """
-        # 讓物件自己產生訂單編號
         order_id = self.generate_order_id()
 
         with sqlite3.connect(self.db_path) as conn:
@@ -93,20 +102,8 @@ class Database():
             conn.commit()
         return True
 
-    # 4. 取得所有訂單＋把單價一起查回來
+    # 4. 查全部訂單 + 加入商品價格
     def get_all_orders(self):
-        """
-        回傳 list，每一筆是 tuple，欄位順序：
-        0: order_id
-        1: product_date
-        2: customer_name
-        3: product_name
-        4: price          (從 commodity 查來)
-        5: product_amount
-        6: product_total
-        7: product_status
-        8: product_note
-        """
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
             cur.execute(
@@ -132,9 +129,6 @@ class Database():
 
     # 5. 刪除一筆訂單
     def delete_order(self, order_id):
-        """
-        回傳 True / False 代表有沒有真的刪到資料
-        """
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
             cur.execute(
@@ -142,5 +136,4 @@ class Database():
                 (order_id,)
             )
             conn.commit()
-            deleted = cur.rowcount > 0
-        return deleted
+            return cur.rowcount > 0
