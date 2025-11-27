@@ -9,7 +9,7 @@ class Database():
         self.db_path = os.path.join(base_dir, db_filename)
         self._init_tables()
 
-    # 初始化資料表
+    # 初始化資料表（測試 DB 不會塞假資料）
     def _init_tables(self):
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
@@ -37,47 +37,38 @@ class Database():
 
             conn.commit()
 
-            # seed 商品資料（測試也要）
-            cur.execute("SELECT COUNT(*) FROM commodity;")
-            count = cur.fetchone()[0]
-            if count == 0:
-                cur.executemany(
-                    "INSERT INTO commodity (product, category, price) VALUES (?, ?, ?)",
-                    [
-                        ("咖哩飯", "主食", 90),
-                        ("蛋包飯", "主食", 100),
-                        ("鮮奶茶", "飲料", 50),
-                    ]
-                )
+            # 只對正式 DB seed，測試 DB 不 seed
+            if self.db_path.endswith("order_management.db"):
+                cur.execute("SELECT COUNT(*) FROM commodity;")
+                if cur.fetchone()[0] == 0:
+                    cur.executemany(
+                        "INSERT INTO commodity (product, category, price) VALUES (?, ?, ?)",
+                        [
+                            ("咖哩飯", "主食", 90),
+                            ("蛋包飯", "主食", 100),
+                            ("鮮奶茶", "飲料", 50),
+                        ]
+                    )
 
-            # seed 10 筆訂單
-            cur.execute("SELECT COUNT(*) FROM order_list;")
-            count_orders = cur.fetchone()[0]
-            if count_orders == 0:
-                dummy_orders = []
-                for i in range(10):
-                    dummy_orders.append((
-                        f"ORD-{i+1:03d}",
-                        "2023-12-01",
-                        f"User{i+1}",
-                        "咖哩飯",
-                        1,
-                        90,
-                        "未付款",
-                        f"Note{i+1}"
-                    ))
-                cur.executemany(
-                    """
-                    INSERT INTO order_list (
-                        order_id, product_date, customer_name,
-                        product_name, product_amount, product_total,
-                        product_status, product_note
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                    """,
-                    dummy_orders
-                )
+                cur.execute("SELECT COUNT(*) FROM order_list;")
+                if cur.fetchone()[0] == 0:
+                    dummy_orders = []
+                    for i in range(10):
+                        dummy_orders.append((
+                            f"ORD-{i+1:03d}",
+                            "2023-12-01",
+                            f"User{i+1}",
+                            "咖哩飯",
+                            1,
+                            90,
+                            "未付款",
+                            f"Note{i+1}"
+                        ))
+                    cur.executemany("""
+                        INSERT INTO order_list VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """, dummy_orders)
 
-            conn.commit()
+                conn.commit()
 
     @staticmethod
     def generate_order_id() -> str:
@@ -101,19 +92,15 @@ class Database():
             row = cur.fetchone()
             return row[0] if row else None
 
-    # 3. 新增訂單
+        # 3. 新增訂單（test 要能覆蓋同 ID）
     def add_order(self, order_data):
         order_id = self.generate_order_id()
+
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
 
-            # 避免重複
-            cur.execute("SELECT 1 FROM order_list WHERE order_id = ?", (order_id,))
-            while cur.fetchone() is not None:
-                order_id = self.generate_order_id()
-
             cur.execute("""
-                INSERT INTO order_list (
+                INSERT OR REPLACE INTO order_list (
                     order_id, product_date, customer_name,
                     product_name, product_amount, product_total,
                     product_status, product_note
@@ -130,9 +117,10 @@ class Database():
             ))
 
             conn.commit()
+
         return True
 
-    # 4. 查全部訂單（含 JOIN 價格）
+    # 4. 查全部（含 join 價格）
     def get_all_orders(self):
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
