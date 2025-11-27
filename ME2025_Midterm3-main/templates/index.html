@@ -1,0 +1,38 @@
+{% extends "base.html"%}
+{% block section %}
+    <div id="order-section" class="page-section">
+        <div style="height: 2cm; width: 5cm;">
+            <button type="button" onclick="open_input_table()">新增商品資料</button>
+            <div id="addModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close" onclick="close_input_table()">&times;</span>
+                    <h3>新增商品資料</h3>
+                    {% block form %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <table border="2 solid black">
+            <tr>
+                <td>訂單編號</td>
+                <td>日期</td>
+                <td>客戶名稱</td>
+                <td>商品名稱</td>
+                <td>單價</td>
+                <td>數量</td>
+                <td>小計</td>
+                <td>狀態</td>
+                <td>備注</td>
+                <td></td>
+            </tr>
+            {% for order in orders %}
+            <tr>
+                {% for i in range(order|length) %}
+                    <td>{{ order[i] }}</td>
+                {% endfor %}
+                <td><button value="{{ order[0] }}" onclick="delete_data(this.value)">刪除</button></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
