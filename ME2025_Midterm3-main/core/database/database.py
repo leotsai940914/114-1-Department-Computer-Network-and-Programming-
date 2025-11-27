@@ -1,6 +1,7 @@
 import datetime
 import os
 import random
+import sqlite3 #新增
 
 class Database():
     def __init__(self, db_filename="order_management.db"):
@@ -14,12 +15,19 @@ class Database():
         random_num = random.randint(1000, 9999)
         return f"OD{timestamp}{random_num}"
 
-    def get_product_names_by_category(self, cur, category):
+    def get_product_names_by_category(self, category):
+        pass
 
-    def get_product_price(self, cur, product):
+    def get_product_price(self, product):
+        pass
 
-    def add_order(self, cur, order_data):
+    def add_order(self, order_data):
+        pass
 
-    def get_all_orders(self, cur):
+    def get_all_orders(self):
+        # 之後會改成真的去查 SQLite
+        # 現在先回傳空 list，讓模板可以安全地 for 迴圈
+        return []
 
-    def delete_order(self, cur, order_id):
+    def delete_order(self, order_id):
+        pass
