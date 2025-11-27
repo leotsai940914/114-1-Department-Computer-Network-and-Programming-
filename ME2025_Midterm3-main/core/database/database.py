@@ -57,7 +57,7 @@ class Database():
                 dummy_orders = []
                 for i in range(10):
                     dummy_orders.append((
-                        f"ORD-{i+1:03d}",
+                        f"ORD-{i+2:03d}",
                         "2023-12-01",
                         f"User{i+1}",
                         "咖哩飯",
@@ -108,9 +108,6 @@ class Database():
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
 
-            # 保證不會 UNIQUE error（因為 test 固定用 ORD-001）
-            cur.execute("DELETE FROM order_list WHERE order_id = ?", (order_id,))
-
             cur.execute("""
                 INSERT INTO order_list (
                     order_id, product_date, customer_name,
@@ -150,7 +147,7 @@ class Database():
                 FROM order_list o
                 LEFT JOIN commodity c
                 ON o.product_name = c.product
-                ORDER BY o.product_date, o.order_id
+                ORDER BY o.rowid
             """)
             return cur.fetchall()
 
