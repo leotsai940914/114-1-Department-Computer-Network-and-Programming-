@@ -34,6 +34,48 @@ class Database():
             """)
             conn.commit()
 
+            # ----- Seed commodity table -----
+            cur.execute("SELECT COUNT(*) FROM commodity;")
+            count = cur.fetchone()[0]
+            if count == 0:
+                cur.executemany(
+                    "INSERT INTO commodity (product, category, price) VALUES (?, ?, ?)",
+                    [
+                        ("咖哩飯", "主食", 90),
+                        ("蛋包飯", "主食", 100),
+                        ("鮮奶茶", "飲料", 50),
+                    ]
+                )
+
+            # ----- Seed order_list with 10 dummy orders -----
+            cur.execute("SELECT COUNT(*) FROM order_list;")
+            count_orders = cur.fetchone()[0]
+            if count_orders == 0:
+                dummy_orders = []
+                for i in range(10):
+                    dummy_orders.append((
+                        f"ORD-{i+1:03d}",
+                        "2023-12-01",
+                        f"User{i+1}",
+                        "咖哩飯",
+                        1,
+                        90,
+                        "未付款",
+                        f"Note{i+1}"
+                    ))
+                cur.executemany(
+                    """
+                    INSERT INTO order_list (
+                        order_id, product_date, customer_name,
+                        product_name, product_amount, product_total,
+                        product_status, product_note
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    dummy_orders
+                )
+
+            conn.commit()
+
     @staticmethod
     def generate_order_id() -> str:
         now = datetime.datetime.now()
