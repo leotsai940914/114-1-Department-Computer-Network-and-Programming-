@@ -16,7 +16,7 @@ def index():
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 
-    orders = db.get_all_orders(cur)
+    orders = db.get_all_orders()
 
     conn.close()
 
@@ -27,32 +27,18 @@ def index():
 # ---------- PRODUCT ROUTE ----------
 @app.route('/product', methods=['GET', 'POST', 'DELETE'])
 def product():
-
-    # 建立資料庫連線
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-
-    # ----- GET -----
     if request.method == 'GET':
         category = request.args.get("category")
         product_name = request.args.get("product")
 
-        # 查商品列表
         if category:
-            products = db.get_product_names_by_category(cur, category)
-            conn.close()
-            return jsonify({"product": products})
+            return jsonify({"product": db.get_product_names_by_category(category)})
 
-        # 查單價
         if product_name:
-            price = db.get_product_price(cur, product_name)
-            conn.close()
-            return jsonify({"price": price})
+            return jsonify({"price": db.get_product_price(product_name)})
 
-        conn.close()
         return jsonify({"error": "Missing parameter"}), 400
 
-    # ----- POST -----
     elif request.method == 'POST':
         order_data = {
             "product_date": request.form.get("product_date"),
@@ -64,23 +50,16 @@ def product():
             "product_note": request.form.get("product_note"),
         }
 
-        db.add_order(cur, order_data)
-        conn.commit()
-        conn.close()
-
+        db.add_order(order_data)
         return redirect(url_for("index", warning="Order placed successfully"))
 
-    # ----- DELETE -----
     elif request.method == 'DELETE':
         order_id = request.args.get("order_id")
 
         if not order_id:
-            conn.close()
             return jsonify({"error": "order_id is required"}), 400
 
-        success = db.delete_order(cur, order_id)
-        conn.commit()
-        conn.close()
+        success = db.delete_order(order_id)
 
         if success:
             return jsonify({"message": "Order deleted successfully"}), 200
