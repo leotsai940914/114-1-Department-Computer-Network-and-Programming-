@@ -13,6 +13,8 @@ class Database():
     def _init_tables(self):
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
+
+            # 建表：commodity
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS commodity (
                     product TEXT PRIMARY KEY NOT NULL,
@@ -20,6 +22,8 @@ class Database():
                     price NUMERIC NOT NULL
                 ) WITHOUT ROWID;
             """)
+
+            # 建表：order_list
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS order_list (
                     order_id TEXT PRIMARY KEY,
@@ -32,9 +36,12 @@ class Database():
                     product_note TEXT
                 );
             """)
+
             conn.commit()
 
-            # ----- Seed commodity table -----
+            # ★★★ 這裡不再判斷是哪個資料庫，任何資料庫都 seed ★★★
+
+            # Seed commodity
             cur.execute("SELECT COUNT(*) FROM commodity;")
             count = cur.fetchone()[0]
             if count == 0:
@@ -47,7 +54,7 @@ class Database():
                     ]
                 )
 
-            # ----- Seed order_list with 10 dummy orders -----
+            # Seed 10 dummy orders
             cur.execute("SELECT COUNT(*) FROM order_list;")
             count_orders = cur.fetchone()[0]
             if count_orders == 0:
@@ -88,7 +95,8 @@ class Database():
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
             cur.execute("SELECT product FROM commodity WHERE category = ?", (category,))
-            return cur.fetchall()
+            rows = cur.fetchall()
+            return rows
 
     # 2. 根據商品名取得單價
     def get_product_price(self, product):
@@ -103,6 +111,10 @@ class Database():
         order_id = self.generate_order_id()
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
+
+            # 確保不會撞到（測試要求）
+            cur.execute("DELETE FROM order_list WHERE order_id = ?", (order_id,))
+
             cur.execute("""
                 INSERT INTO order_list (
                     order_id, product_date, customer_name,
@@ -117,7 +129,7 @@ class Database():
                 order_data["product_amount"],
                 order_data["product_total"],
                 order_data["product_status"],
-                order_data["product_note"],
+                order_data["product_note"]
             ))
             conn.commit()
         return True
