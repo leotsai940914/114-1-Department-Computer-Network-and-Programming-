@@ -32,7 +32,10 @@ def product():
         product_name = request.args.get("product")
 
         if category:
-            return jsonify({"product": db.get_product_names_by_category(category)})
+            # 將 DB 回傳的 tuple list 攤平成字串 list 方便前端使用
+            products = db.get_product_names_by_category(category)
+            flat_products = [p[0] if isinstance(p, (list, tuple)) else p for p in products]
+            return jsonify({"product": flat_products})
 
         if product_name:
             return jsonify({"price": db.get_product_price(product_name)})
@@ -40,14 +43,21 @@ def product():
         return jsonify({"error": "Missing parameter"}), 400
 
     elif request.method == 'POST':
+        def form_value(*keys, default=None):
+            for k in keys:
+                val = request.form.get(k)
+                if val not in (None, ""):
+                    return val
+            return default
+
         order_data = {
-            "product_date": request.form.get("product_date"),
-            "customer_name": request.form.get("customer_name"),
-            "product_name": request.form.get("product_name"),
-            "product_amount": int(request.form.get("product_amount")),
-            "product_total": int(request.form.get("product_total")),
-            "product_status": request.form.get("product_status"),
-            "product_note": request.form.get("product_note"),
+            "product_date": form_value("product_date", "product-date"),
+            "customer_name": form_value("customer_name", "customer-name"),
+            "product_name": form_value("product_name", "product-name"),
+            "product_amount": int(form_value("product_amount", "product-amount", default=0)),
+            "product_total": int(form_value("product_total", "product-total", default=0)),
+            "product_status": form_value("product_status", "product-status", default="未付款"),
+            "product_note": form_value("product_note", "product-note", default=""),
         }
 
         db.add_order(order_data)
