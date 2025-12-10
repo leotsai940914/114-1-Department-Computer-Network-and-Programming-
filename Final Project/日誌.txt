@@ -71,3 +71,14 @@
 - 確認 routes/ 與 models/ 皆有 __init__.py，成為正式 Python package
 - 新增 .gitignore，排除 .venv、__pycache__ 與 SQLite DB 等不必要檔案
 - 整體專案結構正式具備可啟動後端的基礎環境，準備進入 Step 2-2（撰寫 app.py 與 Blueprint 架構）
+
+[2025-12-03]
+完成 Step 2-2：建立 app.py（專案入口）
+
+- 新增 app.py，採用 Flask 的 create_app() 工廠函式架構，符合大型專案標準模式
+- 設定 SECRET_KEY，建立初步的應用設定
+- 引入並註冊四組 Blueprint（auth、post、category、comment），完成後端模組化架構
+- 建立首頁 route：使用 render_template("index.html") 正確渲染前端模板
+- 成功讓 Flask 能啟動網站、處理請求並正確顯示 index.html
+- 前端頁面（Navbar、Hero、卡片等）在 Flask 渲染下正式套用 CSS，不再顯示 Jinja 語法
+- 專案從「純前端」正式提升為「可執行的 Flask 網站骨架」，已具備後續功能擴展的基礎
