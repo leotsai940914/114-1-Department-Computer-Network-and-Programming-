@@ -5,7 +5,12 @@
 <section class="auth-section">
     <h2 class="section-title">註冊 Register</h2>
 
-    <form class="auth-form">
+    <form class="auth-form" method="POST" action="{{ url_for('auth_routes.register') }}">
+
+        {% if error %}
+        <p style="color: #b00020; margin-bottom: 1rem;">{{ error }}</p>
+        {% endif %}
+
         <label>
             帳號 / Username
             <input type="text" name="username" placeholder="請輸入帳號" required>
