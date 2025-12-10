@@ -333,3 +333,21 @@ Blueprint 與所有 endpoint 均已修正、無 BuildError。
 
 網站目前從「純前端」正式進入「可更新內容的部落格」狀態，
 準備開始 Step 5-2：讓前端模板渲染真實文章內容。
+
+
+[2025-12-10]
+完成 Step 5-2：首頁讀取文章列表（資料庫串接）
+
+- 更新 post_routes.home，正式以 PostModel.get_all_posts() 取得資料庫文章列表
+- index.html 從原本的假資料改為 Jinja2 迴圈渲染真實文章：
+      • 標題
+      • 分類名稱（JOIN categories）
+      • 發布日期 created_at
+      • 內容摘要（前 80 字）
+- 首頁文章卡片可點擊導向 /post/<id>（搭配 post_detail 路由完成）
+- app.py 已改為使用 Blueprint 的首頁，確保資料從 DB 載入而非固定模板
+- 當資料庫尚無文章時，首頁顯示「目前尚無文章」提示，避免空畫面
+- 首頁所有樣式（Hero / Card / Title / Meta）完全沿用設計系統，風格一致
+
+此階段完成後，LumenFilm 的首頁正式從「假資料階段」進入「真實內容呈現」階段，
+文章發佈 → 首頁列表 → 單篇內容 的整個部落格流程已完整閉合。

@@ -1,6 +1,4 @@
-from flask import Flask, render_template
-
-# 導入各 Blueprint（之後會在 routes/ 裡建立）
+from flask import Flask, redirect, url_for
 from routes.auth_routes import auth_bp
 from routes.post_routes import post_bp
 from routes.category_routes import category_bp
@@ -22,9 +20,10 @@ def create_app():
     create_tables()
     init_categories()
 
+    # 使用 post_routes 的首頁
     @app.route("/")
     def index():
-        return render_template("index.html")
+        return redirect(url_for("post_routes.home"))
 
     return app
 
