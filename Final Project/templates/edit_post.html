@@ -5,8 +5,9 @@
 
     <h2 class="section-title">編輯文章 Edit Post</h2>
 
-    <form class="newpost-form" 
-          method="POST" 
+    <form id="editPostForm"
+          class="newpost-form" 
+          method="POST"
           action="{{ url_for('post_routes.update_post', post_id=post.id) }}">
 
         {% if error %}
@@ -16,25 +17,25 @@
         {% endif %}
 
         <!-- 標題 -->
-        <label class="form-label" for="title">文章標題</label>
-        <input type="text" 
-               id="title"
-               class="form-input" 
+        <label class="form-label">文章標題</label>
+        <input type="text"
+               class="form-input"
                name="title"
                value="{{ post.title }}"
-               placeholder="請輸入文章標題" required>
+               required>
 
-        <!-- 內容 -->
-        <label class="form-label" for="content">文章內容</label>
-        <textarea id="content"
-                  class="form-textarea" 
-                  name="content" 
-                  rows="10"
-                  required>{{ post.content }}</textarea>
+        <!-- 內容：Quill Editor -->
+        <label class="form-label">文章內容</label>
+
+        <!-- Quill 容器 -->
+        <div id="quillEditor" style="height: 300px; background: #fff;"></div>
+
+        <!-- 隱藏欄位：表單送出時塞 Quill HTML -->
+        <input type="hidden" name="content" id="contentInput">
 
         <!-- 分類 -->
-        <label class="form-label" for="category_id">文章分類</label>
-        <select id="category_id" class="form-input" name="category_id" required>
+        <label class="form-label">文章分類</label>
+        <select class="form-input" name="category_id" required>
             {% for c in categories %}
             <option value="{{ c.id }}"
                 {% if c.id == post.category_id %}selected{% endif %}>
@@ -44,21 +45,69 @@
         </select>
 
         <!-- 封面圖片 -->
-        <label class="form-label" for="cover_image">封面圖片 URL（選填）</label>
-        <input type="text" 
-               id="cover_image"
-               class="form-input" 
+        <label class="form-label">封面圖片 URL（選填）</label>
+        <input type="text"
+               class="form-input"
                name="cover_image"
-               value="{{ post.cover_image_url or '' }}"
-               placeholder="https://example.com/poster.jpg">
+               value="{{ post.cover_image_url or '' }}">
 
         <!-- 更新按鈕 -->
-        <button class="submit-btn" type="submit">
-            更新文章
-        </button>
+        <button class="submit-btn" type="submit">更新文章</button>
 
     </form>
 
+</div>
+
+<!-- ===============================
+     Quill.js CDN
+================================= -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<!-- ===============================
+     初始化 Quill + 載入舊文章內容
+================================= -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // 1️⃣ 建立 Quill 編輯器
+    var quill = new Quill("#quillEditor", {
+        theme: "snow",
+        placeholder: "請輸入文章內容…",
+        modules: {
+            toolbar: [
+                [{ header: [1, 2, 3, false] }],
+                ["bold", "italic", "underline"],
+                ["blockquote", "code-block"],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["link", "image"]
+            ]
+        }
+    });
+
+    // 2️⃣ 預載文章 HTML（安全方式）
+    //    用 hidden div 包住 raw HTML，再塞回 Quill
+    var rawHTML = document.getElementById("rawContent").innerHTML;
+    quill.root.innerHTML = rawHTML;
+
+    // 3️⃣ 表單送出 → 將 Quill HTML 塞進 hidden input
+    document.getElementById("editPostForm").onsubmit = function () {
+        var html = quill.root.innerHTML.trim();
+
+        if (html === "<p><br></p>" || html.length < 5) {
+            alert("文章內容不得為空");
+            return false;
+        }
+
+        document.getElementById("contentInput").value = html;
+    };
+
+});
+</script>
+
+<!-- 用 Jinja2 載入 raw HTML 的安全容器（Quill 初始化後讀取） -->
+<div id="rawContent" style="display:none;">
+    {{ post.content | safe }}
 </div>
 
 {% endblock %}

@@ -96,134 +96,89 @@ Blueprint 架構是乾淨、可維護、可擴充的標準模式。
 
 
 
-🎬 C｜新增 Edit Post（完整 CRUD）規劃 Blueprint
 
-Edit Post 會包含五個部分：
+🎬【Quill.js 整合規劃】— 適合你的 LumenFilm 部落格
 
-⸻
-
-📌 C-1：資料流設計
-
-🔹 使用者（admin）訪問：
-
-/post/<id>/edit   →   GET：顯示編輯表單（填入舊資料）
-
-🔹 admin 修改內容後提交：
-
-/post/<id>/edit   →   POST：接收資料 → 更新 DB → redirect 回 /post/<id>
-
-🔹 權限：
-
-只有 admin 能編輯文章
-如果訪客試圖進入 → 403 Forbidden
-
+這套流程會分四部分：
 
 ⸻
 
-📌 C-2：後端路由規劃（post_routes.py）
+✅ Step 1 — 新增 Quill.js 到你的 new_post.html
 
-你將新增兩條路由：
+你要做到：
+	•	把 <textarea> 改成 Quill 編輯器 UI
+	•	提交表單時，把 HTML 字串塞進 <input type="hidden">
 
-① GET：顯示編輯表單
-
-@post_bp.route("/post/<int:post_id>/edit", methods=["GET"])
-
-功能：
-	•	確認文章存在（否則 404）
-	•	驗證是否為 admin（否則 403）
-	•	撈舊文章資料
-	•	撈分類列表（讓 user 能改分類）
-	•	回傳 edit_post.html
+這裡不需要動後端。
 
 ⸻
 
-② POST：更新文章
+✅ Step 2 — 在 edit_post.html 放入 Quill（預載舊文章內容）
 
-@post_bp.route("/post/<int:post_id>/edit", methods=["POST"])
+難點在：
+	•	Quill 必須在載入時將 post.content 放進編輯器
+	•	因為 Quill 不吃 Jinja2 的 raw HTML，需要安全方式載入
 
-功能：
-	•	驗證欄位（標題／內容不可空）
-	•	更新資料庫
-	•	redirect 回 /post/
-
-⸻
-
-📌 C-3：資料庫 Model（PostModel）要新增 update_post()
-
-新增方法：
-
-update_post(post_id, title, content, category_id, cover_image_url)
-
-SQL：
-
-UPDATE posts
-SET title=?, content=?, category_id=?, cover_image_url=?
-WHERE id=?
-
+我會提供正確做法（vanilla JS）。
 
 ⸻
 
-📌 C-4：新增模板 edit_post.html（UI 與 new_post.html 類似）
+✅ Step 3 — 你的後端（new_post / update_post）
 
-你會使用 new_post.html 的樣式：
-	•	標題 input
-	•	內容 textarea
-	•	分類下拉選單（自動選中原本分類）
-	•	封面圖片 URL
-	•	「更新文章」按鈕
+不用改任何東西！
 
-也要顯示：
-	•	若填寫不完整 → error message
+Quill 輸出的內容就是 HTML
+你後端目前存的是 TEXT → 直接存 HTML 沒問題。
 
 ⸻
 
-📌 C-5：在文章頁（post_detail.html）加一個【編輯文章】按鈕（僅 admin）
+✅ Step 4 — 修改 post_detail.html，顯示 HTML 內容
 
-放在刪除按鈕旁：
+你只需要：
 
-{% if session.get("role") == "admin" %}
-<a href="{{ url_for('post_routes.edit_post', post_id=post.id) }}" class="edit-btn">編輯文章</a>
-{% endif %}
+{{ post.content | safe }}
 
-按鈕 UI 你可以選：
-	•	黑底白字
-	•	與刪除按鈕不同色（避免誤觸）
+不用 nl2br 了，因為 Quill 會自己做排版。
 
 ⸻
 
-🎉 完成後，你的 CMS 更新流程會像這樣：
+🔥 完成後，你的文章功能會具備：
+	•	粗體、斜體、底線
+	•	標題 H1/H2
+	•	引言 blockquote
+	•	清單（bullet / number）
+	•	連結
+	•	插入圖片（貼 URL 即可）
+	•	專業編輯器介面（像 Medium）
 
-✔ 新增文章
-
-✔ 顯示文章
-
-✔ 刪除文章
-
-✔ 編輯文章 ←（準備實作）
-
-你會擁有完整 CRUD 系統，這是軟體開發正式規模的標配。
+整個 LumenFilm 會瞬間升級等級。
 
 ⸻
 
-📌 接下來的流程（實作順序）
+🎨 附加功能（可選）：Quill Toolbars 擴充
 
-我會帶你按順序寫：
+你之後可加入：
+	•	代碼區塊（影評技術項目）
+	•	分鏡格線 layout（自訂 module）
+	•	上傳圖片（Base64 / Imgur API）
 
-Step C-1：post_routes.py 加 edit routes（GET + POST）
+但第一版先不加入，保持簡單最好。
 
-Step C-2：PostModel 新增 update_post()
+⸻
 
-Step C-3：新增 edit_post.html
+🎯 大方向規劃完畢
 
-Step C-4：post_detail.html 加「編輯文章」按鈕
+接下來我會給你：
 
-Step C-5：測試全流程
+✔ new_post.html 的 Quill 整合版本
+✔ edit_post.html 的預載版本
+✔ post_detail.html 改版
+✔ CSS 微調，讓 Quill 完美融入你的網站
 
-你要現在開始 Step C-1（post_routes.py） 嗎？
-如果要，我立刻提供：
-	•	乾淨、無錯誤、可直接貼上的程式碼
-	•	完整註解
-	•	100% 與你目前架構相容
+⸻
 
+你只需要回答：
 
+要開始整合 Quill 嗎？我先從 Step 1（new_post.html）開始給你可直接貼上的完整程式碼。
 
+（我會分成「可直接複製」的區塊，讓你一次完成。）
