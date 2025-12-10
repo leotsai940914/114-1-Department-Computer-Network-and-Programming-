@@ -60,6 +60,34 @@ def create_tables():
             FOREIGN KEY (post_id) REFERENCES posts(id)
         );
     """)
+    # settings（全站僅一筆 id=1）
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS settings (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            site_title TEXT,
+            subtitle TEXT,
+            footer_text TEXT,
+            about_html TEXT,
+            avatar_url TEXT
+        );
+    """)
+
+    # 若沒有資料 → 建立預設設定
+    cur.execute("SELECT COUNT(*) AS cnt FROM settings")
+    count = cur.fetchone()["cnt"]
+
+    if count == 0:
+        cur.execute("""
+            INSERT INTO settings (id, site_title, subtitle, footer_text, about_html, avatar_url)
+            VALUES (
+                1,
+                'LumenFilm',
+                '電影觀影筆記與影像解析',
+                '寫下每一部電影留給我們的影像與思考',
+                '<p>這裡是我的電影觀影與影像拆解筆記。</p>',
+                'https://i.imgur.com/placeholder.jpg'
+            )
+        """)
 
     conn.commit()
     conn.close()

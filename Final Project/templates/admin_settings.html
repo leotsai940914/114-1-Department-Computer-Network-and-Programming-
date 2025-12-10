@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container" style="max-width: 780px; margin-top: 2rem;">
+
+    <h2 class="section-title">網站設定（Admin Settings）</h2>
+
+    <form method="POST" id="settingsForm" class="newpost-form">
+
+        <!-- 站名 -->
+        <label class="form-label">網站名稱（Site Title）</label>
+        <input type="text"
+               class="form-input"
+               name="site_title"
+               value="{{ settings.site_title }}"
+               required>
+
+        <!-- 副標 -->
+        <label class="form-label">網站副標（Subtitle）</label>
+        <input type="text"
+               class="form-input"
+               name="subtitle"
+               value="{{ settings.subtitle }}">
+
+        <!-- 作者頭像 -->
+        <label class="form-label">作者頭像 URL（Avatar）</label>
+        <input type="text"
+               class="form-input"
+               name="avatar_url"
+               placeholder="https://example.com/avatar.jpg"
+               value="{{ settings.avatar_url or '' }}">
+        
+        {% if settings.avatar_url %}
+        <div style="margin: 0.5rem 0 1rem;">
+            <img src="{{ settings.avatar_url }}"
+                 alt="Avatar Preview"
+                 style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
+        </div>
+        {% endif %}
+
+        <!-- About 介紹 -->
+        <label class="form-label">關於本站（About）</label>
+
+        <!-- Quill 工具列 -->
+        <div id="toolbar">
+            <span class="ql-formats">
+                <select class="ql-header">
+                    <option selected></option>
+                    <option value="1">H1</option>
+                    <option value="2">H2</option>
+                    <option value="3">H3</option>
+                </select>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-blockquote"></button>
+                <button class="ql-link"></button>
+                <button class="ql-image"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button id="insert-hr">HR</button>
+            </span>
+        </div>
+
+        <!-- Quill 編輯器 -->
+        <div id="quillEditor" style="height: 260px; background: #fff;"></div>
+
+        <!-- Hidden input：儲存 HTML -->
+        <input type="hidden" name="about_html" id="aboutInput">
+
+        <!-- 儲存按鈕 -->
+        <button class="submit-btn" type="submit">儲存設定</button>
+
+    </form>
+
+</div>
+
+<!-- Quill JS / CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // 建立 Quill 編輯器
+    var quill = new Quill("#quillEditor", {
+        theme: "snow",
+        modules: { toolbar: "#toolbar" },
+        placeholder: "撰寫網站 About…"
+    });
+
+    // 自訂 <hr>
+    var Block = Quill.import("blots/block");
+    class Divider extends Block {}
+    Divider.blotName = "divider";
+    Divider.tagName = "hr";
+    Quill.register(Divider);
+
+    document.getElementById("insert-hr").addEventListener("click", function () {
+        let range = quill.getSelection();
+        if (range) {
+            quill.insertEmbed(range.index, "divider", true);
+            quill.insertText(range.index + 1, "\n");
+        }
+    });
+
+    // 載入舊的 HTML
+    const rawHTML = `{{ settings.about_html | safe }}`;
+    quill.root.innerHTML = rawHTML;
+
+    // 表單送出 → 塞 hidden input
+    document.getElementById("settingsForm").onsubmit = function () {
+        document.getElementById("aboutInput").value =
+            quill.root.innerHTML.trim();
+    };
+
+});
+</script>
+
+{% endblock %}

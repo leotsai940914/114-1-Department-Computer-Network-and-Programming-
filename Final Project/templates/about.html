@@ -1,45 +1,24 @@
 {% extends "base.html" %}
-
 {% block content %}
 
-<section class="container about-section">
+<div class="container" style="max-width: 820px; margin-top: 2rem;">
 
-    <h1 class="about-title">關於 LumenFilm</h1>
+    <h1 class="about-title">關於本站</h1>
 
-    <p class="about-intro">
-        LumenFilm 是一個以〈影像閱讀〉為核心的個人電影研究站點。
-        內容涵蓋影評書寫、鏡頭語言分析、角色結構觀察，以及電影美學與敘事策略的解讀。
-        我希望透過逐格、逐段的觀看，讓影像從感受層次進入思考維度。
-    </p>
+    <!-- 作者頭像 -->
+    {% if settings.avatar_url %}
+    <div style="text-align:center; margin-bottom:1.5rem;">
+        <img src="{{ settings.avatar_url }}"
+             alt="Avatar"
+             style="width:120px; height:120px; border-radius:50%; object-fit:cover;">
+    </div>
+    {% endif %}
 
-    <h2 class="about-subtitle">建立這個網站的初衷</h2>
-    <p>
-        這裡並非影評的資料庫，也不是情緒化心得的合集。
-        LumenFilm 更接近一份「個人化的電影筆記」——以分析為方法、以觀察為基礎，
-        在觀看與書寫之間追尋影像的結構與意義。
-    </p>
-    <p>
-        對我而言，電影不僅是敘事媒介，更是思考世界的方式。
-        因此，我希望透過系統化的記錄，建立一套屬於自己的影像語法。
-    </p>
+    <!-- About 內容：由 Quill 編輯 -->
+    <article class="post-detail-content">
+        {{ settings.about_html | safe }}
+    </article>
 
-    <h2 class="about-subtitle">網站內容架構</h2>
-    <ul class="about-list">
-        <li>🎬 <strong>Review（影評）</strong>：聚焦電影主題、形式、敘事與觀影體驗。</li>
-        <li>🎥 <strong>Scene Analysis（分鏡分析）</strong>：解析鏡頭設計、構圖與影像節奏。</li>
-        <li>🧩 <strong>Themes（主題研究）</strong>：以概念型議題閱讀電影，如孤獨、記憶、時間、現代性等。</li>
-        <li>🧠 <strong>Film Theory（電影理論）</strong>：討論影像符號、敘事策略、美學框架等核心概念。</li>
-        <li>👤 <strong>Character Study（角色研究）</strong>：分析人物動機、角色弧線與文本功能。</li>
-        <li>🎞 <strong>Directors（導演風格）</strong>：整理作者論視角下的導演創作脈絡與美學特徵。</li>
-    </ul>
-
-    <h2 class="about-subtitle">關於作者</h2>
-    <p>
-        一位持續練習「看懂影像」的學生。
-        對電影與影像美學長期保持好奇，並將觀看視為一種知識生產的過程。
-        本站所有內容皆為個人觀點，旨在探索影像背後的敘事邏輯與形式運作。
-    </p>
-
-</section>
+</div>
 
 {% endblock %}

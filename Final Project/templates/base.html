@@ -2,10 +2,13 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="utf-8" />
-    <title>LumenFilm｜電影觀影筆記與影像解析</title>
+
+    <!-- 動態站名（後台可改） -->
+    <title>{{ settings.site_title or "LumenFilm" }}｜{{ settings.subtitle or "電影觀影筆記與影像解析" }}</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- 字體：Noto Serif TC（文章質感強、影評感） -->
+    <!-- 字體 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- 主 CSS -->
@@ -14,20 +17,25 @@
 
 <body>
 
-<!-- =========== NAVBAR =========== -->
+<!-- =============================
+     NAVBAR
+============================== -->
 <header class="site-header">
     <div class="container nav-container">
+
+        <!-- 動態網站名稱（後台可編輯） -->
         <div class="logo">
-            <a href="{{ url_for('index') }}">LumenFilm</a>
+            <a href="{{ url_for('index') }}">
+                {{ settings.site_title or "LumenFilm" }}
+            </a>
         </div>
 
         <nav class="nav-links">
             <a href="{{ url_for('index') }}">Home</a>
 
-            <!-- Categories 改成能正常跳轉 -->
+            <!-- Categories -->
             <div class="dropdown">
                 <a class="dropdown-toggle">Categories ▼</a>
-
                 <div class="dropdown-menu">
                     <a href="{{ url_for('category_routes.category_page', name='Review') }}">Review</a>
                     <a href="{{ url_for('category_routes.category_page', name='Scene Analysis') }}">Scene Analysis</a>
@@ -38,7 +46,7 @@
                 </div>
             </div>
 
-            <!-- About 目前無頁面，維持 placeholder -->
+            <!-- 動態 About 頁 -->
             <a href="{{ url_for('category_routes.about') }}">About</a>
 
             {% if session.get('user_id') %}
@@ -49,31 +57,42 @@
                 <a href="{{ url_for('auth_routes.register') }}">Register</a>
             {% endif %}
         </nav>
+
     </div>
 </header>
 
 
-<!-- =========== MAIN CONTENT =========== -->
+<!-- =============================
+     MAIN CONTENT
+============================== -->
 <main class="container main-content">
     {% block content %}
     {% endblock %}
 </main>
 
 
-<!-- =========== FOOTER =========== -->
+<!-- =============================
+     FOOTER（動態）
+============================== -->
 <footer class="site-footer">
     <div class="container footer-content">
         <p class="footer-text">
-            寫下每一部電影留給我們的影像與思考<br>
-            © 2025 LumenFilm
+            {{ settings.footer_text or "寫下每一部電影留給我們的影像與思考" }}<br>
+            © {{ settings.site_title or "LumenFilm" }} 2025
         </p>
     </div>
 </footer>
 
 
+<!-- =============================
+     SCRIPTS
+============================== -->
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+<!-- Lightbox Overlay -->
 <div id="lightboxOverlay">
     <img id="lightboxImage" src="">
 </div>
+
 </body>
 </html>
