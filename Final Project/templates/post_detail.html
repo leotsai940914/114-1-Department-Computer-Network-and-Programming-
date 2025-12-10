@@ -1,53 +1,55 @@
 {% extends "base.html" %}
-
 {% block content %}
 
-<section class="post-detail">
+<div class="container">
 
     <!-- ====== 文章標題 ====== -->
-    <h1 class="post-detail-title">文章標題（之後用資料庫帶入）</h1>
+    <h1 class="post-detail-title">{{ post.title }}</h1>
 
-    <!-- ====== 分類 & 日期 ====== -->
+    <!-- ====== Meta 資訊 ====== -->
     <p class="post-detail-meta">
-        分類：Scene Analysis ｜ 發布日期：2025-12-03
+        分類：{{ post.category_name }}
+        ｜ 發布日期：{{ post.created_at }}
     </p>
 
-    <!-- ====== 文章內容 placeholder ====== -->
+    <!-- ====== 封面圖片（可選） ====== -->
+    {% if post.cover_image_url %}
+    <img src="{{ post.cover_image_url }}"
+         alt="Cover Image"
+         style="width:100%; border-radius:6px; margin-bottom:1.5rem;">
+    {% endif %}
+
+    <!-- ====== 文章全文 ====== -->
     <article class="post-detail-content">
-        <p>
-            這裡是文章內容 placeholder。
-            之後會放你的影評、鏡頭分析、段落式敘述等等。
-        </p>
-        <p>
-            你也可以在這裡加入多段落、分節標題、小標、圖片……
-            目前先以文字 placeholder 顯示排版。
-        </p>
+        {{ post.content | nl2br }}
     </article>
 
-    <!-- ====== 分隔線 ====== -->
+    <!-- 分隔線 -->
     <hr class="divider">
+
 
     <!-- ====== 留言區 ====== -->
     <section class="comment-section">
         <h2 class="comment-title">留言區 Comments</h2>
 
-        <!-- 留言表單 -->
-        <form class="comment-form">
+        <!-- 留言表單（後續 Step 5-5 會串後端） -->
+        <form class="comment-form" method="POST" action="#">
             <label>
                 暱稱
-                <input type="text" placeholder="輸入暱稱">
+                <input type="text" name="author" placeholder="輸入暱稱">
             </label>
 
             <label>
                 留言內容
-                <textarea placeholder="輸入留言內容（不需登入）"></textarea>
+                <textarea name="content" placeholder="輸入留言內容（不需登入）"></textarea>
             </label>
 
             <button class="comment-btn" type="submit">提交留言</button>
         </form>
 
-        <!-- 留言列表（假資料） -->
+        <!-- ====== 留言列表（目前是假資料） ====== -->
         <div class="comment-list">
+
             <div class="comment-item">
                 <p class="comment-author">訪客A：</p>
                 <p class="comment-text">這是一則留言範例。</p>
@@ -57,10 +59,11 @@
                 <p class="comment-author">訪客B：</p>
                 <p class="comment-text">期待看到正式內容！</p>
             </div>
+
         </div>
 
     </section>
 
-</section>
+</div>
 
 {% endblock %}

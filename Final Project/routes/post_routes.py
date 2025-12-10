@@ -86,3 +86,22 @@ def category_page(name):
         category_name=name,
         posts=posts
     )
+
+
+
+@post_bp.route("/post/<int:post_id>")
+def post_detail(post_id):
+    # 取得文章資料
+    post = PostModel.get_post_by_id(post_id)
+
+    if not post:
+        return render_template("error.html", message="文章不存在"), 404
+
+    # 若之後要加入留言系統，可以啟用這段
+    # comments = CommentModel.get_comments_by_post(post_id)
+
+    return render_template(
+        "post_detail.html",
+        post=post,
+        # comments=comments
+    )

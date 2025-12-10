@@ -372,3 +372,30 @@ Blueprint 與所有 endpoint 均已修正、無 BuildError。
 此階段完成後，LumenFilm 的分類瀏覽體驗成形，
 使用者可以從「首頁 → 分類 → 單篇文章」以主題方式探索內容，
 部落格的導覽架構更加完整。
+
+
+[2025-12-10]
+完成 Step 5-4：文章內容頁從資料庫顯示全文（post_detail.html + post_routes.py）
+
+- 將原本的 placeholder 文章頁與新的後端資料版本完全整合
+- 文章內容頁現在能顯示：
+    • 標題（post.title）
+    • 內容全文（post.content，並使用 nl2br 保留段落格式）
+    • 分類名稱（post.category_name）
+    • 發布日期（post.created_at）
+    • 封面圖片 URL（post.cover_image_url，如有）
+
+- 優化 post_detail.html：
+    • 保留 Medium 風格排版
+    • 維持全站字體與樣式一致
+    • 留下留言區 UI（之後 Step 5-5 會串真正的留言系統）
+
+- 修正模板結構問題（原本有兩個 extends 與兩個 block），整合為單一乾淨版本
+
+- 測試結果：
+    • 發文 → 正確導向 /post/<id>
+    • 文章頁成功載入真實資料
+    • 封面圖片可正常渲染
+    • 404 處理正常（文章不存在會跳 error 頁面）
+
+此步驟完成後，LumenFilm 的文章展示系統正式從「假資料」進化為「完整資料庫顯示」。

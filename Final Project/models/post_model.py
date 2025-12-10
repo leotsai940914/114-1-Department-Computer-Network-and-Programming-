@@ -59,7 +59,6 @@ class PostModel:
 
     @staticmethod
     def get_post_by_id(post_id):
-        """Fetch a single post by its ID."""
         conn = get_db_connection()
         cursor = conn.cursor()
 
@@ -71,6 +70,5 @@ class PostModel:
         """, (post_id,))
 
         post = cursor.fetchone()
-
         conn.close()
         return post
