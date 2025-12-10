@@ -1,0 +1,70 @@
+/* ====== 全站設定 ====== */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Noto Serif TC", serif;
+    background-color: #ffffff;
+    color: #222222;
+    line-height: 1.7;
+}
+
+/* 中央寬度（900px） */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+
+/* ====== NAVBAR ====== */
+.site-header {
+    border-bottom: 1px solid #e6e6e6;
+    background-color: #ffffff;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 0;
+}
+
+.logo a {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #111111;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+}
+
+.nav-links a {
+    margin-left: 1.6rem;
+    color: #444444;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.nav-links a:hover {
+    color: #000000;
+}
+
+
+/* ====== MAIN CONTENT ====== */
+.main-content {
+    padding: 2.5rem 0;
+}
+
+
+/* ====== FOOTER ====== */
+.site-footer {
+    border-top: 1px solid #e6e6e6;
+    margin-top: 4rem;
+    padding: 2rem 0;
+    text-align: center;
+    color: #666666;
+}
+
+.footer-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
