@@ -5,19 +5,23 @@ from routes.auth_routes import auth_bp
 from routes.post_routes import post_bp
 from routes.category_routes import category_bp
 from routes.comment_routes import comment_bp
+from models.database import create_tables, init_categories
 
 
 def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "dev-key-change-later"
 
-    # ===== 註冊 Blueprints =====
+    # Blueprint 註冊
     app.register_blueprint(auth_bp)
     app.register_blueprint(post_bp)
     app.register_blueprint(category_bp)
     app.register_blueprint(comment_bp)
 
-    # ===== 首頁 Route =====
+    # 建立資料表 & 初始化分類
+    create_tables()
+    init_categories()
+
     @app.route("/")
     def index():
         return render_template("index.html")

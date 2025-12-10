@@ -106,3 +106,20 @@
 	•	全站維持一致的 Noto Serif TC 字體與間距系統
 	•	排版採乾淨、簡約、Medium 風格，與其他頁面完全一致
 	•	目前僅為前端骨架，尚未串接後端資料提交（預計 Step 5-1 完成）
+
+[2025-12-10]
+完成 Step 3-1：建立 SQLite 資料庫 schema（含 categories 初始值）
+
+- 新增 models/database.py，集中管理資料庫連線、建表、初始化資料等功能
+- 設計並建立四張核心資料表：
+    • users：用戶資訊（username, email, password_hash, role）
+    • posts：文章（標題、內容、分類、作者、圖片 URL、日期）
+    • categories：文章分類（預設六大電影類別）
+    • comments：留言（文章 ID、暱稱、留言內容、留言時間）
+- 啟動專案時自動執行 create_tables()，確保資料表存在
+- 實作 init_categories()，並在第一次啟動時自動寫入六種固定分類：
+      Review, Scene Analysis, Themes, Character Study, Film Theory, Directors
+- 設定 sqlite3.Row，使資料可用欄位名稱存取，方便傳給模板（Jinja）
+- 完成 instance/blog.db 自動建立，確認資料庫讀寫功能正常
+
+此階段完成後，網站後端正式具備資料儲存能力，為後續登入系統、文章系統與留言功能奠定基礎。

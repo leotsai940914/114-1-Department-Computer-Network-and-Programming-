@@ -32,7 +32,7 @@ final_project/
 │   ├── user_model.py
 │   ├── post_model.py
 │   ├── category_model.py
-│   └── comment_model.py
+│   └── database.py
 │
 └── routes/
     ├── __init__.py
