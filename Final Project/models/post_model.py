@@ -1,10 +1,11 @@
 from models.database import get_db_connection
 from datetime import datetime
 
+
 class PostModel:
 
     @staticmethod
-    def create_post(title, content, category_id, author_id, cover_image_url=None):
+    def create_post(title, content, category_id, user_id, cover_image_url=None):
         """Create a new post with timestamp."""
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -12,14 +13,15 @@ class PostModel:
         created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         cursor.execute("""
-            INSERT INTO posts (title, content, category_id, author_id, created_at, cover_image_url)
+            INSERT INTO posts (title, content, category_id, user_id, created_at, cover_image_url)
             VALUES (?, ?, ?, ?, ?, ?)
-        """, (title, content, category_id, author_id, created_at, cover_image_url))
+        """, (title, content, category_id, user_id, created_at, cover_image_url))
 
         conn.commit()
         new_id = cursor.lastrowid
         conn.close()
         return new_id
+
 
     @staticmethod
     def get_all_posts():
@@ -33,10 +35,11 @@ class PostModel:
             JOIN categories ON posts.category_id = categories.id
             ORDER BY created_at DESC
         """)
-        posts = cursor.fetchall()
 
+        posts = cursor.fetchall()
         conn.close()
         return posts
+
 
     @staticmethod
     def get_posts_by_category(category_id):
@@ -53,12 +56,13 @@ class PostModel:
         """, (category_id,))
 
         posts = cursor.fetchall()
-
         conn.close()
         return posts
 
+
     @staticmethod
     def get_post_by_id(post_id):
+        """Fetch a single post by ID."""
         conn = get_db_connection()
         cursor = conn.cursor()
 

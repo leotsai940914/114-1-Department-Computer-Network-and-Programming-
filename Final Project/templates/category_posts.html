@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block content %}
 
 <div class="container category-section">
@@ -8,6 +9,7 @@
     {% if posts %}
         {% for post in posts %}
         <div class="post-card">
+            
             <h3 class="post-title">
                 <a href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
                     {{ post['title'] }}
@@ -21,6 +23,7 @@
             <p class="post-excerpt">
                 {{ post['content'][:80] }}...
             </p>
+
         </div>
         {% endfor %}
     {% else %}

@@ -6,7 +6,7 @@ category_bp = Blueprint("category_routes", __name__)
 
 
 # =============================
-# 分類一覽頁（顯示全部分類）
+# 分類一覽頁
 # =============================
 @category_bp.route("/categories")
 def categories_index():
@@ -15,7 +15,7 @@ def categories_index():
 
 
 # =============================
-# 分類頁：顯示該分類的所有文章
+# 分類頁：顯示該分類所有文章
 # =============================
 @category_bp.route("/category/<name>")
 def category_page(name):
@@ -28,11 +28,14 @@ def category_page(name):
 
     return render_template(
         "category_posts.html",
-        category_name=name,
+        category_name=category["name"],   # 使用 DB 版本名稱
         posts=posts
     )
 
 
+# =============================
+# About 頁面
+# =============================
 @category_bp.route("/about")
 def about():
     return render_template("about.html")

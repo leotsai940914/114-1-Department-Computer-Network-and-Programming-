@@ -6,10 +6,13 @@
 <section class="hero">
     <div class="hero-text">
         <h1 class="hero-title">本週主題電影：<br>《暫定片名》</h1>
+
         <p class="hero-subtitle">
             這裡會放一段引言式的主打文案。
-            例如一部值得深入分析的電影、導演風格、或你本週最想寫的影評。
+            例如一部值得深入分析的電影、導演風格、
+            或你本週最想寫的影評介紹。
         </p>
+
         <a class="hero-btn" href="#">
             閱讀主打文章
         </a>
@@ -29,6 +32,7 @@
     {% if posts %}
         {% for post in posts %}
         <div class="post-card">
+
             <h3 class="post-title">
                 <a href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
                     {{ post['title'] }}
@@ -42,6 +46,7 @@
             <p class="post-excerpt">
                 {{ post['content'][:80] }}...
             </p>
+
         </div>
         {% endfor %}
     {% else %}
