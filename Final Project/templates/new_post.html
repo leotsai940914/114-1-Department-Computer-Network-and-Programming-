@@ -5,30 +5,32 @@
 
     <h2 class="section-title">新增文章</h2>
 
-    <form class="newpost-form">
+    <!-- POST form -->
+    <form class="newpost-form" method="POST" action="{{ url_for('post_routes.new_post') }}">
+
+        {% if error %}
+        <p style="color:#b00020; margin-bottom:1rem;">{{ error }}</p>
+        {% endif %}
 
         <!-- 標題 -->
         <label class="form-label">文章標題</label>
-        <input type="text" class="form-input" placeholder="請輸入文章標題">
+        <input type="text" class="form-input" name="title" placeholder="請輸入文章標題" required>
 
         <!-- 內容 -->
         <label class="form-label">文章內容</label>
-        <textarea class="form-textarea" rows="10" placeholder="請輸入文章內容（支援多行文字）"></textarea>
+        <textarea class="form-textarea" name="content" rows="10" placeholder="請輸入文章內容（支援多行文字）" required></textarea>
 
         <!-- 分類選單 -->
         <label class="form-label">文章分類</label>
-        <select class="form-input">
-            <option>Review</option>
-            <option>Scene Analysis</option>
-            <option>Themes</option>
-            <option>Character Study</option>
-            <option>Film Theory</option>
-            <option>Directors</option>
+        <select class="form-input" name="category_id" required>
+            {% for c in categories %}
+            <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
         </select>
 
         <!-- 封面圖片 -->
         <label class="form-label">封面圖片 URL（選填）</label>
-        <input type="text" class="form-input" placeholder="https://example.com/poster.jpg">
+        <input type="text" class="form-input" name="cover_image" placeholder="https://example.com/poster.jpg">
 
         <!-- 按鈕 -->
         <button class="submit-btn" type="submit">發布文章</button>

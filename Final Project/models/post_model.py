@@ -2,6 +2,18 @@ from models.database import get_db_connection
 from datetime import datetime
 
 class PostModel:
+    @staticmethod
+    def create_post(title, content, category_id, user_id, cover_image_url):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO posts (title, content, category_id, user_id, cover_image_url)
+            VALUES (?, ?, ?, ?, ?)
+        """, (title, content, category_id, user_id, cover_image_url))
+        conn.commit()
+        new_id = cursor.lastrowid
+        conn.close()
+        return new_id
 
     @staticmethod
     def create_post(title, content, category_id, user_id, cover_image_url=None):
