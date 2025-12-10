@@ -61,7 +61,7 @@ def new_post():
         title=title,
         content=content,
         category_id=category_id,
-        user_id=session["user_id"],    # 修正：與 DB schema 一致
+        user_id=session["user_id"],
         cover_image_url=cover_image_url
     )
 
