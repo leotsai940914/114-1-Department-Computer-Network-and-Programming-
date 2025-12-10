@@ -123,3 +123,38 @@
 - 完成 instance/blog.db 自動建立，確認資料庫讀寫功能正常
 
 此階段完成後，網站後端正式具備資料儲存能力，為後續登入系統、文章系統與留言功能奠定基礎。
+
+[2025-12-10]
+完成 Step 3-2：撰寫 Models（CRUD Interface）
+
+- 在 models/ 資料夾內依功能建立四個資料模型：
+    • user_model.py
+    • post_model.py
+    • category_model.py
+    • comment_model.py
+
+- 每個 Model 皆使用 get_db_connection()，採 sqlite3.Row 以便模板能用欄位名稱讀取資料
+
+- user_model.py：
+    • 完成註冊使用者（create_user）
+    • 依 username / email / id 查詢使用者
+    • 為登入系統與後續角色權限檢查奠定基礎
+
+- category_model.py：
+    • 提供 get_all_categories() 以讀取分類列表
+    • 分類屬固定值（由 init_categories 初始化），不需新增或刪除
+
+- post_model.py：
+    • 新增文章 create_post()
+    • 查詢所有文章（含分類名稱）
+    • 依分類 id 查詢文章
+    • 依文章 id 查詢單篇內容
+    • 完整支援首頁、分類頁與文章內容頁之資料需求
+
+- comment_model.py：
+    • 新增留言 create_comment()
+    • 查詢單篇文章留言 get_comments_by_post()
+    • 為留言系統提供完整後端介面
+
+此階段完成後，LumenFilm 的後端資料操作能力（新增 / 查詢 / 更新可能需求）已全面具備，
+為接下來登入系統（Step 4）與部落格核心功能（Step 5）提供完整資料存取基礎。
