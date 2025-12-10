@@ -198,6 +198,35 @@
 - 更新 login.html：
       • 新增錯誤訊息顯示區塊
       • form 正式加入 method="POST" 與 action
+
+[2025-12-12]
+新增後台設定與主打文章、圖片上傳、夜間模式、UI 優化
+
+- auth / post / category：
+  • 修正 login redirect → index，修正分類路由重疊，保留 category_routes 管理分類頁。
+  • category_routes 去重複 /about，post_routes 移除重複分類 route。
+
+- 後台設定與主打文章：
+  • settings 表新增 featured_post_id、featured_tagline 欄位，SettingsModel 對齊。
+  • admin_settings 頁面增加「主打文章」選單與引言欄位，首頁 Hero 動態顯示主打文章/封面。
+  • 全站 context_processor 注入 settings，首頁 index 改由 PostModel 讀取文章與主打。
+
+- 圖片上傳（About/富文本）：
+  • 新增 /admin/upload_image（admin only），檢查副檔名、存 static/uploads，回傳 URL。
+  • admin_settings 的 Quill image handler 改為 fetch 上傳 + 成功插入，前端 5MB 檢查。
+  • config.py 加 UPLOAD_FOLDER、MAX_CONTENT_LENGTH、允許副檔名；建立 static/uploads。
+
+- UI / UX：
+  • Navbar 新增手機抽屜與遮罩，Admin menu 下拉 z-index/定位修正。
+  • Hero/卡片陰影、meta chip、空狀態提示卡、閱讀更多連結等細節優化。
+  • 字體統一 Noto Sans TC；移除圖示回到純文字導覽。
+  • 夜間模式：Theme toggle（☾/☀），配色柔化，dropdown/meta chip 等皆有 dark token。
+  • 修正最新文章分類/時間重複顯示，導覽底線僅 hover 顯示。
+
+- 其他：
+  • 新增 figure/figcaption、blockquote 彩條樣式；圖片 class w25/50/75/100 半寬等。
+  • 統一陰影 token，提升卡片/按鈕 hover 手感。
+  • 所有 Python 檔 `py_compile` 驗證通過。
       • 與註冊頁一致的排版與樣式（Noto Serif TC + 留白）
 
 此階段完成後，LumenFilm 已具備完整的會員登入系統，
@@ -500,7 +529,6 @@ Hero（2.2rem）、Section Title（1.6rem）、Card Title（1.2rem）、正文�
 ### 4. 刪除後自動 redirect 回首頁
 - 操作更直觀  
 - 行為符合一般 CMS 對文章刪除的 UX 標準
-
 
 
 
