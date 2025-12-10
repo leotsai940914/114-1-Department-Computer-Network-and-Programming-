@@ -39,7 +39,7 @@
             </div>
 
             <!-- About 目前無頁面，維持 placeholder -->
-            <a href="#">About</a>
+            <a href="{{ url_for('category_routes.about') }}">About</a>
 
             {% if session.get('user_id') %}
                 <a href="{{ url_for('post_routes.new_post') }}">New Post</a>

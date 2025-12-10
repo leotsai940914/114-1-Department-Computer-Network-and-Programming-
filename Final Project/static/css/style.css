@@ -424,3 +424,42 @@ button,
 .dropdown:hover .dropdown-menu {
     display: block;
 }
+
+
+/* ===================================
+   About Page
+=================================== */
+
+.about-section {
+    padding: 2rem 0 3rem;
+    line-height: 1.9;
+}
+
+.about-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.about-subtitle {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.about-intro {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.about-list {
+    margin-left: 1rem;
+    padding-left: 1rem;
+}
+
+.about-list li {
+    margin-bottom: 0.6rem;
+    font-size: 1rem;
+}

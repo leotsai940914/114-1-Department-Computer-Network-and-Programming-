@@ -31,3 +31,8 @@ def category_page(name):
         category_name=name,
         posts=posts
     )
+
+
+@category_bp.route("/about")
+def about():
+    return render_template("about.html")
