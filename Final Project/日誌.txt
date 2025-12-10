@@ -306,3 +306,30 @@ Blueprint 與所有 endpoint 均已修正、無 BuildError。
 
 此階段完成後，LumenFilm 已具備最基本的權限管理，
 確保後續文章建立功能只會由管理者觸發。
+
+
+[2025-12-10]
+完成 Step 5-1：post_routes.py 完整整合（首頁、單篇、分類、發文）
+
+- 整合並完成 post_routes.py 全部後端路由：
+    • /               → 首頁文章列表
+    • /post/<id>      → 單篇文章頁（可顯示真實資料）
+    • /new_post       → 新增文章（限 Admin）
+    • /category/<name>→ 分類頁顯示文章
+
+- 新增 redirect 所需的 post_detail 路由，使新增文章能正確導向文章內容頁
+- 將 create_post 的參數全面對齊整合後的 PostModel：
+      author_id       → 與 DB 使用者欄位一致
+      cover_image_url → 配合資料庫欄位名稱
+- 新增 title / content 驗證，避免空文章寫入資料庫
+- new_post 的 GET/POST 流程完整串接資料庫 categories，前端選單可動態生成
+- 若非 admin 進入 new_post → 正確回傳 403 Forbidden（權限系統正式生效）
+- 單篇頁與分類頁已有 404 錯誤處理，網站容錯性提升
+
+此階段完成後，LumenFilm 已具備：
+    1. 寫入文章到 DB 的完整流程
+    2. 發文 → 自動跳轉到文章頁
+    3. 前台首頁 / 分類頁 / 單篇頁可顯示真實文章資料
+
+網站目前從「純前端」正式進入「可更新內容的部落格」狀態，
+準備開始 Step 5-2：讓前端模板渲染真實文章內容。
