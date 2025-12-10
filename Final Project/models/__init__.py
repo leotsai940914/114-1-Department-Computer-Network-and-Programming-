@@ -1,2 +1,13 @@
 # models/__init__.py
-# 之後可以在這裡放資料庫初始化相關的程式碼（例如連線、BaseModel 等）
+
+from .user_model import UserModel
+from .post_model import PostModel
+from .category_model import CategoryModel
+from .comment_model import CommentModel
+
+__all__ = [
+    "UserModel",
+    "PostModel",
+    "CategoryModel",
+    "CommentModel"
+]
