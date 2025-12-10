@@ -5,7 +5,10 @@
 <section class="auth-section">
     <h2 class="section-title">登入 Login</h2>
 
-    <form class="auth-form">
+    <form class="auth-form" method="POST" action="{{ url_for('auth_routes.login') }}">
+        {% if error %}
+        <p style="color: #b00020; margin-bottom: 1rem;">{{ error }}</p>
+        {% endif %}
         <label>
             帳號 / Username
             <input type="text" name="username" placeholder="輸入您的帳號" required>

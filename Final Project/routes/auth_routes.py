@@ -1,38 +1,30 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from werkzeug.security import generate_password_hash
+from flask import Blueprint, render_template, request, redirect, url_for, session
+from werkzeug.security import check_password_hash
 from models.user_model import UserModel
 
 auth_bp = Blueprint("auth_routes", __name__)
 
-@auth_bp.route("/register", methods=["GET", "POST"])
-def register():
+@auth_bp.route("/login", methods=["GET", "POST"])
+def login():
     if request.method == "POST":
         username = request.form.get("username")
-        email = request.form.get("email")
         password = request.form.get("password")
 
-        # --- 基本欄位檢查 ---
-        if not username or not email or not password:
-            return render_template("register.html", error="所有欄位皆為必填")
+        # --- 檢查帳號是否存在 ---
+        user = UserModel.find_by_username(username)
+        if not user:
+            return render_template("login.html", error="帳號不存在")
 
-        # --- 檢查 username 是否存在 ---
-        existing_user = UserModel.find_by_username(username)
-        if existing_user:
-            return render_template("register.html", error="此帳號已被使用")
+        # --- 檢查密碼是否正確 ---
+        if not check_password_hash(user["password_hash"], password):
+            return render_template("login.html", error="密碼錯誤")
 
-        # --- 檢查 email 是否存在 ---
-        existing_email = UserModel.find_by_email(email)
-        if existing_email:
-            return render_template("register.html", error="Email 已被註冊")
+        # --- 登入成功 → 寫入 session ---
+        session["user_id"] = user["id"]
+        session["role"] = user["role"]
 
-        # --- 密碼 hash ---
-        password_hash = generate_password_hash(password)
+        # 可改成導向首頁（目前使用首頁）
+        return redirect(url_for("post_routes.home"))
 
-        # --- 寫入資料庫 ---
-        UserModel.create_user(username, email, password_hash)
-
-        # 註冊成功 → redirect 到登入頁
-        return redirect(url_for("auth_routes.login"))
-
-    # GET：顯示註冊頁
-    return render_template("register.html")
+    # GET：回傳登入頁面
+    return render_template("login.html")

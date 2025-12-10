@@ -158,3 +158,47 @@
 
 此階段完成後，LumenFilm 的後端資料操作能力（新增 / 查詢 / 更新可能需求）已全面具備，
 為接下來登入系統（Step 4）與部落格核心功能（Step 5）提供完整資料存取基礎。
+
+
+[2025-12-10]
+完成 Step 4-1：/register 註冊功能（POST + 驗證 + 密碼哈希）
+
+- 在 auth_routes.py 實作完整的 /register 欄位處理流程（GET / POST）
+- 成功取得前端表單資料：username、email、password
+- 新增欄位驗證（不可為空值）
+- 新增使用者重複檢查：
+      • UserModel.find_by_username()
+      • UserModel.find_by_email()
+  確保帳號與 Email 不重複註冊
+- 使用 Werkzeug 的 generate_password_hash() 對密碼進行哈希，提升安全性
+- 將新使用者寫入 users 資料表（UserModel.create_user）
+- 註冊成功後自動 redirect 至 /login（完全符合老師要求）
+- 更新 register.html：
+      • 新增錯誤訊息顯示區塊
+      • form method 設定為 POST（必要）
+      • action 指向 Flask 的 register route
+
+完成後，LumenFilm 正式擁有「安全且可用」的註冊系統，並可支援後續登入流程。
+
+
+[2025-12-10]
+完成 Step 4-2：/login 登入功能（帳號驗證 + 密碼檢查 + Session）
+
+- 在 auth_routes.py 實作完整登入流程（GET / POST）
+- 成功取得登入表單資料：username、password
+- 新增使用者存在性檢查：
+      • 若帳號不存在 → 回傳錯誤訊息到 login.html
+- 使用 Werkzeug 的 check_password_hash() 驗證密碼正確性
+      • 若密碼錯誤 → 顯示錯誤訊息
+- 登入成功後寫入 session：
+      • session["user_id"] = user.id
+      • session["role"] = user.role
+  為後續權限控制（admin only 功能）建立基礎
+- 登入成功 → redirect 到首頁（或指定頁面）
+- 更新 login.html：
+      • 新增錯誤訊息顯示區塊
+      • form 正式加入 method="POST" 與 action
+      • 與註冊頁一致的排版與樣式（Noto Serif TC + 留白）
+
+此階段完成後，LumenFilm 已具備完整的會員登入系統，
+並可支援後續建立文章、新增留言與登入狀態判斷等功能。
