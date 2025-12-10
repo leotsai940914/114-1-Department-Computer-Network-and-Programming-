@@ -49,3 +49,15 @@
 - 排版採 900px container、白底、Noto Serif TC，維持 Medium 風格閱讀感
 - 新增 category-section 微調頁面間距，確保版面與其他頁面協調
 - 前端架構已能支援未來 Flask route 傳入 category_name 與文章列表資料
+
+
+[2025-12-03]
+完成 Step 1-6：建立 post_detail.html（文章內容頁）
+
+- 新增文章內容頁模板 post_detail.html，包含文章標題、分類、日期與內容區塊
+- 使用 article 結構化文章內容，維持 Medium × Serif 閱讀體驗
+- 加入 placeholder 文本以模擬正式影評或分鏡分析排版效果
+- 增加留言區：含暱稱欄位、留言文字框與提交按鈕，符合「訪客可留言」需求
+- 設計留言列表 comment-list，使用卡片式視覺風格，與首頁 post-card 呼應
+- 新增必要的 CSS 樣式（post-detail-title、divider、comment-section 等）
+- 文章頁視覺調性與首頁、登入頁、分類頁保持一致，完成六大主要頁面前端架構

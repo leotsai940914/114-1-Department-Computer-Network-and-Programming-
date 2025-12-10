@@ -292,3 +292,106 @@ p {
 .category-section {
     padding-top: 1rem;
 }
+
+/* ================================
+   POST DETAIL（文章內容頁）
+   ================================ */
+
+.post-detail-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.post-detail-meta {
+    color: #777;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.post-detail-content p {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+/* 分隔線 */
+.divider {
+    margin: 2.5rem 0 2rem;
+    border: none;
+    border-top: 1px solid #e6e6e6;
+}
+
+/* ================================
+   留言區
+   ================================ */
+
+.comment-section {
+    margin-top: 2rem;
+}
+
+.comment-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+/* 留言表單 */
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.comment-form input,
+.comment-form textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: "Noto Serif TC", serif;
+    font-size: 1rem;
+}
+
+.comment-form textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+.comment-btn {
+    width: fit-content;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid #222;
+    background: #222;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.comment-btn:hover {
+    background: #000;
+}
+
+/* 留言列表 */
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.comment-item {
+    padding: 0.8rem 1rem;
+    border: 1px solid #e6e6e6;
+    background: #fafafa;
+    border-radius: 6px;
+}
+
+.comment-author {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.comment-text {
+    color: #444;
+    line-height: 1.6;
+}
