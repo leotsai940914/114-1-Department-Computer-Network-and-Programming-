@@ -395,3 +395,49 @@ p {
     color: #444;
     line-height: 1.6;
 }
+
+/* ====== New Post Page ====== */
+
+.newpost-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+}
+
+.form-label {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.form-input {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: "Noto Serif TC", serif;
+    font-size: 0.95rem;
+}
+
+.form-textarea {
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: "Noto Serif TC", serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.submit-btn {
+    padding: 0.7rem 1.2rem;
+    border: none;
+    background: #111;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+.submit-btn:hover {
+    background: #333;
+}

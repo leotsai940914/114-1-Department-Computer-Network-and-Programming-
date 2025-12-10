@@ -96,3 +96,13 @@
 - comment_routes：完成 /comment/<post_id> 的 POST 端點（先以 placeholder 回應）
 - 路由骨架搭建完成，整站頁面可由 Flask 端正確跳轉，前端模板全面串接
 - 此階段完成後，網站正式具備「前端與後端接軌」的架構，準備進入資料庫建立階段（Step 3）
+
+[2025-12-03]
+
+完成 Step 1-7：new_post.html（新增文章頁 UI）**
+	•	新增前端頁面 new_post.html，作為「新增文章」介面
+	•	設計表單欄位：標題、內容 textarea、分類下拉選單、封面圖片 URL、發布按鈕
+	•	使用與 login / register 相同的表單設計系統（input、textarea、主要按鈕）
+	•	全站維持一致的 Noto Serif TC 字體與間距系統
+	•	排版採乾淨、簡約、Medium 風格，與其他頁面完全一致
+	•	目前僅為前端骨架，尚未串接後端資料提交（預計 Step 5-1 完成）
