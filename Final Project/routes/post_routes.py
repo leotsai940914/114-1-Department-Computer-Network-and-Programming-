@@ -86,3 +86,21 @@ def category_page(name):
         category_name=name,
         posts=posts
     )
+
+
+@post_bp.route("/post/<int:post_id>/delete", methods=["POST"])
+def delete_post(post_id):
+    # 只有 admin 可刪除
+    if session.get("role") != "admin":
+        abort(403)
+
+    # 檢查文章是否存在
+    post = PostModel.get_post_by_id(post_id)
+    if not post:
+        return render_template("error.html", message="文章不存在"), 404
+
+    # 執行刪除
+    PostModel.delete_post(post_id)
+
+    # 刪除後回首頁
+    return redirect(url_for("index"))

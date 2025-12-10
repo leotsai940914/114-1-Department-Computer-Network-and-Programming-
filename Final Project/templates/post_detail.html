@@ -76,4 +76,21 @@
 
 </div>
 
+{% if session.get("role") == "admin" %}
+<form method="POST" 
+      action="{{ url_for('post_routes.delete_post', post_id=post.id) }}"
+      onsubmit="return confirm('確定要刪除這篇文章嗎？此動作無法復原。');">
+
+    <button type="submit" style="
+        background:#b00020;
+        color:#fff;
+        padding:0.5rem 1rem;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;">
+        刪除文章
+    </button>
+</form>
+{% endif %}
+
 {% endblock %}

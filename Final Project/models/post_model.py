@@ -76,3 +76,12 @@ class PostModel:
         post = cursor.fetchone()
         conn.close()
         return post
+    
+    @staticmethod
+    def delete_post(post_id):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("DELETE FROM posts WHERE id = ?", (post_id,))
+        conn.commit()
+        conn.close()
