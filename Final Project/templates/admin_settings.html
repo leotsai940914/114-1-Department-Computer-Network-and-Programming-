@@ -93,6 +93,39 @@
 
     </form>
 
+    <!-- 主打文章設定 -->
+    <div style="margin-top:2rem;">
+        <h3 class="section-title">主打文章設定</h3>
+
+        <form method="POST" style="margin-top:1rem;">
+            <input type="hidden" name="site_title" value="{{ settings.site_title }}">
+            <input type="hidden" name="subtitle" value="{{ settings.subtitle }}">
+            <input type="hidden" name="footer_text" value="{{ settings.footer_text }}">
+            <input type="hidden" name="about_html" value="{{ settings.about_html }}">
+            <input type="hidden" name="avatar_url" value="{{ settings.avatar_url }}">
+
+            <label class="form-label">選擇主打文章</label>
+            <select class="form-input" name="featured_post_id">
+                <option value="">（不設定）</option>
+                {% for p in posts %}
+                <option value="{{ p.id }}"
+                    {% if settings.featured_post_id == p.id %}selected{% endif %}>
+                    {{ p.title }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <label class="form-label">主打引言（Hero tagline）</label>
+            <input type="text"
+                   class="form-input"
+                   name="featured_tagline"
+                   placeholder="精選一篇值得細讀的影評與分析。"
+                   value="{{ settings.featured_tagline or '' }}">
+
+            <button class="submit-btn" type="submit" style="margin-top:1rem;">儲存主打設定</button>
+        </form>
+    </div>
+
 </div>
 
 <!-- Quill JS / CSS -->

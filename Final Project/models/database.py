@@ -68,9 +68,19 @@ def create_tables():
             subtitle TEXT,
             footer_text TEXT,
             about_html TEXT,
-            avatar_url TEXT
+            avatar_url TEXT,
+            featured_post_id INTEGER,
+            featured_tagline TEXT
         );
     """)
+
+    # 若舊版 settings 表尚未有新欄位，動態補上
+    cur.execute("PRAGMA table_info(settings)")
+    cols = {row["name"] for row in cur.fetchall()}
+    if "featured_post_id" not in cols:
+        cur.execute("ALTER TABLE settings ADD COLUMN featured_post_id INTEGER")
+    if "featured_tagline" not in cols:
+        cur.execute("ALTER TABLE settings ADD COLUMN featured_tagline TEXT")
 
     # 若沒有資料 → 建立預設設定
     cur.execute("SELECT COUNT(*) AS cnt FROM settings")
@@ -78,14 +88,16 @@ def create_tables():
 
     if count == 0:
         cur.execute("""
-            INSERT INTO settings (id, site_title, subtitle, footer_text, about_html, avatar_url)
+            INSERT INTO settings (id, site_title, subtitle, footer_text, about_html, avatar_url, featured_post_id, featured_tagline)
             VALUES (
                 1,
                 'LumenFilm',
                 '電影觀影筆記與影像解析',
                 '寫下每一部電影留給我們的影像與思考',
                 '<p>這裡是我的電影觀影與影像拆解筆記。</p>',
-                'https://i.imgur.com/placeholder.jpg'
+                'https://i.imgur.com/placeholder.jpg',
+                NULL,
+                '本週主打文章'
             )
         """)
 

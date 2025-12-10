@@ -51,6 +51,14 @@ def admin_settings():
         footer_text = request.form.get("footer_text")
         about_html = request.form.get("about_html")  # About 頁面的 HTML
         avatar_url = request.form.get("avatar_url")
+        featured_post_id = request.form.get("featured_post_id") or None
+        featured_tagline = request.form.get("featured_tagline") or ""
+
+        # 轉型 featured_post_id
+        try:
+            featured_post_id = int(featured_post_id) if featured_post_id else None
+        except ValueError:
+            featured_post_id = None
 
         SettingsModel.update_settings(
             site_title=site_title,
@@ -58,6 +66,8 @@ def admin_settings():
             footer_text=footer_text,
             about_html=about_html,
             avatar_url=avatar_url,
+            featured_post_id=featured_post_id,
+            featured_tagline=featured_tagline,
         )
 
         # 儲存後留在同一頁
@@ -65,7 +75,8 @@ def admin_settings():
 
     # GET: 顯示設定頁
     settings = SettingsModel.get_settings()
-    return render_template("admin_settings.html", settings=settings)
+    posts = PostModel.get_all_posts()
+    return render_template("admin_settings.html", settings=settings, posts=posts)
 
 
 # ===============================

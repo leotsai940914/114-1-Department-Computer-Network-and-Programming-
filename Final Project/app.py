@@ -38,7 +38,13 @@ def create_app():
     @app.route("/")
     def index():
         posts = PostModel.get_all_posts()
-        return render_template("index.html", posts=posts)
+        settings = SettingsModel.get_settings()
+        hero_post = None
+        if settings:
+            featured_id = settings["featured_post_id"]
+            if featured_id:
+                hero_post = PostModel.get_post_by_id(featured_id)
+        return render_template("index.html", posts=posts, hero_post=hero_post)
 
     # ---------- 全站注入 settings ----------
     @app.context_processor

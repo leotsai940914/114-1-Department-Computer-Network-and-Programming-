@@ -15,14 +15,16 @@ class SettingsModel:
 
         if not data:
             cur.execute("""
-                INSERT INTO settings (id, site_title, subtitle, footer_text, about_html, avatar_url)
+                INSERT INTO settings (id, site_title, subtitle, footer_text, about_html, avatar_url, featured_post_id, featured_tagline)
                 VALUES (
                     1,
                     'LumenFilm',
                     '電影觀影筆記與影像解析',
                     '寫下每一部電影留給我們的影像與思考',
                     '<p>這裡是我的電影觀影與影像拆解筆記。</p>',
-                    'https://i.imgur.com/placeholder.jpg'
+                    'https://i.imgur.com/placeholder.jpg',
+                    NULL,
+                    '本週主打文章'
                 )
             """)
             conn.commit()
@@ -33,7 +35,7 @@ class SettingsModel:
         return data
 
     @staticmethod
-    def update_settings(site_title, subtitle, footer_text, about_html, avatar_url):
+    def update_settings(site_title, subtitle, footer_text, about_html, avatar_url, featured_post_id, featured_tagline):
         """更新單筆設定，欄位與 settings 資料表一致。"""
         conn = get_db_connection()
         cur = conn.cursor()
@@ -44,9 +46,11 @@ class SettingsModel:
                 subtitle = ?,
                 footer_text = ?,
                 about_html = ?,
-                avatar_url = ?
+                avatar_url = ?,
+                featured_post_id = ?,
+                featured_tagline = ?
             WHERE id = 1
-        """, (site_title, subtitle, footer_text, about_html, avatar_url))
+        """, (site_title, subtitle, footer_text, about_html, avatar_url, featured_post_id, featured_tagline))
 
         conn.commit()
         conn.close()
