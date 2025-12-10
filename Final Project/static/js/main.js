@@ -8,9 +8,8 @@ document.querySelectorAll(".dropdown-toggle").forEach(toggle => {
         e.stopPropagation();
 
         const menu = this.nextElementSibling;
-
-        // toggle 開關
         const opened = menu.style.display === "block";
+
         document.querySelectorAll(".dropdown-menu")
             .forEach(m => (m.style.display = "none"));
 
@@ -18,7 +17,6 @@ document.querySelectorAll(".dropdown-toggle").forEach(toggle => {
     });
 });
 
-// 點擊其他地方時收起 dropdown
 document.addEventListener("click", () => {
     document.querySelectorAll(".dropdown-menu")
         .forEach(menu => (menu.style.display = "none"));
@@ -45,7 +43,7 @@ if (commentForm) {
 
 
 /* ============================================================
-   全站通用：基本空白欄位防呆（required）
+   全站通用：基本必填欄位驗證
 ============================================================ */
 
 document.querySelectorAll("form").forEach(form => {
@@ -64,13 +62,10 @@ document.querySelectorAll("form").forEach(form => {
 
 
 /* ============================================================
-   Quill Editor（New Post / Edit Post 共用）
-   👉 只在有載入 Quill 的頁面生效
+   Quill Editor（新增／編輯共用）
 ============================================================ */
 
 if (window.Quill) {
-
-    // ---------- 行距：自訂 Attributor ----------
     const Parchment = Quill.import("parchment");
 
     const lineHeightConfig = {
@@ -79,44 +74,31 @@ if (window.Quill) {
     };
 
     const LineHeightStyle = new Parchment.Attributor.Class(
-        "line-height",
-        "ql-line-height",
-        lineHeightConfig
+        "line-height", "ql-line-height", lineHeightConfig
     );
-
     Quill.register(LineHeightStyle, true);
 
-    // ---------- Divider（hr） ----------
     const Block = Quill.import("blots/block");
     class Divider extends Block {}
     Divider.blotName = "divider";
     Divider.tagName = "hr";
     Quill.register(Divider);
 
-
-    // ---------- 共用初始化函式 ----------
     function initQuillEditor(editorId, hiddenFieldId, toolbarSelector, rawHTMLId = null) {
-        const container = document.getElementById(editorId);
-        if (!container) return null;   // 該頁沒有這個編輯器，直接跳出
-
-        const modules = toolbarSelector
-            ? { toolbar: toolbarSelector }
-            : { toolbar: true };
+        const editor = document.getElementById(editorId);
+        if (!editor) return;
 
         const quill = new Quill(`#${editorId}`, {
             theme: "snow",
             placeholder: "請輸入文章內容…",
-            modules: modules
+            modules: { toolbar: toolbarSelector }
         });
 
-        // 若有舊文章內容（Edit 頁）
         if (rawHTMLId) {
-            const rawHTMLContainer = document.getElementById(rawHTMLId);
-            const rawHTML = rawHTMLContainer ? rawHTMLContainer.innerHTML : "";
-            quill.root.innerHTML = rawHTML;
+            const raw = document.getElementById(rawHTMLId)?.innerHTML || "";
+            quill.root.innerHTML = raw;
         }
 
-        // #insert-hr 按鈕（若存在）→ 插入 <hr>
         const hrBtn = document.getElementById("insert-hr");
         if (hrBtn) {
             hrBtn.addEventListener("click", () => {
@@ -128,39 +110,76 @@ if (window.Quill) {
             });
         }
 
-        // 表單送出 → 塞進 hidden input
-        const hiddenField = document.getElementById(hiddenFieldId);
-        const parentForm  = container.closest("form");
+        const hidden = document.getElementById(hiddenFieldId);
+        const parentForm = editor.closest("form");
 
-        if (parentForm && hiddenField) {
-            parentForm.addEventListener("submit", function (e) {
-                const html = quill.root.innerHTML.trim();
-
-                if (html === "<p><br></p>" || html.length < 5) {
-                    alert("文章內容不得為空");
-                    e.preventDefault();
-                    return;
-                }
-
-                hiddenField.value = html;
-            });
-        }
-
-        return quill;
+        parentForm?.addEventListener("submit", function (e) {
+            const html = quill.root.innerHTML.trim();
+            if (html === "<p><br></p>" || html.length < 5) {
+                alert("文章內容不得為空");
+                e.preventDefault();
+                return;
+            }
+            hidden.value = html;
+        });
     }
 
-    // ---------- 新增文章頁 ----------
-    initQuillEditor(
-        "quillEditor",   // 編輯器容器 id
-        "contentInput",  // 隱藏欄位 id
-        "#toolbar"       // 工具列 selector（如果你有自訂 toolbar）
-    );
-
-    // ---------- 編輯文章頁 ----------
-    initQuillEditor(
-        "quillEditor",
-        "contentInput",
-        "#toolbar",
-        "rawContent"     // 裝舊文章 HTML 的隱藏 div
-    );
+    initQuillEditor("quillEditor", "contentInput", "#toolbar");
+    initQuillEditor("quillEditor", "contentInput", "#toolbar", "rawContent");
 }
+
+
+/* ============================================================
+   Article Images → Lazy Load + Wrap for Lightbox
+============================================================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+    const content = document.querySelector(".post-detail-content");
+    if (!content) return;
+
+    const imgs = content.querySelectorAll("img");
+
+    imgs.forEach(img => {
+        img.loading = "lazy";
+        img.classList.add("lightbox-img");
+
+        const wrapper = document.createElement("a");
+        wrapper.href = img.src;
+        wrapper.className = "lightbox-wrapper";
+
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+    });
+});
+
+
+/* ============================================================
+   Lightbox 點擊放大（完整版）
+============================================================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+    const overlay = document.getElementById("lightboxOverlay");
+    const overlayImg = document.getElementById("lightboxImage");
+
+    document.body.addEventListener("click", function (e) {
+
+        if (e.target.classList.contains("lightbox-img") ||
+            e.target.closest(".lightbox-wrapper")) {
+
+            e.preventDefault();
+
+            const img =
+                e.target.tagName === "IMG"
+                ? e.target
+                : e.target.querySelector("img");
+
+            overlayImg.src = img.src;
+            overlay.style.display = "flex";
+        }
+    });
+
+    overlay.addEventListener("click", () => {
+        overlay.style.display = "none";
+        overlayImg.src = "";
+    });
+});

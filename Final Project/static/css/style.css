@@ -704,3 +704,34 @@ button,
 .post-detail-content .ql-line-height-16  { line-height: 1.6; }
 .post-detail-content .ql-line-height-18  { line-height: 1.8; }
 .post-detail-content .ql-line-height-20  { line-height: 2.0; }
+
+
+#lightboxOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
+}
+
+#lightboxOverlay img {
+    max-width: 90%;
+    max-height: 90vh;
+    border-radius: 6px;
+}
+
+/* ===================================
+   Lightbox 圖片提示（點擊可放大）
+=================================== */
+
+.post-detail-content img {
+    cursor: zoom-in;
+}
+
+
+.post-detail-content img:hover {
+    filter: brightness(1.05);
+    transition: 0.2s ease;
+}
