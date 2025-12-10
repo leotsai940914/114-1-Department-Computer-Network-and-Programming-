@@ -351,3 +351,24 @@ Blueprint 與所有 endpoint 均已修正、無 BuildError。
 
 此階段完成後，LumenFilm 的首頁正式從「假資料階段」進入「真實內容呈現」階段，
 文章發佈 → 首頁列表 → 單篇內容 的整個部落格流程已完整閉合。
+
+
+[2025-12-10]
+完成 Step 5-3：分類頁讀取資料庫文章（/category/<name>）
+
+- 使用 CategoryModel.get_category_by_name(name) 依分類名稱讀取 categories 資料表
+- 使用 PostModel.get_posts_by_category(category_id) 讀取該分類底下所有文章，並 JOIN categories 取得 category_name
+- 在 post_routes.py 中完成 /category/<name> 路由：
+      • 若分類存在 → 查詢該分類所有文章並渲染 category_posts.html
+      • 若分類不存在 → 回傳 404，使用 error.html 顯示「分類不存在」
+- 將 category_posts.html 從原本的假資料改為 Jinja2 迴圈動態渲染：
+      • 文章標題（可點擊進入 /post/<id>）
+      • 分類名稱
+      • 發布日期 created_at
+      • 內容摘要（前 80 字）
+- 若該分類目前沒有任何文章，頁面顯示「這個分類目前沒有文章」，避免空白畫面
+- 分類頁的版面與首頁文章列表共用同一組 post-card 樣式，維持整體設計一致性
+
+此階段完成後，LumenFilm 的分類瀏覽體驗成形，
+使用者可以從「首頁 → 分類 → 單篇文章」以主題方式探索內容，
+部落格的導覽架構更加完整。
