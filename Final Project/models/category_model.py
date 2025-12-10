@@ -18,3 +18,12 @@ class CategoryModel:
 
         conn.close()
         return categories
+    
+    @staticmethod
+    def count_all():
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) AS cnt FROM categories")
+        result = cur.fetchone()["cnt"]
+        conn.close()
+        return result

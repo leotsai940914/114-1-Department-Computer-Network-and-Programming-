@@ -35,3 +35,12 @@ class CommentModel:
         rows = cur.fetchall()
         conn.close()
         return rows
+    
+    @staticmethod
+    def count_all():
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) AS cnt FROM comments")
+        result = cur.fetchone()["cnt"]
+        conn.close()
+        return result

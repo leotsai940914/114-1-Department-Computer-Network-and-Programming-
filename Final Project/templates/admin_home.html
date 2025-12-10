@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container" style="margin-top: 2rem; max-width: 900px;">
+
+    <h2 class="section-title">後台管理首頁（Admin Dashboard）</h2>
+
+    <!-- ====== 統計卡片 ====== -->
+    <div style="
+        display: flex;
+        gap: 1rem;
+        margin: 1.5rem 0;
+        flex-wrap: wrap;
+    ">
+
+        <div class="post-card" style="flex: 1;">
+            <h3>文章總數</h3>
+            <p style="font-size: 2rem; font-weight: bold;">{{ total_posts }}</p>
+        </div>
+
+        <div class="post-card" style="flex: 1;">
+            <h3>留言數</h3>
+            <p style="font-size: 2rem; font-weight: bold;">{{ total_comments }}</p>
+        </div>
+
+        <div class="post-card" style="flex: 1;">
+            <h3>分類數</h3>
+            <p style="font-size: 2rem; font-weight: bold;">{{ total_categories }}</p>
+        </div>
+
+    </div>
+
+    <hr class="divider">
+
+    <!-- ====== 文章列表 ====== -->
+    <h3 style="margin-top: 1.5rem;">所有文章</h3>
+
+    <div>
+        {% for p in posts %}
+        <div class="post-card" style="margin-bottom: 1rem;">
+
+            <h3 class="post-title">
+                {{ p.title }}
+            </h3>
+
+            <p class="post-meta">
+                {{ p.created_at }} ｜ 分類：{{ p.category_name }}
+            </p>
+
+            <div style="display: flex; gap: 1rem;">
+
+                <!-- 編輯 -->
+                <a href="{{ url_for('post_routes.edit_post', post_id=p.id) }}"
+                   class="hero-btn"
+                   style="padding: 0.4rem 0.8rem;">
+                    編輯
+                </a>
+
+                <!-- 刪除 -->
+                <form method="POST"
+                      action="{{ url_for('post_routes.delete_post', post_id=p.id) }}"
+                      onsubmit="return confirm('確定刪除這篇文章？');">
+                    <button style="
+                        padding: 0.4rem 0.8rem;
+                        background:#b00020;
+                        color:#fff;
+                        border:none;
+                        border-radius:6px;
+                        cursor:pointer;
+                    ">
+                        刪除
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
