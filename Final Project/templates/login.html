@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="auth-section">
+    <h2 class="section-title">登入 Login</h2>
+
+    <form class="auth-form">
+        <label>
+            帳號 / Username
+            <input type="text" name="username" placeholder="輸入您的帳號" required>
+        </label>
+
+        <label>
+            密碼 / Password
+            <input type="password" name="password" placeholder="輸入您的密碼" required>
+        </label>
+
+        <button type="submit" class="auth-btn">登入</button>
+
+        <p class="auth-hint">
+            還沒有帳號嗎？<a href="{{ url_for('auth_routes.register') }}">前往註冊</a>
+        </p>
+    </form>
+</section>
+
+{% endblock %}

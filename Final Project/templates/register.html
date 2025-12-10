@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="auth-section">
+    <h2 class="section-title">註冊 Register</h2>
+
+    <form class="auth-form">
+        <label>
+            帳號 / Username
+            <input type="text" name="username" placeholder="請輸入帳號" required>
+        </label>
+
+        <label>
+            Email
+            <input type="email" name="email" placeholder="example@mail.com" required>
+        </label>
+
+        <label>
+            密碼 / Password
+            <input type="password" name="password" placeholder="請輸入至少 6 位數密碼" required>
+        </label>
+
+        <button type="submit" class="auth-btn">建立帳號</button>
+
+        <p class="auth-hint">
+            已經有帳號了？<a href="{{ url_for('auth_routes.login') }}">前往登入</a>
+        </p>
+    </form>
+</section>
+
+{% endblock %}
