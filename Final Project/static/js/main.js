@@ -53,6 +53,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+/* Theme toggle */
+document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.querySelector(".theme-toggle");
+    if (!btn) return;
+
+    const applyTheme = (mode) => {
+        document.documentElement.classList.toggle("dark-mode", mode === "dark");
+        localStorage.setItem("theme", mode);
+        btn.textContent = mode === "dark" ? "☀" : "☾";
+    };
+
+    const saved = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(saved || (prefersDark ? "dark" : "light"));
+
+    btn.addEventListener("click", () => {
+        const current = document.documentElement.classList.contains("dark-mode") ? "dark" : "light";
+        applyTheme(current === "dark" ? "light" : "dark");
+    });
+});
+
 /* ============================================================
    留言區：前端表單驗證
 ============================================================ */
