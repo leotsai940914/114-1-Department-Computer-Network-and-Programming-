@@ -6,37 +6,47 @@
     <!-- ====== 文章標題 ====== -->
     <h1 class="post-detail-title">{{ post.title }}</h1>
 
-    <!-- ====== Meta 資訊 ====== -->
+    <!-- ====== 分類 & 日期 ====== -->
     <p class="post-detail-meta">
-        分類：{{ post.category_name }}
-        ｜ 發布日期：{{ post.created_at }}
+        分類：{{ post.category_name }} ｜ 
+        發布日期：{{ post.created_at }}
     </p>
 
-    <!-- ====== 封面圖片（可選） ====== -->
+    <!-- ====== 封面圖片（若有） ====== -->
     {% if post.cover_image_url %}
-    <img src="{{ post.cover_image_url }}"
+    <img src="{{ post.cover_image_url }}" 
          alt="Cover Image"
          style="width:100%; border-radius:6px; margin-bottom:1.5rem;">
     {% endif %}
 
-    <!-- ====== 文章全文 ====== -->
+    <!-- ====== 文章內容 ====== -->
     <article class="post-detail-content">
         {{ post.content | nl2br }}
     </article>
 
-    <!-- 分隔線 -->
     <hr class="divider">
+
 
 
     <!-- ====== 留言區 ====== -->
     <section class="comment-section">
         <h2 class="comment-title">留言區 Comments</h2>
 
-        <!-- 留言表單（後續 Step 5-5 會串後端） -->
-        <form class="comment-form" method="POST" action="#">
+        <!-- 若從 redirect 帶來錯誤訊息 -->
+        {% if request.args.get('error') %}
+        <p style="color:#b00020; margin-bottom:1rem;">
+            {{ request.args.get('error') }}
+        </p>
+        {% endif %}
+
+        <!-- 留言表單 -->
+        <form class="comment-form" 
+              method="POST"
+              action="{{ url_for('comment_routes.add_comment', post_id=post.id) }}">
+
             <label>
                 暱稱
-                <input type="text" name="author" placeholder="輸入暱稱">
+                <input type="text" name="nickname" placeholder="輸入暱稱">
             </label>
 
             <label>
@@ -47,19 +57,19 @@
             <button class="comment-btn" type="submit">提交留言</button>
         </form>
 
-        <!-- ====== 留言列表（目前是假資料） ====== -->
+        <!-- ====== 留言列表 ====== -->
         <div class="comment-list">
-
-            <div class="comment-item">
-                <p class="comment-author">訪客A：</p>
-                <p class="comment-text">這是一則留言範例。</p>
-            </div>
-
-            <div class="comment-item">
-                <p class="comment-author">訪客B：</p>
-                <p class="comment-text">期待看到正式內容！</p>
-            </div>
-
+            {% if comments %}
+                {% for c in comments %}
+                <div class="comment-item">
+                    <p class="comment-author">{{ c.nickname }}：</p>
+                    <p class="comment-text">{{ c.content }}</p>
+                    <p style="font-size:0.8rem; color:#999;">{{ c.created_at }}</p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color:#666;">還沒有留言，成為第一位留言的人吧！</p>
+            {% endif %}
         </div>
 
     </section>

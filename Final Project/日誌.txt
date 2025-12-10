@@ -399,3 +399,36 @@ Blueprint 與所有 endpoint 均已修正、無 BuildError。
     • 404 處理正常（文章不存在會跳 error 頁面）
 
 此步驟完成後，LumenFilm 的文章展示系統正式從「假資料」進化為「完整資料庫顯示」。
+
+
+[2025-12-10]
+
+完成 Step 5-5：留言系統（無需登入）
+	•	在 comment_routes.py 建立 /comment/<post_id> POST 路由，用於接收訪客留言
+	•	支援欄位：
+	•	nickname（訪客暱稱）
+	•	content（留言文字）
+	•	新增 CommentModel.create_comment() 與 get_comments_by_post()
+	•	在 post_detail 頁面追加留言顯示區域，採用卡片式排版（維持全站風格）
+	•	留言成功後 redirect 回 /post/<post_id>，符合使用者習慣
+	•	全系統留言功能成功運作，與文章內容動態整合
+
+
+    [2025-12-10]
+
+整理與重構 post_routes.py（消除重複路由、整合留言系統）
+	•	原本 post_detail() 被定義三次，造成 endpoint 名稱衝突風險
+	•	重新整理 post_routes.py，將所有功能統整成完整、乾淨的版本
+	•	現在 post_routes.py 包含 4 個核心：
+	1.	/ — 首頁文章列表
+	2.	/post/<id> — 單篇文章頁（含留言）
+	3.	/new_post — 新增文章（Admin Only）
+	4.	/category/<name> — 分類頁
+	•	更新後：
+	•	路由明確清晰
+	•	沒有重複 endpoint
+	•	留言列表可正確讀取與顯示
+	•	程式碼可維護性大幅提升
+
+此階段完成後，LumenFilm 的文章系統已全部可用（新增 → 列出 → 詳細 → 分類 → 留言），
+成功從「靜態部落格」進化成「動態內容系統」。

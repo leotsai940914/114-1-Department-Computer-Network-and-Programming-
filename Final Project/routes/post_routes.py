@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, abort
 from models.post_model import PostModel
 from models.category_model import CategoryModel
+from models.comment_model import CommentModel
 
 post_bp = Blueprint("post_routes", __name__)
 
@@ -15,7 +16,7 @@ def home():
 
 
 # =============================
-# 單篇文章頁
+# 單篇文章頁（整合留言系統）
 # =============================
 @post_bp.route("/post/<int:post_id>")
 def post_detail(post_id):
@@ -24,7 +25,14 @@ def post_detail(post_id):
     if not post:
         return render_template("error.html", message="文章不存在"), 404
 
-    return render_template("post_detail.html", post=post)
+    # 取得留言
+    comments = CommentModel.get_comments_by_post(post_id)
+
+    return render_template(
+        "post_detail.html",
+        post=post,
+        comments=comments
+    )
 
 
 # =============================
@@ -34,9 +42,9 @@ def post_detail(post_id):
 def new_post():
     # --- 權限檢查 ---
     if session.get("role") != "admin":
-        abort(403)  # 只有管理者能進來
+        abort(403)
 
-    # --- GET：顯示表單（需要分類） ---
+    # --- GET：顯示表單 ---
     if request.method == "GET":
         categories = CategoryModel.get_all_categories()
         return render_template("new_post.html", categories=categories)
@@ -56,7 +64,7 @@ def new_post():
             categories=categories
         )
 
-    # --- 寫進資料庫 ---
+    # --- 寫入資料庫 ---
     new_id = PostModel.create_post(
         title=title,
         content=content,
@@ -65,7 +73,6 @@ def new_post():
         cover_image_url=cover_image_url
     )
 
-    # --- 導向文章頁 ---
     return redirect(url_for("post_routes.post_detail", post_id=new_id))
 
 
@@ -85,23 +92,4 @@ def category_page(name):
         "category_posts.html",
         category_name=name,
         posts=posts
-    )
-
-
-
-@post_bp.route("/post/<int:post_id>")
-def post_detail(post_id):
-    # 取得文章資料
-    post = PostModel.get_post_by_id(post_id)
-
-    if not post:
-        return render_template("error.html", message="文章不存在"), 404
-
-    # 若之後要加入留言系統，可以啟用這段
-    # comments = CommentModel.get_comments_by_post(post_id)
-
-    return render_template(
-        "post_detail.html",
-        post=post,
-        # comments=comments
     )
