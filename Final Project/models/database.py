@@ -1,22 +1,22 @@
 import sqlite3
-import os
+from flask import current_app
 
-DB_PATH = "instance/blog.db"
 
-# 取得資料庫連線
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row  # 讓資料可以用欄位名稱索引
+    """讀取 Flask app 的 Config 設定來取得資料庫路徑"""
+    db_path = current_app.config["DATABASE_PATH"]
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row  # 以 dict 方式讀資料
     return conn
 
 
-# 建立資料表 schema
 def create_tables():
+    """建立資料表"""
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
-    # users 表
-    cursor.execute("""
+    # users
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
@@ -26,16 +26,16 @@ def create_tables():
         );
     """)
 
-    # categories 表
-    cursor.execute("""
+    # categories
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT UNIQUE NOT NULL
         );
     """)
 
-    # posts 表
-    cursor.execute("""
+    # posts
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS posts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
@@ -49,8 +49,8 @@ def create_tables():
         );
     """)
 
-    # comments 表
-    cursor.execute("""
+    # comments
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS comments (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             post_id INTEGER NOT NULL,
@@ -65,10 +65,10 @@ def create_tables():
     conn.close()
 
 
-# 初始化六個分類
 def init_categories():
+    """初始化六個分類"""
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
     default_categories = [
         "Review",
@@ -80,7 +80,7 @@ def init_categories():
     ]
 
     for cat in default_categories:
-        cursor.execute("INSERT OR IGNORE INTO categories (name) VALUES (?)", (cat,))
+        cur.execute("INSERT OR IGNORE INTO categories (name) VALUES (?)", (cat,))
 
     conn.commit()
     conn.close()
