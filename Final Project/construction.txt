@@ -10,22 +10,22 @@ final_project/
 │
 ├── templates/
 │   ├── base.html              # 共同佈局（導覽列＋主體）
-│   ├── index.html             # 首頁 → 最新攝影文章列表
-│   ├── post_detail.html       # 單篇作品解析/影評
-│   ├── new_post.html          # 新增文章（登入者限定）
+│   ├── index.html             # 首頁 → 最新電影文章列表
+│   ├── post_detail.html       # 單篇影評 / 分鏡分析
+│   ├── new_post.html          # 新增文章（僅作者可用）
 │   ├── login.html
 │   ├── register.html
-│   ├── category_posts.html    # 類別頁（例如：攝影史/器材/影評）
-│   ├── about.html             # 可選：關於攝影理念/自介
-│   └── error.html             # 錯誤頁
+│   ├── category_posts.html    # 類別頁（分類顯示文章）
+│   ├── about.html             # 關於網站 / 觀影理念
+│   └── error.html             # 錯誤頁（未授權、找不到頁面等）
 │
 ├── static/
 │   ├── css/
-│   │   └── style.css          # 主樣式（乾淨簡約攝影風）
+│   │   └── style.css          # 主樣式（電影風 / Medium 風）
 │   ├── js/
 │   │   └── main.js            # 表單檢查、前端互動
 │   └── images/
-│       └── (空)               # 之後放照片縮圖/LOGO
+│       └── (空)               # 用來放海報、封面、Logo
 │
 ├── models/
 │   ├── __init__.py
@@ -36,7 +36,7 @@ final_project/
 │
 └── routes/
     ├── __init__.py
-    ├── auth_routes.py         # 登入、註冊、登出
-    ├── post_routes.py         # 作品文章 / 影評
-    ├── category_routes.py     # 分類展示（攝影史/器材/影評）
-    └── comment_routes.py      # 留言功能
+    ├── auth_routes.py         # 登入 / 註冊 / 登出
+    ├── post_routes.py         # 影評 / 文章 CRUD
+    ├── category_routes.py     # 類別文章顯示
+    └── comment_routes.py      # 訪客留言

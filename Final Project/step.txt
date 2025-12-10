@@ -1,0 +1,389 @@
+好的，我會給你一份 完整、清晰、順序正確、可以照做的「LumenFilm 全開發步驟」。
+你可以把這份當成你的 整個期末專案的「開發路線地圖」。
+
+這份表列出的每一個步驟都：
+	•	不浪費時間
+	•	符合老師評分項目
+	•	環環相扣
+	•	能從 0 → 最終成品
+	•	每完成一段，你的網站就會更完整
+
+⸻
+
+🎬 LumenFilm｜完整前後端開發步驟表（適合你逐步照做）
+
+我會分成五大階段：
+	1.	前端基礎架構（HTML / CSS / Layout）
+	2.	後端初始架構（Flask 路由骨架）
+	3.	資料庫與 Models
+	4.	登入 / 註冊 / Session 系統
+	5.	完整部落格功能（文章 / 分類 / 留言）
+	6.	收尾：部署、RWD、美化
+
+你把這份照著做，就能完整開發完 LumenFilm。
+
+⸻
+
+🟦 第 1 階段：前端基礎架構（最先做，非常重要）
+
+這階段的目標：
+能看得到「網站雛形」與整體風格 → 用於 12/10 進度報告
+
+⸻
+
+✔ Step 1-1：建立 base.html（全站框架）
+
+要包含：
+	•	HTML 基本結構
+	•	head + 字體設定
+	•	Navbar（Home / Categories / About / Login/Register）
+	•	container 最大寬度
+	•	block content
+	•	Footer
+
+（這是所有頁面的共同版型）
+
+⸻
+
+✔ Step 1-2：建立首頁 index.html（視覺門面）
+
+內容需包含：
+	•	Hero Banner（大圖 + 標語 + 按鈕）
+	•	最新文章列表（3–6 張卡片 placeholder）
+
+不用資料庫，先用「假資料」→ 之後替換成動態資料。
+
+⸻
+
+✔ Step 1-3：建立 style.css（初版設計系統）
+
+定義：
+	•	字體
+	•	顏色
+	•	通用排版
+	•	卡片元件
+	•	Hero 樣式
+	•	Navbar 樣式
+
+這階段不需要 RWD，也不用美到爆，只要 一致 就好。
+
+⸻
+
+✔ Step 1-4：建立 login.html / register.html（表單 UI 骨架）
+
+要包含：
+	•	欄位
+	•	按鈕
+	•	placeholder
+	•	基本排版
+
+不需要後端功能，但要好看。
+
+⸻
+
+✔ Step 1-5：category_posts.html（分類列表頁）
+
+內容：
+	•	類別標題
+	•	3–6 張文章列表 placeholder
+
+⸻
+
+✔ Step 1-6：post_detail.html（文章內容頁）
+
+包含：
+	•	標題
+	•	分類
+	•	日期
+	•	文章內容 placeholder
+	•	留言區 placeholder
+
+⸻
+
+📌 完成第 1 階段 → 你已經足以交 12/10 進度報告（前端）
+
+⸻
+
+🟦 第 2 階段：後端初始架構（Flask 路由骨架）
+
+這裡你只要建立 空路由，前端能跳轉即可。
+
+⸻
+
+✔ Step 2-1：建立 Flask 專案結構（你已完成）
+
+final_project/
+templates/
+static/
+routes/
+models/
+instance/
+
+⸻
+
+✔ Step 2-2：app.py（入口）
+
+建立：
+	•	create_app()
+	•	註冊 blueprint
+	•	homepage route
+
+⸻
+
+✔ Step 2-3：建立 routes/
+	•	auth_routes.py
+	•	post_routes.py
+	•	category_routes.py
+	•	comment_routes.py
+
+每個檔先放 骨架路由（return 字串），確認能跳轉。
+
+例如：
+
+@auth_routes.route("/login")
+def login():
+    return render_template("login.html")
+
+
+⸻
+
+📌 完成第 2 階段 → 你的頁面將能完整「跳轉」，看起來像真的網站。
+
+⸻
+
+🟦 第 3 階段：資料庫與 Models（12/10 後開始）
+
+⸻
+
+✔ Step 3-1：建立 SQLite 資料庫 schema
+
+需要四張表：
+	•	users
+	•	posts
+	•	categories
+	•	comments
+
+⸻
+
+✔ Step 3-2：在 models/ 裡撰寫 CRUD Interface
+
+每個 model 負責：
+	•	新增資料
+	•	查詢資料
+	•	更新（可選）
+	•	刪除（可選）
+
+⸻
+
+✔ Step 3-3：初始化 categories（6 種分類）
+
+在第一次啟動時自動寫入：
+	•	Review
+	•	Scene Analysis
+	•	Themes
+	•	Character Study
+	•	Film Theory
+	•	Directors
+
+⸻
+
+📌 完成第 3 階段 → 可以開始讓首頁與分類頁顯示真實資料。
+
+⸻
+
+🟦 第 4 階段：登入 / 註冊 / Session 系統（重大功能）
+
+⸻
+
+✔ Step 4-1：完成 /register
+	•	表單取得資訊
+	•	檢查 email / username 是否重複
+	•	密碼雜湊（Werkzeug）
+	•	成功後 redirect /login
+
+⸻
+
+✔ Step 4-2：完成 /login
+	•	檢查帳號是否存在
+	•	密碼是否正確
+	•	若正確 → 設定 session：
+
+session["user_id"] = user.id
+session["role"] = user.role
+
+
+
+⸻
+
+✔ Step 4-3：完成 /logout
+	•	清空 session
+
+⸻
+
+📌 完成第 4 階段 → 你已經有運作的會員系統。
+
+⸻
+
+🟦 第 5 階段：文章系統（部落格核心）
+
+⸻
+
+✔ Step 5-1：完成 /new_post（Admin Only）
+
+內容包含：
+	•	標題
+	•	內容
+	•	分類（下拉）
+	•	封面圖片 URL
+	•	發布按鈕
+
+成功後：
+
+redirect(url_for("post_routes.post_detail", id=new_id))
+
+
+⸻
+
+✔ Step 5-2：首頁顯示文章列表（從 DB 撈資料）
+
+index.html：
+
+return render_template("index.html", posts=posts)
+
+
+⸻
+
+✔ Step 5-3：分類頁顯示該分類文章
+
+category_posts.html：
+
+SELECT * FROM posts WHERE category_id = ?
+
+
+⸻
+
+✔ Step 5-4：文章內容頁顯示全文（含留言）
+
+⸻
+
+✔ Step 5-5：留言系統（無需登入）
+
+comment_routes.py：
+	•	收集暱稱 + 留言
+	•	新增至 DB
+	•	redirect 回該文章頁
+
+⸻
+
+📌 完成第 5 階段 → 你的網站功能已完整運作，可以準備 12/18 Demo。
+
+⸻
+
+🟦 第 6 階段：最終優化（報告前完成即可）
+
+⸻
+
+✔ Step 6-1：全站 RWD
+	•	手機版顯示
+	•	Hero banner 堆疊
+
+⸻
+
+✔ Step 6-2：簡單動畫
+	•	hover 效果
+	•	card 微亮度
+	•	按鈕過場
+
+⸻
+
+✔ Step 6-3：版面一致性檢查
+	•	字級一致
+	•	行距一致
+	•	邊界一致
+	•	圓角一致
+
+⸻
+
+✔ Step 6-4：部署（老師提供平台）
+
+通常是：
+	•	Render
+	•	Fly.io
+	•	Railway
+
+⸻
+
+📌 完成第 6 階段 → 你的專案可公開訪問，100% 符合評分標準。
+
+⸻
+
+🎯 最終總覽（你可以打印貼在牆上）
+
+⸻
+
+🔵 LumenFilm 開發全流程（你照著做就能成功）
+
+Part 1 — 前端基礎（12/3～12/7）
+	1.	base.html
+	2.	index.html
+	3.	style.css
+	4.	login/register
+	5.	category_posts
+	6.	post_detail
+
+⸻
+
+Part 2 — 後端路由骨架（12/7～12/9）
+	7.	app.py
+	8.	blueprint 設計
+	9.	routes skeleton
+
+⸻
+
+Part 3 — 資料庫 & Models（12/9～12/11）
+	10.	DB schema
+	11.	Models
+	12.	categories 初始化
+
+⸻
+
+Part 4 — 登入系統（12/11～12/13）
+	13.	註冊
+	14.	登入
+	15.	Session 管理
+
+⸻
+
+Part 5 — 部落格功能（12/13～12/16）
+	16.	新增文章
+	17.	首頁讀取 DB
+	18.	分類頁
+	19.	單篇文章
+	20.	留言系統
+
+⸻
+
+Part 6 — 完整收尾（12/16～12/18）
+	21.	RWD
+	22.	動效
+	23.	風格一致性檢查
+	24.	部署
+	25.	Demo 排練
+
+⸻
+
+🎉 完成！
+
+這份就是你的 LumenFilm 開發藍圖。
+照這個順序做，你：
+	•	不會迷路
+	•	不會做到一半發現東西衝突
+	•	能確保 12/10 前端完整、12/18 全功能完成
+	•	老師一定覺得你開發流程非常清晰
+
+⸻
+
+如果你願意，我可以從 Part 1 Step 1（base.html） 帶你寫起，
+而且會幫你做得很漂亮、風格一致。
+
+要開始嗎？

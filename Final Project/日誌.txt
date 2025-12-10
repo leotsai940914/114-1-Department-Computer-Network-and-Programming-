@@ -1,0 +1,16 @@
+[2025-12-03]
+建立 LumenFilm 專案基本架構：
+- 決定網站主題：電影影評與分鏡分析部落格
+- 完成專案資料夾架構（templates / static / routes / models / instance）
+- 規劃完整開發步驟（前端 → 路由 → DB → 登入系統 → 文章系統）
+- 客製化 base.html 設計風格（Medium 白底、Serif 字體、900px 寬度）
+- 建立 style.css 初版（基本排版 + Navbar + Footer）
+
+---
+[2025-12-03]
+完成 Step 1-2：建立首頁 index.html
+- 新增 Hero Banner（左側文字敘述、主打按鈕、右側視覺圖片區塊）
+- 設計最新文章列表的三張 placeholder 卡片（標題、分類、摘要皆可後續替換）
+- 依照 Medium＋Serif 的網站閱讀風格進行排版，確保視覺一致性
+- 擴充 style.css：加入 hero 區塊、卡片列表、按鈕互動效果（hover）
+- 首頁目前使用假資料，後端完成後會改成資料庫資料
