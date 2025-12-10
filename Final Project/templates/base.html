@@ -23,7 +23,11 @@
 
         <nav class="nav-links">
             <a href="{{ url_for('index') }}">Home</a>
-            <a href="#">Categories</a>
+
+            <!-- Categories 改成能正常跳轉 -->
+            <a href="{{ url_for('category_routes.categories_index') }}">Categories</a>
+
+            <!-- About 目前無頁面，維持 placeholder -->
             <a href="#">About</a>
 
             {% if session.get('user_id') %}

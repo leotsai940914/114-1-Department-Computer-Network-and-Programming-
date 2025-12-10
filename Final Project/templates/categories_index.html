@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="category-section">
+    <h2 class="section-title">分類一覽 Categories</h2>
+
+    <ul style="list-style:none; padding:0; margin-top:1.5rem;">
+        {% for cat in categories %}
+        <li style="margin-bottom:0.8rem;">
+            <a href="{{ url_for('category_routes.category_page', name=cat['name']) }}"
+               style="font-size:1.1rem; color:#222;">
+                {{ cat["name"] }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+
+{% endblock %}
