@@ -6,7 +6,7 @@
     <h2 class="section-title">編輯文章 Edit Post</h2>
 
     <form id="editPostForm"
-          class="newpost-form" 
+          class="newpost-form"
           method="POST"
           action="{{ url_for('post_routes.update_post', post_id=post.id) }}">
 
@@ -24,14 +24,68 @@
                value="{{ post.title }}"
                required>
 
-        <!-- 內容：Quill Editor -->
+        <!-- 內容 -->
         <label class="form-label">文章內容</label>
 
-        <!-- Quill 容器 -->
-        <div id="quillEditor" style="height: 300px; background: #fff;"></div>
+        <!-- 工具列 Toolbar -->
+        <div id="toolbar-edit">
+            <span class="ql-formats">
+                <select class="ql-header">
+                    <option selected></option>
+                    <option value="1">H1</option>
+                    <option value="2">H2</option>
+                    <option value="3">H3</option>
+                    <option value="4">H4</option>
+                </select>
+            </span>
 
-        <!-- 隱藏欄位：表單送出時塞 Quill HTML -->
-        <input type="hidden" name="content" id="contentInput">
+            <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-align" value=""></button>
+                <button class="ql-align" value="center"></button>
+                <button class="ql-align" value="right"></button>
+                <button class="ql-align" value="justify"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-indent" value="-1"></button>
+                <button class="ql-indent" value="+1"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-blockquote"></button>
+                <button class="ql-code-block"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-link"></button>
+                <button class="ql-image"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button id="insert-hr-edit">HR</button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-clean"></button>
+            </span>
+        </div>
+
+        <!-- Quill 編輯器 -->
+        <div id="quillEditor-edit" style="height: 350px; background: #fff;"></div>
+
+        <!-- hidden input -->
+        <input type="hidden" name="content" id="contentInput-edit">
 
         <!-- 分類 -->
         <label class="form-label">文章分類</label>
@@ -51,7 +105,7 @@
                name="cover_image"
                value="{{ post.cover_image_url or '' }}">
 
-        <!-- 更新按鈕 -->
+        <!-- 按鈕 -->
         <button class="submit-btn" type="submit">更新文章</button>
 
     </form>
@@ -65,47 +119,53 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
 <!-- ===============================
-     初始化 Quill + 載入舊文章內容
+     初始化 Quill（含預載 HTML）
 ================================= -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // 1️⃣ 建立 Quill 編輯器
-    var quill = new Quill("#quillEditor", {
+    // 1️⃣ 建立 Quill 編輯器（完整工具列）
+    var quill = new Quill("#quillEditor-edit", {
         theme: "snow",
         placeholder: "請輸入文章內容…",
         modules: {
-            toolbar: [
-                [{ header: [1, 2, 3, false] }],
-                ["bold", "italic", "underline"],
-                ["blockquote", "code-block"],
-                [{ list: "ordered" }, { list: "bullet" }],
-                ["link", "image"]
-            ]
+            toolbar: "#toolbar-edit"
         }
     });
 
-    // 2️⃣ 預載文章 HTML（安全方式）
-    //    用 hidden div 包住 raw HTML，再塞回 Quill
+    // 2️⃣ 自訂 HR 分隔線
+    var Block = Quill.import("blots/block");
+    class Divider extends Block {}
+    Divider.blotName = "divider";
+    Divider.tagName = "hr";
+    Quill.register(Divider);
+
+    document.getElementById("insert-hr-edit").addEventListener("click", function () {
+        let range = quill.getSelection();
+        if (range) {
+            quill.insertEmbed(range.index, "divider", true);
+            quill.insertText(range.index + 1, "\n");
+        }
+    });
+
+    // 3️⃣ 預載文章內容
     var rawHTML = document.getElementById("rawContent").innerHTML;
     quill.root.innerHTML = rawHTML;
 
-    // 3️⃣ 表單送出 → 將 Quill HTML 塞進 hidden input
+    // 4️⃣ 表單送出 → 塞 HTML
     document.getElementById("editPostForm").onsubmit = function () {
         var html = quill.root.innerHTML.trim();
-
         if (html === "<p><br></p>" || html.length < 5) {
             alert("文章內容不得為空");
             return false;
         }
-
-        document.getElementById("contentInput").value = html;
+        document.getElementById("contentInput-edit").value = html;
     };
 
 });
 </script>
 
-<!-- 用 Jinja2 載入 raw HTML 的安全容器（Quill 初始化後讀取） -->
+<!-- 安全載入 HTML → 給 JS 預填 Quill -->
 <div id="rawContent" style="display:none;">
     {{ post.content | safe }}
 </div>

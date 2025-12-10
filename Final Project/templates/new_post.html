@@ -5,7 +5,6 @@
 
     <h2 class="section-title">新增文章</h2>
 
-    <!-- POST form -->
     <form id="postForm"
           class="newpost-form"
           method="POST"
@@ -20,15 +19,64 @@
         <input type="text" class="form-input" name="title"
                placeholder="請輸入文章標題" required>
 
-        <!-- 內容（Quill 替換 textarea） -->
-        <label class="form-label">文章內容</label>
+        <!-- 工具列 -->
+        <div id="toolbar-new">
+            <span class="ql-formats">
+                <select class="ql-header">
+                    <option selected></option>
+                    <option value="1">H1</option>
+                    <option value="2">H2</option>
+                    <option value="3">H3</option>
+                    <option value="4">H4</option>
+                </select>
+            </span>
 
-        <!-- Quill 編輯器顯示的區域 -->
-        <div id="quillEditor"
-             style="height: 300px; background: #fff;"></div>
+            <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+            </span>
 
-        <!-- 隱藏欄位：送出前填入 HTML -->
-        <input type="hidden" name="content" id="contentInput">
+            <span class="ql-formats">
+                <button class="ql-align" value=""></button>
+                <button class="ql-align" value="center"></button>
+                <button class="ql-align" value="right"></button>
+                <button class="ql-align" value="justify"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-indent" value="-1"></button>
+                <button class="ql-indent" value="+1"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-blockquote"></button>
+                <button class="ql-code-block"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-link"></button>
+                <button class="ql-image"></button>
+            </span>
+
+            <span class="ql-formats">
+                <button id="insert-hr-new">HR</button>
+            </span>
+
+            <span class="ql-formats">
+                <button class="ql-clean"></button>
+            </span>
+        </div>
+
+        <!-- Quill 編輯器 -->
+        <div id="quillEditor-new" style="height:350px;background:#fff;"></div>
+
+        <input type="hidden" name="content" id="contentInput-new">
 
         <!-- 分類 -->
         <label class="form-label">文章分類</label>
@@ -38,56 +86,52 @@
             {% endfor %}
         </select>
 
-        <!-- 封面圖片 -->
+        <!-- 封面 -->
         <label class="form-label">封面圖片 URL（選填）</label>
         <input type="text" class="form-input" name="cover_image"
                placeholder="https://example.com/poster.jpg">
 
-        <!-- 按鈕 -->
         <button class="submit-btn" type="submit">發布文章</button>
 
     </form>
 
 </div>
 
-<!-- ===============================
-     Quill.js CDN
-================================= -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
-<!-- ===============================
-     初始化 Quill + 表單提交處理
-================================= -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // 建立 Quill 編輯器
-    var quill = new Quill("#quillEditor", {
+    var quill = new Quill("#quillEditor-new", {
         theme: "snow",
         placeholder: "請輸入文章內容…",
-        modules: {
-            toolbar: [
-                [{ header: [1, 2, 3, false] }],
-                ["bold", "italic", "underline"],
-                ["blockquote", "code-block"],
-                [{ list: "ordered" }, { list: "bullet" }],
-                ["link", "image"]
-            ]
+        modules: { toolbar: "#toolbar-new" }
+    });
+
+    // HR 插入
+    var Block = Quill.import("blots/block");
+    class Divider extends Block {}
+    Divider.blotName = "divider";
+    Divider.tagName = "hr";
+    Quill.register(Divider);
+
+    document.getElementById("insert-hr-new").addEventListener("click", function () {
+        let range = quill.getSelection();
+        if (range) {
+            quill.insertEmbed(range.index, "divider");
+            quill.insertText(range.index + 1, "\n");
         }
     });
 
-    // 表單送出 → 將 HTML 塞入 hidden input
+    // Submit
     document.getElementById("postForm").onsubmit = function () {
-        var html = quill.root.innerHTML.trim();
-
-        // 防止空文章
-        if (html === "<p><br></p>" || html.length < 5) {
+        let html = quill.root.innerHTML.trim();
+        if (html === "<p><br></p>") {
             alert("文章內容不得為空");
             return false;
         }
-
-        document.getElementById("contentInput").value = html;
+        document.getElementById("contentInput-new").value = html;
     };
 
 });

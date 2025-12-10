@@ -97,88 +97,220 @@ Blueprint 架構是乾淨、可維護、可擴充的標準模式。
 
 
 
-🎬【Quill.js 整合規劃】— 適合你的 LumenFilm 部落格
+🎬【Quill.js 整合完成
 
-這套流程會分四部分：
 
-⸻
+🎬 LumenFilm｜完整開發計畫（含 Quill、排版、UI 優化、部署）
 
-✅ Step 1 — 新增 Quill.js 到你的 new_post.html
 
-你要做到：
-	•	把 <textarea> 改成 Quill 編輯器 UI
-	•	提交表單時，把 HTML 字串塞進 <input type="hidden">
 
-這裡不需要動後端。
+🟦 Phase A — 影評網站體驗提升（前端）
+
+目標：你的文章看起來像 專業影評，不是部落格。
 
 ⸻
 
-✅ Step 2 — 在 edit_post.html 放入 Quill（預載舊文章內容）
+A-1｜文章排版強化（立即可做）
 
-難點在：
-	•	Quill 必須在載入時將 post.content 放進編輯器
-	•	因為 Quill 不吃 Jinja2 的 raw HTML，需要安全方式載入
+你會得到 5 種可用 layout：
+	1.	劇照插圖（自動置中＋陰影）
+	2.	Blockquote 高級引用
+	3.	分鏡拆解（左圖右文、右圖左文）
+	4.	Key Takeaways / Highlights 區塊
+	5.	Drop cap（文章首字大寫天堂級排版）
 
-我會提供正確做法（vanilla JS）。
+➡️ 全部都可以用 CSS + Quill 完成（後端不改）。
 
-⸻
-
-✅ Step 3 — 你的後端（new_post / update_post）
-
-不用改任何東西！
-
-Quill 輸出的內容就是 HTML
-你後端目前存的是 TEXT → 直接存 HTML 沒問題。
+成果：
+文章會像電影雜誌、Letterboxd 專欄、高質感影評網站。
 
 ⸻
 
-✅ Step 4 — 修改 post_detail.html，顯示 HTML 內容
+A-2｜Quill 自訂工具列（行距、H1-H4、小標題）
 
-你只需要：
+讓你在後台編輯文章時：
+	•	可做小標題 H2、H3
+	•	可插入分隔線
+	•	可插入 blockquote
+	•	可插入圖片
+	•	可改粗體、斜體、縮排
 
-{{ post.content | safe }}
-
-不用 nl2br 了，因為 Quill 會自己做排版。
-
-⸻
-
-🔥 完成後，你的文章功能會具備：
-	•	粗體、斜體、底線
-	•	標題 H1/H2
-	•	引言 blockquote
-	•	清單（bullet / number）
-	•	連結
-	•	插入圖片（貼 URL 即可）
-	•	專業編輯器介面（像 Medium）
-
-整個 LumenFilm 會瞬間升級等級。
+➡️ 實體感超強的後台文章編輯器。
+	1.	幫你改 new_post.html
+	2.	幫你改 edit_post.html
+	3.	幫你改 JS 初始化 Quill 的 toolbar
+	4.	加行距系統（line-height）
+	5.	加分隔線按鈕（特殊功能）
 
 ⸻
 
-🎨 附加功能（可選）：Quill Toolbars 擴充
+A-3｜文章內圖片 Lazy Load + Lightbox
 
-你之後可加入：
-	•	代碼區塊（影評技術項目）
-	•	分鏡格線 layout（自訂 module）
-	•	上傳圖片（Base64 / Imgur API）
-
-但第一版先不加入，保持簡單最好。
+圖片不會一下子全部下載 → 加快載入速度
+點擊圖片變大張 → 電影劇照效果爆炸提升。
 
 ⸻
 
-🎯 大方向規劃完畢
+🟦 Phase B — 使用者體驗（UX / 功能）
 
-接下來我會給你：
-
-✔ new_post.html 的 Quill 整合版本
-✔ edit_post.html 的預載版本
-✔ post_detail.html 改版
-✔ CSS 微調，讓 Quill 完美融入你的網站
+目標：讓你的網站更像真的在用。
 
 ⸻
 
-你只需要回答：
+B-1｜新增 About / Profile（後台）
 
-要開始整合 Quill 嗎？我先從 Step 1（new_post.html）開始給你可直接貼上的完整程式碼。
+管理者可以：
+	•	更新網站簡介
+	•	更新作者頭像
+	•	更新站名（LumenFilm）
 
-（我會分成「可直接複製」的區塊，讓你一次完成。）
+➡️ 做 Demo 非常實用。
+
+⸻
+
+B-2｜文章列表排序與過濾（後端）
+
+不需要 search。
+
+你可以很快做出：
+	•	最新文章
+	•	依分類查看
+	•	依發布時間排序
+	•	類別列表置頂（全部文章、Review、Themes…）
+
+全部是 SQL ORDER BY → 超輕鬆。
+
+⸻
+
+B-3｜Pagination（文章多時自動分頁）
+
+每頁顯示 5 筆 → 第 1 頁、下一頁、上一頁
+像 Medium 一樣。
+
+➡️ 不做也行，但做了會像正式網站。
+
+⸻
+
+B-4｜留言區安全性強化（防灌水）
+
+你可以加入：
+	•	30 秒內不得連續留言
+	•	暱稱清洗
+	•	HTML escape
+
+你已經有留言功能 → 強化會更專業。
+
+⸻
+
+🟦 Phase C — 管理後台（Admin Dashboard）
+
+你現在已經能：
+
+✔ 新增文章
+✔ 編輯文章
+✔ 刪除文章
+✔ 分類
+✔ 留言
+
+但缺少 一個後台入口。
+
+⸻
+
+C-1｜/admin（後台首頁）
+
+簡單顯示：
+	•	文章列表（含編輯、刪除按鈕）
+	•	留言管理
+	•	統計數據（文章數、留言總數）
+
+這部分後端你已經全有，
+只是缺一個 集中的頁面。
+
+⸻
+
+C-2｜留言管理（Admin Only）
+
+增加：
+	•	刪除留言（避免亂留言）
+
+超簡單：只要加一個 delete_comment()。
+
+⸻
+
+🟦 Phase D — 整體視覺強化（CSS / RWD）
+
+⸻
+
+D-1｜全站 RWD（手機版）
+
+重點：
+	•	Navbar 手機漢堡選單
+	•	Hero 縮成單欄
+	•	卡片滿版
+	•	Quill 在手機也能編輯
+
+這件事會讓網站「真的能用」。
+
+⸻
+
+D-2｜黑暗模式（Dark Mode）
+
+設計 tokens 全部已完成 → 你可以一鍵反轉顏色。
+
+你可以得到：
+	•	白底／黑底切換
+	•	自動配色
+	•	按鈕隨主題變色
+
+超高級體驗。
+
+⸻
+
+🟦 Phase E — 部署（正式上線）
+
+可以選：
+	1.	Railway（最簡單）
+	2.	Render（穩定）
+	3.	Fly.io（強大）
+
+流程：
+	•	requirements.txt
+	•	Procfile
+	•	STATIC_FILES 設定
+	•	DATABASE 路徑改成雲端版本（或 SQLite 持久化）
+
+最後你會得到：
+
+🌍 一個能分享給同學、老師、朋友的 LumenFilm 網站。
+
+⸻
+
+⭐ 最推薦你現在開始的路線
+
+因為你後端 CRUD 已完整，
+前端 Quill 已成功整合，
+
+所以最有感、成效最快的是：
+
+⸻
+
+🔥 立即做：A-1 文章排版強化
+
+理由：
+	•	馬上提升文章品質
+	•	馬上看得出差異
+	•	不會動到後端（不會破壞現有功能）
+	•	Demo 時老師也最能感受到你的用心
+
+⸻
+
+📣 下一步，請你從下面選一個：
+
+1）劇照插圖（置中 + 陰影）
+2）Blockquote（高級引用排版）
+3）分鏡拆解（左右布局）
+4）Key Takeaways 區塊（高亮重點）
+5）Drop cap（雜誌級首字排版）
+6）我想五個全部做
+
+你選，我直接開始幫你寫 CSS + Quill 可插入的 snippet。
