@@ -28,3 +28,24 @@
 - 整體風格定調為 Medium 風格 + Noto Serif TC 文青質感
 
 此階段完成後，全站視覺統一性已建立，可開始撰寫登入與註冊頁（Step 1-4）。
+
+[2025-12-03]
+完成 Step 1-4：建立 login.html / register.html（表單 UI 骨架）
+
+- 完成登入頁 login.html：包含帳號欄位、密碼欄位、登入按鈕、導向註冊提示
+- 完成註冊頁 register.html：包含帳號、Email、密碼欄位及註冊按鈕
+- 新增 auth-section、auth-form、auth-btn 等共用 CSS 元件，維持整站統一風格
+- 表單採用 Medium × Noto Serif TC 的文青閱讀風格，與首頁視覺一致
+- 排版以 900px container 中央置中，留白充足，提升頁面清晰度與使用體驗
+- 尚未串接後端註冊與登入，現在為純前端 UI 架構，可之後直接套上 Flask 表單處理
+
+[2025-12-03]
+完成 Step 1-5：建立 category_posts.html（分類列表頁）
+
+- 新增分類頁前端模板 category_posts.html，內容包含分類標題與多篇文章卡片
+- 使用 section-title 呈現分類名稱，保持與首頁、登入頁一致的排版層級
+- 全站共用 post-card 元件（首頁 / 分類頁皆使用相同樣式）
+- 頁面目前採用 3 組 placeholder 假資料，便於 Demo 與後續串接資料庫
+- 排版採 900px container、白底、Noto Serif TC，維持 Medium 風格閱讀感
+- 新增 category-section 微調頁面間距，確保版面與其他頁面協調
+- 前端架構已能支援未來 Flask route 傳入 category_name 與文章列表資料

@@ -287,3 +287,8 @@ p {
 .auth-hint a:hover {
     text-decoration: underline;
 }
+
+
+.category-section {
+    padding-top: 1rem;
+}

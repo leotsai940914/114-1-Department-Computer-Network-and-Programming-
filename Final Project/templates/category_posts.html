@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="category-section">
+
+    <!-- 類別標題：之後會用後端傳入 category.name -->
+    <h2 class="section-title">{{ category_name or "分類名稱 Category" }}</h2>
+
+    <!-- ====== 假資料文章卡片（3–6 個） ====== -->
+    <div class="post-card">
+        <h3 class="post-title">示範文章一：該分類的一篇文章</h3>
+        <p class="post-meta">發布日期：2025-12-03</p>
+        <p class="post-excerpt">
+            這裡是摘要，之後會從資料庫讀取。
+            現在先用 placeholder 呈現版面。
+        </p>
+    </div>
+
+    <div class="post-card">
+        <h3 class="post-title">示範文章二：更多文章標題</h3>
+        <p class="post-meta">發布日期：2025-12-03</p>
+        <p class="post-excerpt">
+            這裡會顯示該分類底下文章的部分內容。
+        </p>
+    </div>
+
+    <div class="post-card">
+        <h3 class="post-title">示範文章三</h3>
+        <p class="post-meta">發布日期：2025-12-03</p>
+        <p class="post-excerpt">
+            等後端完成後，這裡會根據分類 ID 顯示正確文章列表。
+        </p>
+    </div>
+
+</section>
+
+{% endblock %}
