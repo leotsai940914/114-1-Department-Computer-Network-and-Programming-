@@ -26,13 +26,10 @@
 
     <hr class="divider">
 
-
-
     <!-- ====== 留言區 ====== -->
     <section class="comment-section">
         <h2 class="comment-title">留言區 Comments</h2>
 
-        <!-- 若從 redirect 帶來錯誤訊息 -->
         {% if request.args.get('error') %}
         <p style="color:#b00020; margin-bottom:1rem;">
             {{ request.args.get('error') }}
@@ -76,21 +73,46 @@
 
 </div>
 
+<!-- ====== Admin 控制按鈕（編輯 / 刪除） ====== -->
 {% if session.get("role") == "admin" %}
-<form method="POST" 
-      action="{{ url_for('post_routes.delete_post', post_id=post.id) }}"
-      onsubmit="return confirm('確定要刪除這篇文章嗎？此動作無法復原。');">
+<div style="margin-top: 2rem;" class="container">
+    <div style="display:flex; gap:1rem;">
 
-    <button type="submit" style="
-        background:#b00020;
-        color:#fff;
-        padding:0.5rem 1rem;
-        border:none;
-        border-radius:6px;
-        cursor:pointer;">
-        刪除文章
-    </button>
-</form>
+        <!-- 編輯文章 -->
+        <a href="{{ url_for('post_routes.edit_post', post_id=post.id) }}"
+           style="
+               background:#222;
+               color:#fff;
+               padding:0.5rem 1rem;
+               border-radius:6px;
+               text-decoration:none;
+               transition:0.25s ease;
+           "
+           onmouseover="this.style.opacity='0.85'"
+           onmouseout="this.style.opacity='1'">
+            編輯文章
+        </a>
+
+        <!-- 刪除文章 -->
+        <form method="POST"
+              action="{{ url_for('post_routes.delete_post', post_id=post.id) }}"
+              onsubmit="return confirm('確定要刪除這篇文章嗎？此動作無法復原。');">
+
+            <button type="submit" style="
+                background:#b00020;
+                color:#fff;
+                padding:0.5rem 1rem;
+                border:none;
+                border-radius:6px;
+                cursor:pointer;
+                transition:0.25s ease;
+            ">
+                刪除文章
+            </button>
+        </form>
+
+    </div>
+</div>
 {% endif %}
 
 {% endblock %}

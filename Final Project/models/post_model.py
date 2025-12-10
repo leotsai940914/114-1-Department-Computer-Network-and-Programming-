@@ -85,3 +85,35 @@ class PostModel:
         cursor.execute("DELETE FROM posts WHERE id = ?", (post_id,))
         conn.commit()
         conn.close()
+
+    @staticmethod
+    def update_post(post_id, title, content, category_id, cover_image_url):
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute("""
+            UPDATE posts
+            SET title = ?, content = ?, category_id = ?, cover_image_url = ?
+            WHERE id = ?
+        """, (title, content, category_id, cover_image_url, post_id))
+
+        conn.commit()
+        conn.close()
+
+
+    @staticmethod
+    def update_post(post_id, title, content, category_id, cover_image_url):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE posts
+            SET title = ?, 
+                content = ?, 
+                category_id = ?, 
+                cover_image_url = ?
+            WHERE id = ?
+        """, (title, content, category_id, cover_image_url, post_id))
+
+        conn.commit()
+        conn.close()

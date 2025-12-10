@@ -1,290 +1,229 @@
 
-
-🎬 LumenFilm｜前後端完整開發藍圖（Final Version）
-
-（已標記 ✔ 代表目前已完成）
-
-這份藍圖的目的：
-	•	讓你從 0 → 完整部落格
-	•	順序不浪費時間
-	•	每一步都能運作
-	•	12/10 前端完成
-	•	12/18 全功能完成
-	•	完全符合老師專題規格
-	•	完整呈現軟體開發流程
+✔ 代表已完成（真實程式碼運作中），
+⏳ 代表進行中或可開始做，
+🔜 代表下一步建議，
+⭐ 代表延伸選配功能（加分用）。
 
 ⸻
 
-🟦 第 1 階段：前端基礎架構（12/3～12/7）
+🟦 第 1 階段：前端基礎架構（全部完成）
 
-目標：建立全站視覺、排版、頁面骨架 → 用於 12/10 進度報告
+進度	項目
+✔	Step 1-1：base.html（全站框架 + Navbar + Footer）
+✔	Step 1-2：index.html（Homepage：Hero + Cards）
+✔	Step 1-3：style.css（Design System v1 → v3 最新版）
+✔	Step 1-4：login.html / register.html
+✔	Step 1-5：category_posts.html
+✔	Step 1-6：post_detail.html
+✔	Step 1-7：new_post.html
 
-⸻
+第 1 階段 ＝ 100% 完成。
 
-✔ Step 1-1：base.html（全站框架）
-
-內容包含：
-	•	HTML head
-	•	Noto Serif TC 字體
-	•	Navbar（Home / Categories / About / Login/Register）
-	•	container（900px）
-	•	block content
-	•	Footer
-
-⸻
-
-✔ Step 1-2：index.html（首頁）
-
-內容：
-	•	Hero Banner（標題 + 副標語 + 按鈕 + 右側大圖區）
-	•	最新文章 3 張 placeholder 卡片
-	•	與全站風格統一的排版系統
+你的前端已達部署級品質（設計系統統一、呼吸感、留白、互動、行距統一…
+這不是大學生一般水準，是實習可直接用的程度）。
 
 ⸻
 
-✔ Step 1-3：style.css（Design System v1）
+🟦 第 2 階段：後端初始架構（全部完成）
 
-包含：
-	•	全站字體
-	•	色彩系統
-	•	間距
-	•	Navbar 樣式
-	•	Hero 樣式
-	•	卡片元件
-	•	Footer 樣式
+進度	項目
+✔	Step 2-1：Flask 虛擬環境 + folder 結構
+✔	Step 2-2：app.py（Blueprint 註冊、首頁渲染、nl2br）
+✔	Step 2-3：四大 Blueprint 架構（auth / post / category / comment）
 
-⸻
+第 2 階段 ＝ 100% 完成。
 
-✔ Step 1-4：login.html / register.html（表單 UI）
-
-內容：
-	•	帳號、Email、密碼欄位
-	•	黑底白字按鈕
-	•	Medium 風格排版
-	•	下方導引連結
+Blueprint 架構是乾淨、可維護、可擴充的標準模式。
 
 ⸻
 
-✔ Step 1-5：category_posts.html（分類頁）
-	•	類別標題（動態顯示）
-	•	文章卡片列表（placeholder）
-	•	完整排版、留白、風格一致
+🟦 第 3 階段：資料庫與 Models（全部完成）
+
+進度	項目
+✔	Step 3-1：建立 SQLite schema（users / posts / categories / comments）
+✔	Step 3-2：Models（User / Post / Category / Comment）全部 CRUD 可用
+✔	init_categories：自動建立六種分類
+
+第 3 階段 ＝ 100% 完成。
+
+你現在已具備完整「資料持久化」能力。
 
 ⸻
 
-✔ Step 1-6：post_detail.html（文章內容頁）
-	•	標題
-	•	日期、分類 meta 資訊
-	•	內文 placeholder（段落）
-	•	留言區（表單 + 留言列表的卡片）
+🟦 第 4 階段：登入 / 註冊 / Session（全部完成）
+
+進度	項目
+✔	Step 4-1：/register（檢查欄位、檢查重複、密碼哈希）
+✔	Step 4-2：/login（密碼驗證、寫入 session）
+✔	Step 4-3：/logout（清空 session）
+✔	權限控制（Admin Only）
+
+第 4 階段 ＝ 100% 完成。
+
+你甚至已經用 SQLite 直接把 admin 提升成功。
 
 ⸻
 
-⬜ Step 1-7：new_post.html（新增文章頁 UI）
+🟦 第 5 階段：文章與留言（全部完成）
 
-此頁將包含：
-	•	標題輸入欄
+進度	項目
+✔	Step 5-1：新增文章（Admin Only）
+✔	Step 5-2：首頁讀取資料庫文章
+✔	Step 5-3：分類頁讀取資料庫文章
+✔	Step 5-4：文章內容頁讀取資料庫全文
+✔	Step 5-5：留言系統（無需登入）
+✔	🔥（額外）Step 5-6：刪除文章（Admin Only）
+
+第 5 階段 ＝ 100% 完成。
+並且你還把 Delete Post（D of CRUD）提前做掉了。
+
+你的部落格目前具備完整 CRUD（Create / Read / Delete）。
+下一步若要「Edit Post」，會變成完整 CMS。
+
+⸻
+
+🟦 第 6 階段：完整收尾（正式開始）
+
+進度	項目
+⏳	Step 6-1：RWD（手機版）
+✔	Step 6-2：動效（hover、卡片、按鈕、fade-in）
+✔	Step 6-3：風格一致性（Design Tokens v3 → 已完成）
+🔜	Step 6-4：部署（Render / Railway）
+✔	Step 6-5：error.html（404 / 403）
+🔜	Step 6-6：Demo 排練
+
+
+
+
+
+🎬 C｜新增 Edit Post（完整 CRUD）規劃 Blueprint
+
+Edit Post 會包含五個部分：
+
+⸻
+
+📌 C-1：資料流設計
+
+🔹 使用者（admin）訪問：
+
+/post/<id>/edit   →   GET：顯示編輯表單（填入舊資料）
+
+🔹 admin 修改內容後提交：
+
+/post/<id>/edit   →   POST：接收資料 → 更新 DB → redirect 回 /post/<id>
+
+🔹 權限：
+
+只有 admin 能編輯文章
+如果訪客試圖進入 → 403 Forbidden
+
+
+⸻
+
+📌 C-2：後端路由規劃（post_routes.py）
+
+你將新增兩條路由：
+
+① GET：顯示編輯表單
+
+@post_bp.route("/post/<int:post_id>/edit", methods=["GET"])
+
+功能：
+	•	確認文章存在（否則 404）
+	•	驗證是否為 admin（否則 403）
+	•	撈舊文章資料
+	•	撈分類列表（讓 user 能改分類）
+	•	回傳 edit_post.html
+
+⸻
+
+② POST：更新文章
+
+@post_bp.route("/post/<int:post_id>/edit", methods=["POST"])
+
+功能：
+	•	驗證欄位（標題／內容不可空）
+	•	更新資料庫
+	•	redirect 回 /post/
+
+⸻
+
+📌 C-3：資料庫 Model（PostModel）要新增 update_post()
+
+新增方法：
+
+update_post(post_id, title, content, category_id, cover_image_url)
+
+SQL：
+
+UPDATE posts
+SET title=?, content=?, category_id=?, cover_image_url=?
+WHERE id=?
+
+
+⸻
+
+📌 C-4：新增模板 edit_post.html（UI 與 new_post.html 類似）
+
+你會使用 new_post.html 的樣式：
+	•	標題 input
 	•	內容 textarea
-	•	分類下拉選單
-	•	封面圖片 URL 欄位
-	•	發布按鈕
-	•	只需前端骨架，不需後端
-
-這是前端唯一尚未完成的頁面。
-
-⸻
-
-🟦 第 2 階段：後端初始架構（Flask 路由骨架）（12/7～12/9）
-
-目標：讓所有頁面可正常跳轉 → 完整網站雛形
-
-⸻
-
-✔ Step 2-1：建立 Flask 專案環境
-
-已完成：
-	•	.venv 虛擬環境
-	•	requirements.txt
-	•	.gitignore
-	•	routes/、models/、instance/ 結構
-
-⸻
-
-✔ Step 2-2：app.py（入口）
-
-含：
-	•	create_app() 工廠函式
-	•	SECRET_KEY
-	•	Blueprint 註冊
-	•	首頁 route
-
-⸻
-
-✔ Step 2-3：四大 Blueprint 路由骨架
-
-包含：
-	•	auth_routes（login / register / logout）
-	•	post_routes（post_detail / new_post）
-	•	category_routes（category/）
-	•	comment_routes（comment/<post_id>）
-
-全部能正常跳轉。
-
-⸻
-
-🟦 第 3 階段：資料庫與 Models（12/9～12/11）
-
-目標：讓網站「活起來」並可存取資料
-
-⸻
-
-⬜ Step 3-1：建立 SQLite schema（含 categories 初始值）
-
-資料表：
-	•	users
-	•	posts
-	•	categories
-	•	comments
-
-並初始化六種電影分類：
-	•	Review
-	•	Scene Analysis
-	•	Themes
-	•	Character Study
-	•	Film Theory
-	•	Directors
-
-⸻
-
-⬜ Step 3-2：撰寫 Models（CRUD Interface）
-
-每個 model 必須支援：
-	•	新增
-	•	查詢
-	•	刪除（可選）
-	•	更新（可選）
-
-⸻
-
-🟦 第 4 階段：登入 / 註冊 / Session 系統（12/11～12/13）
-
-⸻
-
-⬜ Step 4-1：/register
-	•	表單取得 username / email / password
-	•	email / username 檢查
-	•	密碼 hash（Werkzeug）
-	•	redirect /login
-
-⸻
-
-⬜ Step 4-2：/login
-	•	驗證帳號
-	•	驗證密碼
-	•	session[“user_id”] = user.id
-	•	session[“role”] = user.role
-
-⸻
-
-⬜ Step 4-3：/logout
-	•	清空 session
-
-⸻
-
-🟦 第 5 階段：文章與留言系統（12/13～12/16）
-
-⸻
-
-⬜ Step 5-1：/new_post（Admin Only）
-	•	表單接收
-	•	寫入 DB
-	•	redirect 到 /post/
-
-⸻
-
-⬜ Step 5-2：首頁讀文章列表
-
-index.html：
-
-return render_template("index.html", posts=posts)
-
-
-⸻
-
-⬜ Step 5-3：分類頁讀取 DB 資料
-
-SQL:
-
-SELECT * FROM posts WHERE category_id = ?
-
-
-⸻
-
-⬜ Step 5-4：文章內容頁從 DB 顯示全文
-
-包含：
-	•	標題
-	•	內容
-	•	分類
-	•	日期
+	•	分類下拉選單（自動選中原本分類）
 	•	封面圖片 URL
+	•	「更新文章」按鈕
+
+也要顯示：
+	•	若填寫不完整 → error message
 
 ⸻
 
-⬜ Step 5-5：留言系統（無需登入）
+📌 C-5：在文章頁（post_detail.html）加一個【編輯文章】按鈕（僅 admin）
 
-comment_routes：
-	•	接收 nickname + content
-	•	寫入 DB
-	•	redirect 回文章頁
+放在刪除按鈕旁：
 
-⸻
+{% if session.get("role") == "admin" %}
+<a href="{{ url_for('post_routes.edit_post', post_id=post.id) }}" class="edit-btn">編輯文章</a>
+{% endif %}
 
-🟦 第 6 階段：完整收尾（12/16～12/18）
-
-⸻
-
-⬜ Step 6-1：RWD（手機版）
-	•	Navbar 折疊
-	•	Hero 左右改上下
-	•	卡片改成滿版
+按鈕 UI 你可以選：
+	•	黑底白字
+	•	與刪除按鈕不同色（避免誤觸）
 
 ⸻
 
-⬜ Step 6-2：動效
-	•	hover
-	•	按鈕
-	•	卡片亮度
+🎉 完成後，你的 CMS 更新流程會像這樣：
+
+✔ 新增文章
+
+✔ 顯示文章
+
+✔ 刪除文章
+
+✔ 編輯文章 ←（準備實作）
+
+你會擁有完整 CRUD 系統，這是軟體開發正式規模的標配。
 
 ⸻
 
-⬜ Step 6-3：風格一致性
-	•	字級統一
-	•	行距一致
-	•	圓角統一
-	•	色系一致
+📌 接下來的流程（實作順序）
 
-⸻
+我會帶你按順序寫：
 
-⬜ Step 6-4：部署（老師平台）
+Step C-1：post_routes.py 加 edit routes（GET + POST）
 
-Render / Fly.io / Railway 任選。
+Step C-2：PostModel 新增 update_post()
 
-⸻
+Step C-3：新增 edit_post.html
 
-⬜ Step 6-5：錯誤處理頁（404 / 403）
+Step C-4：post_detail.html 加「編輯文章」按鈕
 
-在 app.py：
+Step C-5：測試全流程
 
-@app.errorhandler(404)
-def not_found(e):
-    return render_template("error.html"), 404
-
-
-⸻
-
-⬜ Step 6-6：Demo 排練（期末）
-
+你要現在開始 Step C-1（post_routes.py） 嗎？
+如果要，我立刻提供：
+	•	乾淨、無錯誤、可直接貼上的程式碼
+	•	完整註解
+	•	100% 與你目前架構相容
 
 
 

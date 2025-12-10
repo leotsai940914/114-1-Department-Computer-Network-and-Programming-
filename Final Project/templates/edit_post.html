@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <h2 class="section-title">編輯文章 Edit Post</h2>
+
+    <form class="newpost-form" 
+          method="POST" 
+          action="{{ url_for('post_routes.update_post', post_id=post.id) }}">
+
+        {% if error %}
+        <p style="color:#b00020; margin-bottom:1rem;">
+            {{ error }}
+        </p>
+        {% endif %}
+
+        <!-- 標題 -->
+        <label class="form-label" for="title">文章標題</label>
+        <input type="text" 
+               id="title"
+               class="form-input" 
+               name="title"
+               value="{{ post.title }}"
+               placeholder="請輸入文章標題" required>
+
+        <!-- 內容 -->
+        <label class="form-label" for="content">文章內容</label>
+        <textarea id="content"
+                  class="form-textarea" 
+                  name="content" 
+                  rows="10"
+                  required>{{ post.content }}</textarea>
+
+        <!-- 分類 -->
+        <label class="form-label" for="category_id">文章分類</label>
+        <select id="category_id" class="form-input" name="category_id" required>
+            {% for c in categories %}
+            <option value="{{ c.id }}"
+                {% if c.id == post.category_id %}selected{% endif %}>
+                {{ c.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <!-- 封面圖片 -->
+        <label class="form-label" for="cover_image">封面圖片 URL（選填）</label>
+        <input type="text" 
+               id="cover_image"
+               class="form-input" 
+               name="cover_image"
+               value="{{ post.cover_image_url or '' }}"
+               placeholder="https://example.com/poster.jpg">
+
+        <!-- 更新按鈕 -->
+        <button class="submit-btn" type="submit">
+            更新文章
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

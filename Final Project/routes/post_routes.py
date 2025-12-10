@@ -7,16 +7,14 @@ post_bp = Blueprint("post_routes", __name__)
 
 
 # =============================
-# 單篇文章頁（整合留言系統）
+# 單篇文章頁（含留言）
 # =============================
 @post_bp.route("/post/<int:post_id>")
 def post_detail(post_id):
     post = PostModel.get_post_by_id(post_id)
-
     if not post:
         return render_template("error.html", message="文章不存在"), 404
 
-    # 撈留言
     comments = CommentModel.get_comments_by_post(post_id)
 
     return render_template(
@@ -27,27 +25,23 @@ def post_detail(post_id):
 
 
 # =============================
-# 新增文章（僅限 Admin）
+# 新增文章（Admin Only）
 # =============================
 @post_bp.route("/new_post", methods=["GET", "POST"])
 def new_post():
-
-    # --- 權限檢查 ---
     if session.get("role") != "admin":
         abort(403)
 
-    # --- GET：顯示表單（需要分類列表） ---
     if request.method == "GET":
         categories = CategoryModel.get_all_categories()
         return render_template("new_post.html", categories=categories)
 
-    # --- POST：接收表單 ---
+    # POST
     title = request.form.get("title")
     content = request.form.get("content")
     category_id = request.form.get("category_id")
     cover_image_url = request.form.get("cover_image") or None
 
-    # --- 必填欄位驗證 ---
     if not title or not content or not category_id:
         categories = CategoryModel.get_all_categories()
         return render_template(
@@ -56,7 +50,6 @@ def new_post():
             categories=categories
         )
 
-    # --- 寫入資料庫 ---
     new_id = PostModel.create_post(
         title=title,
         content=content,
@@ -65,12 +58,11 @@ def new_post():
         cover_image_url=cover_image_url
     )
 
-    # --- 導向文章頁 ---
     return redirect(url_for("post_routes.post_detail", post_id=new_id))
 
 
 # =============================
-# 分類頁：顯示某分類的所有文章
+# 分類頁
 # =============================
 @post_bp.route("/category/<name>")
 def category_page(name):
@@ -80,27 +72,76 @@ def category_page(name):
         return render_template("error.html", message="分類不存在"), 404
 
     posts = PostModel.get_posts_by_category(category["id"])
-
-    return render_template(
-        "category_posts.html",
-        category_name=name,
-        posts=posts
-    )
+    return render_template("category_posts.html", category_name=name, posts=posts)
 
 
+# =============================
+# 刪除文章（Admin Only）
+# =============================
 @post_bp.route("/post/<int:post_id>/delete", methods=["POST"])
 def delete_post(post_id):
-    # 只有 admin 可刪除
     if session.get("role") != "admin":
         abort(403)
 
-    # 檢查文章是否存在
     post = PostModel.get_post_by_id(post_id)
     if not post:
         return render_template("error.html", message="文章不存在"), 404
 
-    # 執行刪除
     PostModel.delete_post(post_id)
-
-    # 刪除後回首頁
     return redirect(url_for("index"))
+
+
+# =============================
+# 編輯文章（Admin Only）— 顯示編輯表單
+# =============================
+@post_bp.route("/post/<int:post_id>/edit", methods=["GET"])
+def edit_post(post_id):
+    if session.get("role") != "admin":
+        abort(403)
+
+    post = PostModel.get_post_by_id(post_id)
+    if not post:
+        return render_template("error.html", message="文章不存在"), 404
+
+    categories = CategoryModel.get_all_categories()
+
+    return render_template(
+        "edit_post.html",
+        post=post,
+        categories=categories
+    )
+
+
+# =============================
+# 編輯文章（Admin Only）— 接收更新
+# =============================
+@post_bp.route("/post/<int:post_id>/edit", methods=["POST"])
+def update_post(post_id):
+    if session.get("role") != "admin":
+        abort(403)
+
+    title = request.form.get("title")
+    content = request.form.get("content")
+    category_id = request.form.get("category_id")
+    cover_image_url = request.form.get("cover_image") or None
+
+    if not title or not content:
+        post = PostModel.get_post_by_id(post_id)
+        categories = CategoryModel.get_all_categories()
+        return render_template(
+            "edit_post.html",
+            post=post,
+            categories=categories,
+            error="標題與內容不得為空"
+        )
+
+    # 更新 DB
+    PostModel.update_post(
+        post_id=post_id,
+        title=title,
+        content=content,
+        category_id=category_id,
+        cover_image_url=cover_image_url
+    )
+
+    return redirect(url_for("post_routes.post_detail", post_id=post_id))

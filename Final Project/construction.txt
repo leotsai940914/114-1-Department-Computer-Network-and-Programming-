@@ -18,6 +18,7 @@ final_project/
 │   ├── category_posts.html    # 類別頁（分類顯示文章）
 │   ├── about.html             # 關於網站 / 觀影理念
 │   ├── categories_index.html
+│   ├── edit_post.html
 │   └── error.html             # 錯誤頁（未授權、找不到頁面等）
 │
 ├── static/
