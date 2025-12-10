@@ -82,3 +82,17 @@
 - 成功讓 Flask 能啟動網站、處理請求並正確顯示 index.html
 - 前端頁面（Navbar、Hero、卡片等）在 Flask 渲染下正式套用 CSS，不再顯示 Jinja 語法
 - 專案從「純前端」正式提升為「可執行的 Flask 網站骨架」，已具備後續功能擴展的基礎
+
+[2025-12-03]
+完成 Step 2-3：建立四個 Blueprint 路由骨架
+
+- 在 routes/ 資料夾中新增四個模組：
+  auth_routes.py、post_routes.py、category_routes.py、comment_routes.py
+- 每個檔案皆定義對應的 Blueprint（auth_bp、post_bp、category_bp、comment_bp）
+- 設定基本跳轉功能：所有頁面可透過 Flask 正確渲染與切換
+- auth_routes：完成 /login、/register、/logout（暫時以字串 placeholder）
+- post_routes：完成 /post/<id> 與 /new_post 的 route skeleton
+- category_routes：完成 /category/<name>，並將分類名稱動態傳入模板
+- comment_routes：完成 /comment/<post_id> 的 POST 端點（先以 placeholder 回應）
+- 路由骨架搭建完成，整站頁面可由 Flask 端正確跳轉，前端模板全面串接
+- 此階段完成後，網站正式具備「前端與後端接軌」的架構，準備進入資料庫建立階段（Step 3）
