@@ -16,18 +16,27 @@
                 </a>
             </h3>
 
-            <p class="post-meta">
-                {{ post['category_name'] }} ｜ {{ post['created_at'] }}
-            </p>
+            <div class="meta-row">
+                <span class="meta-chip">{{ post['category_name'] }}</span>
+                <span>{{ post['created_at'] }}</span>
+            </div>
 
             <p class="post-excerpt">
                 {{ post['content'] | striptags | truncate(80, True, '…') }}
             </p>
+            <a class="inline-more" href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">閱讀更多 →</a>
 
         </div>
         {% endfor %}
     {% else %}
-        <p>這個分類目前沒有文章。</p>
+        <div class="empty-state">
+            <p>這個分類目前沒有文章。</p>
+            {% if session.get('role') == 'admin' %}
+                <a class="hero-btn" href="{{ url_for('post_routes.new_post') }}">撰寫第一篇</a>
+            {% else %}
+                <a class="hero-btn" href="{{ url_for('auth_routes.login') }}">登入後新增文章</a>
+            {% endif %}
+        </div>
     {% endif %}
 
 </div>

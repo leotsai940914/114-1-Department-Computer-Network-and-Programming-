@@ -35,6 +35,23 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", () => menu.classList.remove("open"));
 });
 
+/* Hamburger for small screens (reuse dropdown toggle) */
+document.addEventListener("DOMContentLoaded", () => {
+    const nav = document.querySelector(".nav-links");
+    const burger = document.querySelector(".burger-toggle");
+    const overlay = document.getElementById("navOverlay");
+    if (!nav || !burger) return;
+
+    burger.addEventListener("click", () => {
+        nav.classList.toggle("nav-open");
+        overlay?.classList.toggle("show");
+    });
+
+    overlay?.addEventListener("click", () => {
+        nav.classList.remove("nav-open");
+        overlay.classList.remove("show");
+    });
+});
 
 /* ============================================================
    留言區：前端表單驗證
