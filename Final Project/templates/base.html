@@ -25,7 +25,18 @@
             <a href="{{ url_for('index') }}">Home</a>
 
             <!-- Categories 改成能正常跳轉 -->
-            <a href="{{ url_for('category_routes.categories_index') }}">Categories</a>
+            <div class="dropdown">
+                <a class="dropdown-toggle">Categories ▼</a>
+
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('category_routes.category_page', name='Review') }}">Review</a>
+                    <a href="{{ url_for('category_routes.category_page', name='Scene Analysis') }}">Scene Analysis</a>
+                    <a href="{{ url_for('category_routes.category_page', name='Themes') }}">Themes</a>
+                    <a href="{{ url_for('category_routes.category_page', name='Character Study') }}">Character Study</a>
+                    <a href="{{ url_for('category_routes.category_page', name='Film Theory') }}">Film Theory</a>
+                    <a href="{{ url_for('category_routes.category_page', name='Directors') }}">Directors</a>
+                </div>
+            </div>
 
             <!-- About 目前無頁面，維持 placeholder -->
             <a href="#">About</a>
