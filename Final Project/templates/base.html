@@ -49,17 +49,22 @@
             <!-- 動態 About 頁 -->
             <a href="{{ url_for('category_routes.about') }}">About</a>
 
-            {% if session.get('role') == 'admin' %}
-                <a href="{{ url_for('admin_routes.admin_home') }}">Admin</a>
-                <a href="{{ url_for('admin_routes.admin_settings') }}">Settings</a>
-            {% endif %}
-
             {% if session.get('user_id') %}
                 <a href="{{ url_for('post_routes.new_post') }}">New Post</a>
                 <a href="{{ url_for('auth_routes.logout') }}">Logout</a>
             {% else %}
                 <a href="{{ url_for('auth_routes.login') }}">Login</a>
                 <a href="{{ url_for('auth_routes.register') }}">Register</a>
+            {% endif %}
+
+            {% if session.get('role') == 'admin' %}
+                <div class="admin-menu">
+                    <button class="admin-toggle">☰</button>
+                    <div class="admin-dropdown">
+                        <a href="{{ url_for('admin_routes.admin_home') }}">Admin</a>
+                        <a href="{{ url_for('admin_routes.admin_settings') }}">Settings</a>
+                    </div>
+                </div>
             {% endif %}
         </nav>
 

@@ -21,7 +21,7 @@
             </p>
 
             <p class="post-excerpt">
-                {{ post['content'][:80] }}...
+                {{ post['content'] | striptags | truncate(80, True, '…') }}
             </p>
 
         </div>

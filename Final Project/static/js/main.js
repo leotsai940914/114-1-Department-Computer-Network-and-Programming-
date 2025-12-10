@@ -22,6 +22,19 @@ document.addEventListener("click", () => {
         .forEach(menu => (menu.style.display = "none"));
 });
 
+/* Admin mini menu */
+document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.querySelector(".admin-toggle");
+    const menu = document.querySelector(".admin-dropdown");
+    if (!toggle || !menu) return;
+
+    toggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        menu.classList.toggle("open");
+    });
+    document.addEventListener("click", () => menu.classList.remove("open"));
+});
+
 
 /* ============================================================
    留言區：前端表單驗證
