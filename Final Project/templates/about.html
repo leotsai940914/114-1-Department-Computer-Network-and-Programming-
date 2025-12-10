@@ -19,6 +19,16 @@
         {{ settings.about_html | safe }}
     </article>
 
+    {% if session.get('role') == 'admin' %}
+    <div style="margin-top:1.5rem;">
+        <a href="{{ url_for('admin_routes.admin_settings') }}"
+           class="hero-btn"
+           style="padding:0.55rem 1rem;">
+            編輯 About 內容
+        </a>
+    </div>
+    {% endif %}
+
 </div>
 
 {% endblock %}

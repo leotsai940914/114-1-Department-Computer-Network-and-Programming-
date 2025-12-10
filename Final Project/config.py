@@ -11,6 +11,11 @@ class Config:
     # SQLite Database 路徑
     DATABASE_PATH = os.path.join(BASE_DIR, "instance", "blog.db")
 
+    # 上傳設定
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
+    MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5 MB
+    ALLOWED_IMAGE_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+
     DEBUG = False
     TESTING = False
 

@@ -111,6 +111,7 @@ if (window.Quill) {
         }
 
         const hidden = document.getElementById(hiddenFieldId);
+        if (!hidden) return;  // 若該頁沒有對應 hidden input，直接跳過（避免阻擋其他表單）
         const parentForm = editor.closest("form");
 
         parentForm?.addEventListener("submit", function (e) {

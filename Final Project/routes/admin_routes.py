@@ -1,6 +1,9 @@
 # routes/admin_routes.py
 
-from flask import Blueprint, render_template, request, session, abort, redirect, url_for
+import os
+import uuid
+from flask import Blueprint, render_template, request, session, abort, redirect, url_for, jsonify, current_app
+from werkzeug.utils import secure_filename
 from models.post_model import PostModel
 from models.comment_model import CommentModel
 from models.category_model import CategoryModel
@@ -63,3 +66,36 @@ def admin_settings():
     # GET: 顯示設定頁
     settings = SettingsModel.get_settings()
     return render_template("admin_settings.html", settings=settings)
+
+
+# ===============================
+# 圖片上傳（Admin Only, About 內文用）
+# ===============================
+@admin_bp.route("/admin/upload_image", methods=["POST"])
+def upload_image():
+    if session.get("role") != "admin":
+        abort(403)
+
+    if "file" not in request.files:
+        return jsonify({"error": "缺少檔案欄位"}), 400
+
+    file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "未選擇檔案"}), 400
+
+    # 副檔名檢查
+    allowed = current_app.config.get("ALLOWED_IMAGE_EXTENSIONS", set())
+    filename = secure_filename(file.filename)
+    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    if ext not in allowed:
+        return jsonify({"error": "僅允許圖片格式: " + ", ".join(sorted(allowed))}), 400
+
+    # 儲存檔案
+    upload_dir = current_app.config["UPLOAD_FOLDER"]
+    os.makedirs(upload_dir, exist_ok=True)
+    new_name = f"{uuid.uuid4().hex}.{ext}"
+    save_path = os.path.join(upload_dir, new_name)
+    file.save(save_path)
+
+    url = url_for("static", filename=f"uploads/{new_name}", _external=False)
+    return jsonify({"url": url})

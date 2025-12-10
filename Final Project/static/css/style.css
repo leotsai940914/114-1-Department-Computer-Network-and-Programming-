@@ -629,10 +629,21 @@ button,
 .post-detail-content img {
     display: block;
     margin: 1.5rem auto;
-    max-width: 90%;
+    max-width: 100%;
     border-radius: 6px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
+
+/* 半寬圖片（在內文加 class="half"） */
+.post-detail-content img.half {
+    max-width: 50%;
+}
+
+/* 自訂比例：直接在 img 加 class="w25"/"w50"/"w75"/"w100" */
+.post-detail-content img.w25  { max-width: 25%; }
+.post-detail-content img.w50  { max-width: 50%; }
+.post-detail-content img.w75  { max-width: 75%; }
+.post-detail-content img.w100 { max-width: 100%; }
 
 .post-detail-content blockquote {
     border-left: 4px solid #111;
