@@ -432,3 +432,22 @@ Blueprint 與所有 endpoint 均已修正、無 BuildError。
 
 此階段完成後，LumenFilm 的文章系統已全部可用（新增 → 列出 → 詳細 → 分類 → 留言），
 成功從「靜態部落格」進化成「動態內容系統」。
+
+
+[2025-12-10]
+
+完成 Step 6-3：全站風格一致性（字級／行距／圓角／色系）
+	•	重新統整 Design Tokens，建立 LumenFilm 最終正式版設計系統
+包含：顏色、字級 scale、行距、圓角、動效、間距
+	•	全站字級依照新的 Typography Scale 調整為：
+Hero（2.2rem）、Section Title（1.6rem）、Card Title（1.2rem）、正文（1rem）、Meta（0.9rem）
+	•	全站行距統一為 line-height = 1.75，提高閱讀舒適度與排版一致性
+	•	圓角混用（4px / 6px / 10px）正式統一為全站 border-radius = 6px
+套用於所有卡片、按鈕、表單、圖片、留言區塊
+	•	降低 transition: all 的副作用，改為僅對 transform / opacity / box-shadow / background-color 過渡
+使用者操作感更穩定，不會出現 layout 跳動
+	•	調整所有標題、內文、meta 樣式，使其完全按照 token 呈現
+	•	色系統一使用黑白灰（#222 / #666 / #e6e6e6 / #fafafa），符合 Medium × 文青影評網站的預期風格
+	•	style.css 已重整為專案級結構，並與所有既有頁面（首頁、文章頁、分類、登入、註冊、新增文章、留言）完全相容
+	•	完成後網站視覺穩定性、專業感大幅提升，風格一致性已達可 Demo / 部署水準
+

@@ -1,35 +1,48 @@
 /* ===================================
-   設計系統 Design Tokens
+   設計系統 Design Tokens (Final Unified)
    =================================== */
 
 :root {
-    /* 顏色 */
+    /* ==== 色票 ==== */
     --color-bg: #ffffff;
     --color-text: #222222;
     --color-text-muted: #666666;
     --color-border: #e6e6e6;
     --color-border-soft: #f0f0f0;
-    --color-accent: #222222;
+    --color-accent: #111111;
     --color-card-bg: #fafafa;
 
-    /* 字體 */
+    /* ==== 字體 ==== */
     --font-family-main: "Noto Serif TC", serif;
 
-    /* 間距 scale */
+    /* Typography scale */
+    --font-size-xl: 2.2rem;   /* Hero 標題 */
+    --font-size-lg: 1.6rem;   /* Section 標題 */
+    --font-size-md: 1.2rem;   /* 卡片標題 */
+    --font-size-base: 1rem;   /* 正文 */
+    --font-size-sm: 0.9rem;   /* meta */
+    --font-size-xs: 0.8rem;
+
+    /* ==== Line height（全站統一）==== */
+    --line-height-base: 1.75;
+
+    /* ==== 統一圓角（全站 6px）==== */
+    --radius: 6px;
+
+    /* ==== 間距 scale ==== */
     --space-xs: 0.25rem;
     --space-sm: 0.5rem;
     --space-md: 1rem;
     --space-lg: 1.5rem;
     --space-xl: 2.5rem;
 
-    /* 其他 */
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 10px;
+    /* ==== 動效 ==== */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.25s ease;
 }
 
 /* ===================================
-   全站基本設定
+   全站基本設定 + 風格一致化
    =================================== */
 
 * {
@@ -42,33 +55,50 @@ body {
     font-family: var(--font-family-main);
     background-color: var(--color-bg);
     color: var(--color-text);
-    line-height: 1.7;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    animation: fadeIn 0.6s ease;
 }
 
-/* 中央寬度（900px） */
+img,
+input,
+textarea,
+button,
+.post-card,
+.comment-item,
+.hero-image-placeholder {
+    border-radius: var(--radius);
+}
+
+h1, h2, h3 {
+    margin: 0;
+    line-height: var(--line-height-base);
+}
+
+p {
+    margin: 0 0 var(--space-md);
+}
+
 .container {
     max-width: 900px;
     margin: 0 auto;
     padding: 0 var(--space-md);
 }
 
-/* 全站連結樣式（Navbar 會再客製） */
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* 標題與段落的基本節奏感 */
-h1, h2, h3 {
-    margin: 0;
-}
-
-p {
-    margin: 0 0 var(--space-md);
+/* 更正 transition: all → 只過渡必要屬性 */
+a,
+button,
+.post-card,
+.hero-btn,
+.comment-btn,
+.auth-btn {
+    transition: 
+        background-color var(--transition-normal),
+        color var(--transition-normal),
+        transform var(--transition-fast),
+        opacity var(--transition-fast),
+        box-shadow var(--transition-normal),
+        filter var(--transition-normal);
 }
 
 /* ===================================
@@ -90,41 +120,24 @@ p {
 .logo a {
     font-size: 1.6rem;
     font-weight: 600;
-    color: #111111;
-    text-decoration: none;
+    color: var(--color-text);
     letter-spacing: 0.04em;
 }
 
-/* 導覽列不加底線，維持乾淨 */
 .nav-links a {
     margin-left: 1.6rem;
-    color: #444444;
-    text-decoration: none;
+    color: #444;
     font-size: 1rem;
 }
 
 .nav-links a:hover {
-    color: #000000;
+    color: #000;
     text-decoration: none;
+    opacity: 0.8;
 }
 
 /* ===================================
-   MAIN CONTENT
-   =================================== */
-
-.main-content {
-    padding: 2.5rem 0;
-}
-
-/* 區塊標題：會在首頁、分類頁、登入頁等重用 */
-.section-title {
-    font-size: 1.4rem;
-    margin: 2.5rem 0 1.2rem;
-    font-weight: 600;
-}
-
-/* ===================================
-   HERO SECTION（首頁用）
+   HERO SECTION
    =================================== */
 
 .hero {
@@ -137,72 +150,74 @@ p {
 }
 
 .hero-title {
-    font-size: 2.2rem;
+    font-size: var(--font-size-xl);
     font-weight: 600;
 }
 
 .hero-subtitle {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
     color: #555;
-    line-height: 1.8;
     margin: 1rem 0 1.2rem;
 }
 
-/* 通用按鈕樣式，可在其他頁面沿用 */
 .hero-btn {
-    display: inline-block;
     padding: 0.6rem 1.4rem;
     border: 1px solid var(--color-accent);
     color: var(--color-accent);
-    text-decoration: none;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius);
     font-size: 0.95rem;
 }
 
 .hero-btn:hover {
     background-color: var(--color-accent);
     color: #fff;
+    transform: translateY(-2px);
 }
 
-/* 右側 hero 圖片區塊（之後可換照片） */
 .hero-image-placeholder {
     width: 280px;
     height: 170px;
     border: 1px solid #bbb;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     color: #888;
-    font-size: 0.9rem;
-    border-radius: var(--radius-sm);
+}
+
+.hero-image-placeholder:hover {
+    filter: brightness(1.08);
 }
 
 /* ===================================
-   POSTS LIST（首頁與分類頁會共用）
+   POSTS LIST
    =================================== */
 
 .post-card {
     border: 1px solid var(--color-border);
     padding: 1.2rem 1.4rem;
-    border-radius: var(--radius-md);
     margin-bottom: 1.2rem;
     background-color: var(--color-card-bg);
 }
 
+.post-card:hover {
+    background-color: #fff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transform: translateY(-3px);
+}
+
 .post-title {
-    margin: 0 0 0.4rem;
-    font-size: 1.2rem;
+    font-size: var(--font-size-md);
+    margin-bottom: 0.4rem;
 }
 
 .post-meta {
-    color: #777;
-    font-size: 0.85rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
     margin-bottom: 0.8rem;
 }
 
 .post-excerpt {
     color: #444;
-    line-height: 1.7;
 }
 
 /* ===================================
@@ -218,13 +233,12 @@ p {
 }
 
 .footer-text {
-    font-size: 0.9rem;
-    line-height: 1.6;
+    font-size: var(--font-size-sm);
 }
 
-/* ================================
-   AUTH FORMS（Login / Register）
-   ================================ */
+/* ===================================
+   AUTH FORMS
+   =================================== */
 
 .auth-section {
     padding: 2rem 0 3rem;
@@ -237,24 +251,13 @@ p {
     margin-top: 1.5rem;
 }
 
-.auth-form label {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    font-weight: 500;
-    font-size: 0.95rem;
-}
-
 .auth-form input {
     padding: 0.6rem 0.8rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: "Noto Serif TC", serif;
     font-size: 1rem;
 }
 
 .auth-form input:focus {
-    outline: none;
     border-color: #111;
 }
 
@@ -263,39 +266,16 @@ p {
     border: 1px solid #222;
     background: #222;
     color: #fff;
-    font-size: 1rem;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
 .auth-btn:hover {
     background: #000;
+    transform: translateY(-2px);
 }
 
-.auth-hint {
-    font-size: 0.85rem;
-    margin-top: 0.5rem;
-    color: #666;
-}
-
-.auth-hint a {
-    color: #222;
-    font-weight: 500;
-    text-decoration: none;
-}
-
-.auth-hint a:hover {
-    text-decoration: underline;
-}
-
-
-.category-section {
-    padding-top: 1rem;
-}
-
-/* ================================
-   POST DETAIL（文章內容頁）
-   ================================ */
+/* ===================================
+   POST DETAIL
+   =================================== */
 
 .post-detail-title {
     font-size: 2rem;
@@ -304,27 +284,24 @@ p {
 }
 
 .post-detail-meta {
-    color: #777;
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
     margin-bottom: 1.5rem;
 }
 
 .post-detail-content p {
-    margin-bottom: 1rem;
-    line-height: 1.8;
     color: #333;
 }
 
 /* 分隔線 */
 .divider {
     margin: 2.5rem 0 2rem;
-    border: none;
     border-top: 1px solid #e6e6e6;
 }
 
-/* ================================
-   留言區
-   ================================ */
+/* ===================================
+   COMMENTS
+   =================================== */
 
 .comment-section {
     margin-top: 2rem;
@@ -335,68 +312,34 @@ p {
     margin-bottom: 1rem;
 }
 
-/* 留言表單 */
-.comment-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
 .comment-form input,
 .comment-form textarea {
-    width: 100%;
     padding: 0.6rem 0.8rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: "Noto Serif TC", serif;
-    font-size: 1rem;
-}
-
-.comment-form textarea {
-    height: 120px;
-    resize: vertical;
 }
 
 .comment-btn {
-    width: fit-content;
     padding: 0.6rem 1.2rem;
     border: 1px solid #222;
     background: #222;
     color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
 .comment-btn:hover {
     background: #000;
+    transform: translateY(-2px);
 }
 
 /* 留言列表 */
-.comment-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
 .comment-item {
     padding: 0.8rem 1rem;
     border: 1px solid #e6e6e6;
     background: #fafafa;
-    border-radius: 6px;
 }
 
-.comment-author {
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-}
-
-.comment-text {
-    color: #444;
-    line-height: 1.6;
-}
-
-/* ====== New Post Page ====== */
+/* ===================================
+   NEW POST PAGE
+   =================================== */
 
 .newpost-form {
     display: flex;
@@ -405,88 +348,26 @@ p {
     margin-top: 1.5rem;
 }
 
-.form-label {
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-.form-input {
-    padding: 0.6rem 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: "Noto Serif TC", serif;
-    font-size: 0.95rem;
-}
-
+.form-input,
 .form-textarea {
     padding: 0.8rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: "Noto Serif TC", serif;
-    font-size: 0.95rem;
-    line-height: 1.7;
 }
 
 .submit-btn {
     padding: 0.7rem 1.2rem;
-    border: none;
     background: #111;
     color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 1rem;
-    font-size: 1rem;
 }
 
 .submit-btn:hover {
     background: #333;
-}
-
-
-/* ===== 全站過場效果 ===== */
-* {
-    transition: all 0.25s ease;
-}
-
-.nav-links a:hover {
-    color: #000;
-    opacity: 0.8;
-}
-
-.hero-btn {
-    transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
-}
-
-.hero-btn:hover {
-    background-color: #222;
-    color: #fff;
     transform: translateY(-2px);
 }
 
-.post-card {
-    transition: box-shadow 0.25s ease, transform 0.2s ease;
-}
-
-.post-card:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    transform: translateY(-3px);
-    background-color: #ffffff;
-}
-
-.hero-image-placeholder:hover {
-    filter: brightness(1.08);
-}
-
-.submit-btn:hover,
-.auth-btn:hover,
-.comment-btn:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
-}
-
-body {
-    animation: fadeIn 0.6s ease;
-}
+/* ===================================
+   PAGE FADE-IN
+   =================================== */
 
 @keyframes fadeIn {
     from { opacity: 0; }
