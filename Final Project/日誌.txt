@@ -61,3 +61,13 @@
 - 設計留言列表 comment-list，使用卡片式視覺風格，與首頁 post-card 呼應
 - 新增必要的 CSS 樣式（post-detail-title、divider、comment-section 等）
 - 文章頁視覺調性與首頁、登入頁、分類頁保持一致，完成六大主要頁面前端架構
+
+[2025-12-03]
+完成 Step 2-1：建立 Flask 專案環境（虛擬環境 + 專案結構）
+
+- 使用 VS Code 建立專案專用虛擬環境（.venv），隔離不同 Python 套件版本
+- 成功啟動虛擬環境，讓專案運行不依賴全域套件，避免版本衝突
+- 安裝 Flask 並將目前套件清單寫入 requirements.txt
+- 確認 routes/ 與 models/ 皆有 __init__.py，成為正式 Python package
+- 新增 .gitignore，排除 .venv、__pycache__ 與 SQLite DB 等不必要檔案
+- 整體專案結構正式具備可啟動後端的基礎環境，準備進入 Step 2-2（撰寫 app.py 與 Blueprint 架構）

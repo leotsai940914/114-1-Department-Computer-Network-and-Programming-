@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# venv
+.venv/
+
+# SQLite DB
+instance/*.db
+
+# VS Code
+.vscode/
