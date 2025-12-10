@@ -1,10 +1,47 @@
-/* ====== 全站設定 ====== */
+/* ===================================
+   設計系統 Design Tokens
+   =================================== */
+
+:root {
+    /* 顏色 */
+    --color-bg: #ffffff;
+    --color-text: #222222;
+    --color-text-muted: #666666;
+    --color-border: #e6e6e6;
+    --color-border-soft: #f0f0f0;
+    --color-accent: #222222;
+    --color-card-bg: #fafafa;
+
+    /* 字體 */
+    --font-family-main: "Noto Serif TC", serif;
+
+    /* 間距 scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2.5rem;
+
+    /* 其他 */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 10px;
+}
+
+/* ===================================
+   全站基本設定
+   =================================== */
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
-    font-family: "Noto Serif TC", serif;
-    background-color: #ffffff;
-    color: #222222;
+    font-family: var(--font-family-main);
+    background-color: var(--color-bg);
+    color: var(--color-text);
     line-height: 1.7;
 }
 
@@ -12,14 +49,35 @@ body {
 .container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 var(--space-md);
 }
 
+/* 全站連結樣式（Navbar 會再客製） */
+a {
+    color: inherit;
+    text-decoration: none;
+}
 
-/* ====== NAVBAR ====== */
+a:hover {
+    text-decoration: underline;
+}
+
+/* 標題與段落的基本節奏感 */
+h1, h2, h3 {
+    margin: 0;
+}
+
+p {
+    margin: 0 0 var(--space-md);
+}
+
+/* ===================================
+   NAVBAR
+   =================================== */
+
 .site-header {
-    border-bottom: 1px solid #e6e6e6;
-    background-color: #ffffff;
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-bg);
 }
 
 .nav-container {
@@ -37,6 +95,7 @@ body {
     letter-spacing: 0.04em;
 }
 
+/* 導覽列不加底線，維持乾淨 */
 .nav-links a {
     margin-left: 1.6rem;
     color: #444444;
@@ -46,37 +105,35 @@ body {
 
 .nav-links a:hover {
     color: #000000;
+    text-decoration: none;
 }
 
+/* ===================================
+   MAIN CONTENT
+   =================================== */
 
-/* ====== MAIN CONTENT ====== */
 .main-content {
     padding: 2.5rem 0;
 }
 
-
-/* ====== FOOTER ====== */
-.site-footer {
-    border-top: 1px solid #e6e6e6;
-    margin-top: 4rem;
-    padding: 2rem 0;
-    text-align: center;
-    color: #666666;
+/* 區塊標題：會在首頁、分類頁、登入頁等重用 */
+.section-title {
+    font-size: 1.4rem;
+    margin: 2.5rem 0 1.2rem;
+    font-weight: 600;
 }
 
-.footer-text {
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
+/* ===================================
+   HERO SECTION（首頁用）
+   =================================== */
 
-/* ====== HERO SECTION ====== */
 .hero {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
     padding: 2rem 0 3rem;
-    border-bottom: 1px solid #e6e6e6;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .hero-title {
@@ -91,21 +148,23 @@ body {
     margin: 1rem 0 1.2rem;
 }
 
+/* 通用按鈕樣式，可在其他頁面沿用 */
 .hero-btn {
     display: inline-block;
     padding: 0.6rem 1.4rem;
-    border: 1px solid #222;
-    color: #222;
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 0.95rem;
 }
 
 .hero-btn:hover {
-    background-color: #222;
+    background-color: var(--color-accent);
     color: #fff;
 }
 
+/* 右側 hero 圖片區塊（之後可換照片） */
 .hero-image-placeholder {
     width: 280px;
     height: 170px;
@@ -115,23 +174,19 @@ body {
     justify-content: center;
     color: #888;
     font-size: 0.9rem;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
 }
 
-
-/* ====== POSTS LIST ====== */
-.section-title {
-    font-size: 1.4rem;
-    margin: 2.5rem 0 1.2rem;
-    font-weight: 600;
-}
+/* ===================================
+   POSTS LIST（首頁與分類頁會共用）
+   =================================== */
 
 .post-card {
-    border: 1px solid #e6e6e6;
+    border: 1px solid var(--color-border);
     padding: 1.2rem 1.4rem;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     margin-bottom: 1.2rem;
-    background-color: #fafafa;
+    background-color: var(--color-card-bg);
 }
 
 .post-title {
@@ -148,4 +203,21 @@ body {
 .post-excerpt {
     color: #444;
     line-height: 1.7;
+}
+
+/* ===================================
+   FOOTER
+   =================================== */
+
+.site-footer {
+    border-top: 1px solid var(--color-border);
+    margin-top: 4rem;
+    padding: 2rem 0;
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+.footer-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
 }
