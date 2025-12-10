@@ -202,3 +202,17 @@
 
 此階段完成後，LumenFilm 已具備完整的會員登入系統，
 並可支援後續建立文章、新增留言與登入狀態判斷等功能。
+
+
+[2025-12-10]
+完成 Step 4-3：/logout 登出功能（Session 清除）
+
+- 在 auth_routes.py 新增 /logout 路由，並統一調整檔案結構
+- 修正 Blueprint 宣告順序（先宣告 auth_bp，再定義路由）
+- 登出流程使用 session.clear() 清空所有使用者登入資訊
+- 登出後自動 redirect 到 /login，使用者體驗順暢
+- 移除重複 import，讓程式碼更乾淨一致
+- 測試結果：登入 → /logout → 重新導向成功，session 狀態正確清空
+
+完成此步驟後，LumenFilm 的登入 / 註冊 / 登出三大流程正式完備，
+網站的 Session 狀態管理已可支援後續的權限控制（如 Admin Only 新增文章）。
