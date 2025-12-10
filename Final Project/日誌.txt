@@ -472,3 +472,35 @@ Hero（2.2rem）、Section Title（1.6rem）、Card Title（1.2rem）、正文�
 	•	非 admin 嘗試 /new_post → 正確顯示 403 錯誤
 
 功能已穩定運作。
+
+
+
+# [2025-12-10] — 完成 Step 5-6：文章刪除功能（Admin Only）
+
+完成了文章刪除（Delete Post）功能，正式讓網站具備完整的「文章管理」流程。
+
+---
+
+## 🔧 實作內容
+
+### 1. 新增刪除路由 `/post/<id>/delete`
+- 僅限 `role == "admin"` 才能刪除文章  
+- 非 admin → 回傳 403 Forbidden  
+- 文章不存在 → 顯示 error.html（404）
+
+### 2. 新增 `PostModel.delete_post(post_id)`
+- 直接從 posts 資料表刪除文章  
+- 正確 commit / close，避免 DB lock
+
+### 3. 在 `post_detail.html` 中加入刪除按鈕
+- 只有 admin 狀態下才會顯示  
+- 前端按鈕加入 `confirm()` 二次確認  
+- 按鈕樣式符合全站設計（黑 × 白 × Serif）
+
+### 4. 刪除後自動 redirect 回首頁
+- 操作更直觀  
+- 行為符合一般 CMS 對文章刪除的 UX 標準
+
+
+
+
