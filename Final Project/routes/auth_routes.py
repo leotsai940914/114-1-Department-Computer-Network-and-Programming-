@@ -68,7 +68,8 @@ def login():
         session["user_id"] = user["id"]
         session["role"] = user["role"]
 
-        return redirect(url_for("post_routes.home"))
+        # 登入成功後回首頁
+        return redirect(url_for("index"))
 
     # GET 請求：回傳登入頁
     return render_template("login.html")

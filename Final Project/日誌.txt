@@ -216,3 +216,79 @@
 
 完成此步驟後，LumenFilm 的登入 / 註冊 / 登出三大流程正式完備，
 網站的 Session 狀態管理已可支援後續的權限控制（如 Admin Only 新增文章）。
+
+
+[2025-12-10]
+修復 BuildError：auth_routes.register 無法解析
+
+- 問題來源：
+    在 base.html 中使用了 url_for('auth_routes.register')
+    但 auth_routes Blueprint 中沒有定義 register 這條 route
+    導致 Flask URL Map 無法找到該 endpoint → BuildError
+
+- 解決方式：
+    於 routes/auth_routes.py 補上完整的 /register endpoint（GET/POST）
+        • 取得表單資料 username / email / password
+        • 檢查欄位是否為空
+        • 檢查使用者 / email 是否重複（UserModel 查詢）
+        • 對密碼進行 generate_password_hash() 雜湊
+        • UserModel.create_user() 寫入資料庫
+        • 成功後 redirect 到 /login
+
+- 也同步修正 auth_routes.py 結構：
+        • 先宣告 Blueprint（auth_bp）
+        • 再定義 register、login、logout 三條路由
+        • 保證所有 endpoint 皆能被 url_for 正確解析
+
+- 驗證：
+        • 重新啟動 Flask 伺服器
+        • 首頁正常載入，不再觸發 BuildError
+        • Navbar 的 Register 連結可正常導向 /register
+
+此修正確保 Blueprint endpoint 完整性，並讓前端模板中的所有 url_for()
+都能正確解析，網站路由系統恢復正常運作。
+
+
+[2025-12-10]
+進行網站核心功能的逐步測試（Registration / Login / Session / Routing）
+
+1. 首頁啟動測試
+   - 成功啟動 Flask 伺服器
+   - 首頁正常渲染 index.html（Hero + 假資料文章卡片）
+   - 無錯誤、無 BuildError，CSS/JS 正常載入
+
+2. 註冊功能測試（/register）
+   - 使用 testuser1 成功註冊（username / email / password 寫入 DB）
+   - 驗證重複帳號：顯示「此帳號已被使用」
+   - 驗證重複 email：顯示「Email 已被註冊」
+   - 密碼成功使用 generate_password_hash 以 hash 形式儲存
+   - 註冊成功 → 正常 redirect 到 /login
+
+3. 登入功能測試（/login）
+   - 錯誤帳號：正確顯示「帳號不存在」
+   - 錯誤密碼：正確顯示「密碼錯誤」
+   - 正確帳號 + 密碼登入成功
+   - session["user_id"] 與 session["role"] 正常寫入
+   - 原本的 redirect 指向不存在的 post_routes.home → 導致 BuildError
+   - 已修正為 redirect(url_for("index")) → 測試成功跳回首頁
+
+4. 登出功能測試（/logout）
+   - session.clear() 正常清空登入資訊
+   - /logout → 正常 redirect 回 /login
+   - 多次重複測試皆無錯誤
+
+5. 資料庫驗證（SQLite）
+   - 使用 sqlite3 檢查 users 表
+   - testuser1 已成功寫入（含 username、email、password_hash）
+   - categories 表含預設六筆資料
+
+6. Categories 行為測試
+   - Navbar 上的 Categories 按鈕目前為 placeholder（無下拉選單、無路由）
+   - 點擊無反應是預期行為，因為尚未實作選單及資料串接
+   - category_routes.py 已建立骨架，可正常擴充
+
+測試結論：
+目前網站的會員系統（註冊 / 登入 / 登出）已完整運作；
+首頁與所有前端頁面皆能渲染；
+Blueprint 與所有 endpoint 均已修正、無 BuildError。
+下一階段將可順利進入文章系統（Step 5-1）。
