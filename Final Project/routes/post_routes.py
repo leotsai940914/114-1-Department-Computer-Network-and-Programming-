@@ -7,15 +7,6 @@ post_bp = Blueprint("post_routes", __name__)
 
 
 # =============================
-# 首頁：列出所有文章
-# =============================
-@post_bp.route("/")
-def home():
-    posts = PostModel.get_all_posts()
-    return render_template("index.html", posts=posts)
-
-
-# =============================
 # 單篇文章頁（整合留言系統）
 # =============================
 @post_bp.route("/post/<int:post_id>")
@@ -58,11 +49,11 @@ def new_post():
     # 必填驗證
     if not title or not content:
         categories = CategoryModel.get_all_categories()
-        return render_template(
-            "new_post.html",
-            error="標題與內容不得為空",
-            categories=categories
-        )
+    return render_template(
+        "new_post.html",
+        error="標題與內容不得為空",
+        categories=categories
+    )
 
     # --- 寫入資料庫 ---
     new_id = PostModel.create_post(
@@ -74,22 +65,3 @@ def new_post():
     )
 
     return redirect(url_for("post_routes.post_detail", post_id=new_id))
-
-
-# =============================
-# 分類頁：顯示某分類的所有文章
-# =============================
-@post_bp.route("/category/<name>")
-def category_page(name):
-    category = CategoryModel.get_category_by_name(name)
-
-    if not category:
-        return render_template("error.html", message="分類不存在"), 404
-
-    posts = PostModel.get_posts_by_category(category["id"])
-
-    return render_template(
-        "category_posts.html",
-        category_name=name,
-        posts=posts
-    )

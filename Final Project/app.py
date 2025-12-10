@@ -1,9 +1,11 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, render_template
+from markupsafe import Markup, escape
 from routes.auth_routes import auth_bp
 from routes.post_routes import post_bp
 from routes.category_routes import category_bp
 from routes.comment_routes import comment_bp
 from models.database import create_tables, init_categories
+from models.post_model import PostModel
 
 
 def create_app():
@@ -20,10 +22,16 @@ def create_app():
     create_tables()
     init_categories()
 
-    # 使用 post_routes 的首頁
+    # Jinja filter：將換行轉換為 <br>
+    @app.template_filter("nl2br")
+    def nl2br(value):
+        return Markup("<br>".join(escape(value).split("\n")))
+
+    # 首頁
     @app.route("/")
     def index():
-        return redirect(url_for("post_routes.home"))
+        posts = PostModel.get_all_posts()
+        return render_template("index.html", posts=posts)
 
     return app
 
