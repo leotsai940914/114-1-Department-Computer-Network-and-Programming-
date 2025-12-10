@@ -22,6 +22,14 @@
                name="subtitle"
                value="{{ settings.subtitle }}">
 
+        <!-- 頁尾文字 -->
+        <label class="form-label">頁尾文字（Footer）</label>
+        <input type="text"
+               class="form-input"
+               name="footer_text"
+               placeholder="寫下每一部電影留給我們的影像與思考"
+               value="{{ settings.footer_text or '' }}">
+
         <!-- 作者頭像 -->
         <label class="form-label">作者頭像 URL（Avatar）</label>
         <input type="text"

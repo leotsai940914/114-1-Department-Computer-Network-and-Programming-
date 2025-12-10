@@ -124,8 +124,11 @@ if (window.Quill) {
         });
     }
 
+    // 新增文章（若有 quillEditor）
     initQuillEditor("quillEditor", "contentInput", "#toolbar");
-    initQuillEditor("quillEditor", "contentInput", "#toolbar", "rawContent");
+
+    // 編輯文章（若有 quillEditor-edit）
+    initQuillEditor("quillEditor-edit", "contentInput-edit", "#toolbar-edit", "rawContent");
 }
 
 

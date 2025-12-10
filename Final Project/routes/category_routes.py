@@ -39,9 +39,3 @@ def category_page(name):
 @category_bp.route("/about")
 def about():
     return render_template("about.html")
-
-@category_bp.route("/about")
-def about():
-    from models.settings_model import SettingsModel
-    settings = SettingsModel.get_settings()
-    return render_template("about.html", settings=settings)
