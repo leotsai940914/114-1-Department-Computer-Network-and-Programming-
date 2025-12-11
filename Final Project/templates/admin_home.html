@@ -60,6 +60,7 @@
                 <form method="POST"
                       action="{{ url_for('post_routes.delete_post', post_id=p.id) }}"
                       onsubmit="return confirm('確定刪除這篇文章？');">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
                     <button style="
                         padding: 0.4rem 0.8rem;
                         background:#b00020;

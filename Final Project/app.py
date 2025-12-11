@@ -1,6 +1,8 @@
-from flask import Flask, render_template
+import os
+import secrets
+from flask import Flask, render_template, request, session, abort
 from markupsafe import Markup, escape
-from config import DevelopmentConfig
+from config import DevelopmentConfig, ProductionConfig
 
 from routes.auth_routes import auth_bp
 from routes.post_routes import post_bp
@@ -15,7 +17,30 @@ from models.settings_model import SettingsModel   # ← 要 import
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(DevelopmentConfig)
+
+    env = os.getenv("FLASK_ENV") or os.getenv("APP_ENV") or "development"
+    config_cls = ProductionConfig if env.lower() == "production" else DevelopmentConfig
+    app.config.from_object(config_cls)
+
+    # ---------- CSRF 保護 ----------
+    def generate_csrf_token():
+        token = session.get("_csrf_token")
+        if not token:
+            token = secrets.token_hex(16)
+            session["_csrf_token"] = token
+        return token
+
+    @app.before_request
+    def csrf_protect():
+        if request.method == "POST":
+            token = session.get("_csrf_token")
+            submitted = request.form.get("_csrf_token") or request.headers.get("X-CSRFToken")
+            if not token or token != submitted:
+                abort(400, description="Invalid CSRF token")
+
+    @app.context_processor
+    def inject_csrf_token():
+        return dict(csrf_token=generate_csrf_token)
 
     # ---------- 註冊 Blueprint ----------
     app.register_blueprint(auth_bp)

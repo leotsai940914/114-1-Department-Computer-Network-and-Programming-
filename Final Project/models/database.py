@@ -7,6 +7,7 @@ def get_db_connection():
     db_path = current_app.config["DATABASE_PATH"]
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row  # 以 dict 方式讀資料
+    conn.execute("PRAGMA foreign_keys = ON")  # 確保外鍵約束有效
     return conn
 
 

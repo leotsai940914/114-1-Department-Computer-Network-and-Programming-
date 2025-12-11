@@ -50,10 +50,24 @@ def new_post():
             categories=categories
         )
 
+    # 分類檢查
+    try:
+        category_id_int = int(category_id)
+    except (TypeError, ValueError):
+        category_id_int = None
+
+    if not category_id_int or not CategoryModel.get_category_by_id(category_id_int):
+        categories = CategoryModel.get_all_categories()
+        return render_template(
+            "new_post.html",
+            error="分類不存在，請重新選擇",
+            categories=categories
+        )
+
     new_id = PostModel.create_post(
         title=title,
         content=content,
-        category_id=category_id,
+        category_id=category_id_int,
         user_id=session["user_id"],
         cover_image_url=cover_image_url
     )
@@ -121,12 +135,28 @@ def update_post(post_id):
             error="標題與內容不得為空"
         )
 
+    # 分類檢查
+    try:
+        category_id_int = int(category_id)
+    except (TypeError, ValueError):
+        category_id_int = None
+
+    if not category_id_int or not CategoryModel.get_category_by_id(category_id_int):
+        post = PostModel.get_post_by_id(post_id)
+        categories = CategoryModel.get_all_categories()
+        return render_template(
+            "edit_post.html",
+            post=post,
+            categories=categories,
+            error="分類不存在，請重新選擇"
+        )
+
     # 更新 DB
     PostModel.update_post(
         post_id=post_id,
         title=title,
         content=content,
-        category_id=category_id,
+        category_id=category_id_int,
         cover_image_url=cover_image_url
     )
 

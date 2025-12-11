@@ -9,6 +9,7 @@
           class="newpost-form"
           method="POST"
           action="{{ url_for('post_routes.update_post', post_id=post.id) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
 
         {% if error %}
         <p style="color:#b00020; margin-bottom:1rem;">

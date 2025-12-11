@@ -18,6 +18,15 @@ class CategoryModel:
 
         conn.close()
         return categories
+
+    @staticmethod
+    def get_category_by_id(category_id):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM categories WHERE id = ?", (category_id,))
+        category = cursor.fetchone()
+        conn.close()
+        return category
     
     @staticmethod
     def count_all():
