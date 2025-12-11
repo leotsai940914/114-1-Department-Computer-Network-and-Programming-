@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container" style="margin-top:1.5rem;">
+    <h2 class="section-title">作者列表</h2>
+
+    {% if authors %}
+    <div class="author-grid">
+        {% for a in authors %}
+        <a class="author-card" href="{{ url_for('post_routes.author_page', username=a['username']) }}">
+            <div class="author-avatar">
+                {% if a.avatar_url %}
+                <img src="{{ a.avatar_url }}" alt="{{ a.username }}">
+                {% else %}
+                <div class="avatar-placeholder">{{ a.username[:1] | upper }}</div>
+                {% endif %}
+            </div>
+            <div class="author-info">
+                <p class="author-name">{{ a.username }}</p>
+                <p class="author-bio">{{ a.bio or "這位作者很神秘，還沒有留下介紹。" }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>目前沒有作者資料。</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

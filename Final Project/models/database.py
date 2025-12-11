@@ -23,9 +23,19 @@ def create_tables():
             username TEXT UNIQUE NOT NULL,
             email TEXT UNIQUE NOT NULL,
             password_hash TEXT NOT NULL,
-            role TEXT NOT NULL DEFAULT 'visitor'
+            role TEXT NOT NULL DEFAULT 'visitor',
+            avatar_url TEXT,
+            bio TEXT
         );
     """)
+
+    # 補齊 users 新欄位（舊表）
+    cur.execute("PRAGMA table_info(users)")
+    user_cols = {row["name"] for row in cur.fetchall()}
+    if "avatar_url" not in user_cols:
+        cur.execute("ALTER TABLE users ADD COLUMN avatar_url TEXT")
+    if "bio" not in user_cols:
+        cur.execute("ALTER TABLE users ADD COLUMN bio TEXT")
 
     # categories
     cur.execute("""

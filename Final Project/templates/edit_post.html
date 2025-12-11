@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
         previewTitle.textContent = titleInput.value.trim() || "尚未輸入標題";
 
         const plain = quill.getText().trim();
-        const words = plain ? plain.split(/\\s+/).length : 0;
+        const words = plain ? plain.split(/\s+/).length : 0;
         const minutes = Math.max(1, Math.round(words / 220));
         previewReading.textContent = `約 ${minutes} 分鐘讀完`;
         previewExcerpt.textContent = plain ? (plain.slice(0, 120) + (plain.length > 120 ? "…" : "")) : "開始輸入內容，預覽會同步更新。";

@@ -128,6 +128,42 @@
         </form>
     </div>
 
+    <!-- 作者資料 -->
+    {% if session.get('user_id') %}
+    <div style="margin-top:2rem;">
+        <h3 class="section-title">作者資料</h3>
+        <form method="POST" action="{{ url_for('admin_routes.admin_settings') }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="site_title" value="{{ settings.site_title }}">
+            <input type="hidden" name="subtitle" value="{{ settings.subtitle }}">
+            <input type="hidden" name="footer_text" value="{{ settings.footer_text }}">
+            <input type="hidden" name="about_html" value="{{ settings.about_html }}">
+            <input type="hidden" name="avatar_url" value="{{ settings.avatar_url }}">
+            <input type="hidden" name="featured_post_id" value="{{ settings.featured_post_id or '' }}">
+            <input type="hidden" name="featured_tagline" value="{{ settings.featured_tagline or '' }}">
+
+            <label class="form-label">作者頭像 URL（個人）</label>
+            <input type="text" class="form-input" name="author_avatar"
+                   placeholder="https://example.com/me.jpg"
+                   value="{{ author.avatar_url if author else '' }}">
+
+            {% if author and author.avatar_url %}
+            <div style="margin:0.5rem 0 1rem;">
+                <img src="{{ author.avatar_url }}"
+                     alt="Author Avatar"
+                     style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
+            </div>
+            {% endif %}
+
+            <label class="form-label">作者簡介</label>
+            <textarea class="form-input" name="author_bio" rows="3"
+                      placeholder="寫幾句關於你的話">{{ author.bio if author else '' }}</textarea>
+
+            <button class="submit-btn" type="submit" style="margin-top:1rem;">儲存作者資料</button>
+        </form>
+    </div>
+    {% endif %}
+
 </div>
 
 <!-- Quill JS / CSS -->

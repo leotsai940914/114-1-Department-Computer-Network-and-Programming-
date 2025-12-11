@@ -67,6 +67,9 @@
                     <div class="meta-row">
                         <span class="meta-chip">{{ post['category_name'] }}</span>
                         <span>{{ post['created_at'] }}</span>
+                        {% if post['author_name'] %}
+                        <a class="meta-chip" href="{{ url_for('post_routes.author_page', username=post['author_name']) }}">作者：{{ post['author_name'] }}</a>
+                        {% endif %}
                         {% if loop.first and hero_post and hero_post.id == post['id'] %}
                             <span class="meta-chip featured">主打</span>
                         {% endif %}

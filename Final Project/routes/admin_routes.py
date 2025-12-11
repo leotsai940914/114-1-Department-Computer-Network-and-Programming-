@@ -8,6 +8,7 @@ from models.post_model import PostModel
 from models.comment_model import CommentModel
 from models.category_model import CategoryModel
 from models.settings_model import SettingsModel
+from models.user_model import UserModel
 
 admin_bp = Blueprint("admin_routes", __name__)
 
@@ -53,6 +54,8 @@ def admin_settings():
         avatar_url = request.form.get("avatar_url")
         featured_post_id = request.form.get("featured_post_id") or None
         featured_tagline = request.form.get("featured_tagline") or ""
+        author_avatar = request.form.get("author_avatar")
+        author_bio = request.form.get("author_bio")
 
         # 轉型 featured_post_id
         try:
@@ -70,13 +73,22 @@ def admin_settings():
             featured_tagline=featured_tagline,
         )
 
+        # 更新作者資料
+        if session.get("user_id"):
+            UserModel.update_profile(
+                user_id=session["user_id"],
+                avatar_url=author_avatar,
+                bio=author_bio
+            )
+
         # 儲存後留在同一頁
         return redirect(url_for("admin_routes.admin_settings"))
 
     # GET: 顯示設定頁
     settings = SettingsModel.get_settings()
     posts = PostModel.get_all_posts()
-    return render_template("admin_settings.html", settings=settings, posts=posts)
+    author = UserModel.find_by_id(session.get("user_id")) if session.get("user_id") else None
+    return render_template("admin_settings.html", settings=settings, posts=posts, author=author)
 
 
 # ===============================

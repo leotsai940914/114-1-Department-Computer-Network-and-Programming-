@@ -30,9 +30,10 @@ class PostModel:
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT posts.*, categories.name AS category_name
+            SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar
             FROM posts
             JOIN categories ON posts.category_id = categories.id
+            JOIN users ON posts.user_id = users.id
             ORDER BY created_at DESC
         """)
 
@@ -48,9 +49,10 @@ class PostModel:
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT posts.*, categories.name AS category_name
+            SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar
             FROM posts
             JOIN categories ON posts.category_id = categories.id
+            JOIN users ON posts.user_id = users.id
             WHERE category_id = ?
             ORDER BY created_at DESC
         """, (category_id,))
@@ -58,6 +60,43 @@ class PostModel:
         posts = cursor.fetchall()
         conn.close()
         return posts
+
+    @staticmethod
+    def get_posts_by_user(user_id):
+        """Fetch posts by author."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar
+            FROM posts
+            JOIN categories ON posts.category_id = categories.id
+            JOIN users ON posts.user_id = users.id
+            WHERE user_id = ?
+            ORDER BY created_at DESC
+        """, (user_id,))
+        rows = cursor.fetchall()
+        conn.close()
+        return rows
+
+    @staticmethod
+    def get_posts_by_user_paginated(user_id, limit, offset):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar
+            FROM posts
+            JOIN categories ON posts.category_id = categories.id
+            JOIN users ON posts.user_id = users.id
+            WHERE user_id = ?
+            ORDER BY created_at DESC
+            LIMIT ? OFFSET ?
+        """, (user_id, limit, offset))
+        rows = cur.fetchall()
+
+        cur.execute("SELECT COUNT(*) AS cnt FROM posts WHERE user_id = ?", (user_id,))
+        total = cur.fetchone()["cnt"]
+        conn.close()
+        return rows, total
 
 
     @staticmethod
@@ -67,9 +106,10 @@ class PostModel:
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT posts.*, categories.name AS category_name
+            SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar, users.bio AS author_bio
             FROM posts
             JOIN categories ON posts.category_id = categories.id
+            JOIN users ON posts.user_id = users.id
             WHERE posts.id = ?
         """, (post_id,))
 

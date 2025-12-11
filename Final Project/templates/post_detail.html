@@ -14,6 +14,9 @@
         <span class="meta-chip">{{ post.category_name }}</span>
         <span class="meta-chip">{{ post.created_at }}</span>
         <span class="meta-chip reading-time">約 {{ reading_time }} 分鐘讀完</span>
+        {% if author %}
+        <a class="meta-chip" href="{{ url_for('post_routes.author_page', username=author.username) }}">作者：{{ author.username }}</a>
+        {% endif %}
     </div>
 
     <!-- ====== 封面圖片（若有） ====== -->
@@ -22,6 +25,22 @@
          alt="Cover Image"
          style="width:100%; border-radius:6px; margin-bottom:1.5rem;"
          class="cover-image">
+    {% endif %}
+
+    {% if author %}
+    <div class="author-box">
+        <div class="author-avatar">
+            {% if author.avatar_url %}
+            <img src="{{ author.avatar_url }}" alt="{{ author.username }}">
+            {% else %}
+            <div class="avatar-placeholder">{{ author.username[:1] | upper }}</div>
+            {% endif %}
+        </div>
+        <div class="author-info">
+            <p class="author-name">{{ author.username }}</p>
+            <p class="author-bio">{{ author.bio or "這篇文章由本站作者撰寫。" }}</p>
+        </div>
+    </div>
     {% endif %}
 
     <!-- ====== 文章內容（圖片將由 JS 自動加 lazy load + lightbox） ====== -->

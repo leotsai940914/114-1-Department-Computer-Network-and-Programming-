@@ -1,8 +1,10 @@
 import re
-from flask import Blueprint, render_template, request, redirect, url_for, session, abort
+from datetime import datetime
+from flask import Blueprint, render_template, request, redirect, url_for, session, abort, Response
 from models.post_model import PostModel
 from models.category_model import CategoryModel
 from models.comment_model import CommentModel
+from models.user_model import UserModel
 
 post_bp = Blueprint("post_routes", __name__)
 
@@ -26,6 +28,7 @@ def post_detail(post_id):
 
     comments = CommentModel.get_comments_by_post(post_id)
     reading_time = _estimate_reading_time(post["content"])
+    author = UserModel.find_by_id(post["user_id"]) if post.get("user_id") else None
 
     # 取得前後文章 + 同分類推薦
     all_posts = list(PostModel.get_all_posts())
@@ -50,10 +53,77 @@ def post_detail(post_id):
         post=post,
         comments=comments,
         reading_time=reading_time,
+        author=author,
         prev_post=prev_post,
         next_post=next_post,
         related_posts=related_posts
     )
+
+
+# =============================
+# 作者專頁：顯示該作者文章
+# =============================
+@post_bp.route("/author/<username>")
+def author_page(username):
+    user = UserModel.find_by_username(username)
+    if not user:
+        return render_template("error.html", message="作者不存在"), 404
+
+    page = request.args.get("page", 1, type=int)
+    per_page = 6
+    offset = (page - 1) * per_page
+
+    posts, total = PostModel.get_posts_by_user_paginated(user["id"], per_page, offset)
+    total_pages = max(1, -(-total // per_page))
+    return render_template(
+        "author_posts.html",
+        author=user,
+        posts=posts,
+        page=page,
+        total_pages=total_pages
+    )
+
+
+@post_bp.route("/author/<username>/rss")
+def author_rss(username):
+    user = UserModel.find_by_username(username)
+    if not user:
+        abort(404)
+
+    posts = PostModel.get_posts_by_user(user["id"])
+    items = []
+    for p in posts:
+        link = url_for("post_routes.post_detail", post_id=p["id"], _external=True)
+        pub_date = p["created_at"]
+        items.append(f"""
+        <item>
+            <title><![CDATA[{p['title']}]]></title>
+            <link>{link}</link>
+            <guid isPermaLink="false">{p['id']}</guid>
+            <pubDate>{pub_date}</pubDate>
+            <description><![CDATA[{p['content'][:200]}]]></description>
+        </item>
+        """)
+
+    feed = f"""<?xml version="1.0" encoding="UTF-8"?>
+    <rss version="2.0">
+      <channel>
+        <title><![CDATA[{user['username']} - LumenFilm 作者 RSS]]></title>
+        <link>{url_for('post_routes.author_page', username=user['username'], _external=True)}</link>
+        <description><![CDATA[{user.get('bio') or '作者文章訂閱'}]]></description>
+        {''.join(items)}
+      </channel>
+    </rss>"""
+    return Response(feed, content_type="application/rss+xml; charset=utf-8")
+
+
+# =============================
+# 作者列表
+# =============================
+@post_bp.route("/authors")
+def authors_index():
+    authors = UserModel.get_all_authors()
+    return render_template("authors.html", authors=authors)
 
 
 # =============================

@@ -62,6 +62,8 @@
                 <a href="{{ url_for('auth_routes.register') }}">Register</a>
             {% endif %}
 
+            <a href="{{ url_for('post_routes.authors_index') }}">Authors</a>
+
             {% if session.get('role') == 'admin' %}
                 <div class="admin-menu">
                     <button class="admin-toggle">☰</button>
