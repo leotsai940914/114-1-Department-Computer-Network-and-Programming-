@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container">
+<div class="container post-wrapper">
 
     <!-- ====== 文章標題 ====== -->
     <h1 class="post-detail-title">{{ post.title }}</h1>
+    <p class="post-subtitle">
+        {{ post.content | striptags | truncate(140, True, '…') }}
+    </p>
 
     <!-- ====== 分類 & 日期 ====== -->
     <div class="post-detail-meta">
@@ -35,6 +38,16 @@
     </article>
 
     <hr class="divider">
+
+    <!-- ====== 分享 ====== -->
+    <section class="share-row">
+        <div class="share-label">分享這篇文章</div>
+        <div class="share-buttons">
+            <button type="button" class="share-btn" data-share="copy">複製連結</button>
+            <a class="share-btn" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}">Facebook</a>
+            <a class="share-btn" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url={{ request.url }}&text={{ post.title }}">X/Twitter</a>
+        </div>
+    </section>
 
     <!-- ====== 續讀推薦 ====== -->
     <section class="related-section">
@@ -107,6 +120,12 @@
 
     </section>
 
+</div>
+
+<!-- 浮動回頂/回目錄 -->
+<div class="floating-actions">
+    <button type="button" class="float-btn" data-action="toc">目錄</button>
+    <button type="button" class="float-btn" data-action="top">頂端</button>
 </div>
 
 

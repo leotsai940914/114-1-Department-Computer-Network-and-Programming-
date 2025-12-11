@@ -694,6 +694,11 @@ button,
     margin-bottom: 0.5rem;
 }
 
+.post-subtitle {
+    color: var(--color-text-muted);
+    margin: 0.3rem 0 1rem;
+}
+
 .post-detail-meta {
     display: flex;
     gap: 0.5rem;
@@ -705,6 +710,27 @@ button,
 
 .post-detail-content p {
     color: #333;
+}
+
+.post-wrapper {
+    max-width: 780px;
+}
+
+.post-detail-content {
+    line-height: 1.7;
+    font-size: 1.05rem;
+}
+
+.post-detail-content h2 {
+    margin: 1.8rem 0 0.8rem;
+}
+
+.post-detail-content h3 {
+    margin: 1.4rem 0 0.7rem;
+}
+
+.post-detail-content p + p {
+    margin-top: 0.8rem;
 }
 
 /* 分隔線 */
@@ -766,6 +792,63 @@ button,
 
 .reading-time {
     background: #e8e8e8;
+}
+
+.share-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+.share-label {
+    font-weight: 600;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    border: 1px solid var(--color-border);
+    background: #fff;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--color-text);
+    cursor: pointer;
+}
+
+.share-btn:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+}
+
+.floating-actions {
+    position: fixed;
+    right: 1rem;
+    bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    z-index: 3000;
+}
+
+.float-btn {
+    border: 1px solid var(--color-border);
+    background: #fff;
+    padding: 0.45rem 0.75rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+}
+
+.float-btn:hover {
+    transform: translateY(-1px);
 }
 
 /* ===================================

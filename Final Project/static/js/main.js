@@ -286,3 +286,44 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+/* ============================================================
+   分享／浮動按鈕
+============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+    const shareButtons = document.querySelectorAll(".share-btn");
+    shareButtons.forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            if (btn.dataset.share !== "copy") return;
+            e.preventDefault();
+            const url = window.location.href;
+            try {
+                await navigator.clipboard.writeText(url);
+                btn.textContent = "已複製";
+                setTimeout(() => (btn.textContent = "複製連結"), 1500);
+            } catch (err) {
+                btn.textContent = "無法複製";
+                setTimeout(() => (btn.textContent = "複製連結"), 1500);
+            }
+        });
+    });
+
+    const floater = document.querySelector(".floating-actions");
+    if (floater) {
+        floater.addEventListener("click", (e) => {
+            const target = e.target.closest(".float-btn");
+            if (!target) return;
+            const action = target.dataset.action;
+            if (action === "top") {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+            if (action === "toc") {
+                const toc = document.getElementById("tocContainer");
+                if (toc) {
+                    toc.classList.add("open");
+                    toc.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            }
+        });
+    }
+});
