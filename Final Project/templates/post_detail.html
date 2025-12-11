@@ -7,10 +7,11 @@
     <h1 class="post-detail-title">{{ post.title }}</h1>
 
     <!-- ====== 分類 & 日期 ====== -->
-    <p class="post-detail-meta">
-        分類：{{ post.category_name }} ｜ 
-        發布日期：{{ post.created_at }}
-    </p>
+    <div class="post-detail-meta">
+        <span class="meta-chip">{{ post.category_name }}</span>
+        <span class="meta-chip">{{ post.created_at }}</span>
+        <span class="meta-chip reading-time">約 {{ reading_time }} 分鐘讀完</span>
+    </div>
 
     <!-- ====== 封面圖片（若有） ====== -->
     {% if post.cover_image_url %}
@@ -21,11 +22,44 @@
     {% endif %}
 
     <!-- ====== 文章內容（圖片將由 JS 自動加 lazy load + lightbox） ====== -->
-    <article class="post-detail-content">
+    <div class="toc-container" id="tocContainer">
+        <div class="toc-header">
+            <span>目錄</span>
+            <button type="button" class="toc-toggle" aria-label="toggle toc">展開</button>
+        </div>
+        <nav id="toc"></nav>
+    </div>
+
+    <article class="post-detail-content" id="postContent">
         {{ post.content | safe }}
     </article>
 
     <hr class="divider">
+
+    <!-- ====== 續讀推薦 ====== -->
+    <section class="related-section">
+        <h3 class="section-title">延伸閱讀</h3>
+        <div class="related-grid">
+            {% if prev_post %}
+            <a class="related-card" href="{{ url_for('post_routes.post_detail', post_id=prev_post['id']) }}">
+                <p class="eyebrow">上一篇</p>
+                <p class="related-title">{{ prev_post['title'] }}</p>
+            </a>
+            {% endif %}
+            {% if next_post %}
+            <a class="related-card" href="{{ url_for('post_routes.post_detail', post_id=next_post['id']) }}">
+                <p class="eyebrow">下一篇</p>
+                <p class="related-title">{{ next_post['title'] }}</p>
+            </a>
+            {% endif %}
+            {% for rp in related_posts %}
+            <a class="related-card" href="{{ url_for('post_routes.post_detail', post_id=rp['id']) }}">
+                <p class="eyebrow">同分類</p>
+                <p class="related-title">{{ rp['title'] }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
 
     <!-- ====== 留言區 ====== -->
     <section class="comment-section">

@@ -1,9 +1,18 @@
+import re
 from flask import Blueprint, render_template, request, redirect, url_for, session, abort
 from models.post_model import PostModel
 from models.category_model import CategoryModel
 from models.comment_model import CommentModel
 
 post_bp = Blueprint("post_routes", __name__)
+
+
+def _estimate_reading_time(html):
+    """粗估閱讀時間（以 220 wpm 近似）"""
+    text = re.sub(r"<[^>]+>", " ", html or "")
+    words = re.findall(r"\w+", text)
+    minutes = max(1, round(len(words) / 220))
+    return minutes
 
 
 # =============================
@@ -16,11 +25,34 @@ def post_detail(post_id):
         return render_template("error.html", message="文章不存在"), 404
 
     comments = CommentModel.get_comments_by_post(post_id)
+    reading_time = _estimate_reading_time(post["content"])
+
+    # 取得前後文章 + 同分類推薦
+    all_posts = list(PostModel.get_all_posts())
+    prev_post = next_post = None
+    related_posts = []
+
+    for idx, p in enumerate(all_posts):
+        if p["id"] == post_id:
+            if idx + 1 < len(all_posts):
+                next_post = all_posts[idx + 1]
+            if idx - 1 >= 0:
+                prev_post = all_posts[idx - 1]
+            break
+
+    related_posts = [
+        p for p in all_posts
+        if p["category_id"] == post["category_id"] and p["id"] != post_id
+    ][:3]
 
     return render_template(
         "post_detail.html",
         post=post,
-        comments=comments
+        comments=comments,
+        reading_time=reading_time,
+        prev_post=prev_post,
+        next_post=next_post,
+        related_posts=related_posts
     )
 
 

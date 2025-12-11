@@ -238,3 +238,51 @@ document.addEventListener("DOMContentLoaded", () => {
         overlayImg.src = "";
     });
 });
+
+/* ============================================================
+   TOC：根據 H2/H3 生成目錄
+============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+    const content = document.getElementById("postContent");
+    const toc = document.getElementById("toc");
+    const container = document.getElementById("tocContainer");
+    if (!content || !toc || !container) return;
+
+    const headings = content.querySelectorAll("h2, h3");
+    if (!headings.length) {
+        container.style.display = "none";
+        return;
+    }
+
+    const slugify = (text) =>
+        text.trim().toLowerCase()
+            .replace(/[^\w\u4e00-\u9fff]+/g, "-")
+            .replace(/-+/g, "-")
+            .replace(/^-|-$/g, "");
+
+    const list = document.createElement("ul");
+    headings.forEach((h) => {
+        if (!h.id) {
+            const id = slugify(h.textContent || "section");
+            h.id = id || `section-${Math.random().toString(16).slice(2, 7)}`;
+        }
+        const li = document.createElement("li");
+        li.className = h.tagName.toLowerCase();
+
+        const a = document.createElement("a");
+        a.href = `#${h.id}`;
+        a.textContent = h.textContent || h.id;
+        li.appendChild(a);
+        list.appendChild(li);
+    });
+
+    toc.appendChild(list);
+
+    const toggle = container.querySelector(".toc-toggle");
+    if (toggle) {
+        toggle.addEventListener("click", () => {
+            container.classList.toggle("open");
+            toggle.textContent = container.classList.contains("open") ? "收合" : "展開";
+        });
+    }
+});

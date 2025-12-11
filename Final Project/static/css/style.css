@@ -695,6 +695,9 @@ button,
 }
 
 .post-detail-meta {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
     margin-bottom: 1.5rem;
@@ -708,6 +711,61 @@ button,
 .divider {
     margin: 2.5rem 0 2rem;
     border-top: 1px solid #e6e6e6;
+}
+
+.toc-container {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.8rem 1rem;
+    background: var(--color-card-bg);
+    margin-bottom: 1.5rem;
+}
+
+.toc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.toc-toggle {
+    border: 1px solid var(--color-border);
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 0.25rem 0.7rem;
+    cursor: pointer;
+}
+
+#toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.4rem 0 0;
+    display: none;
+    gap: 0.35rem;
+    flex-direction: column;
+}
+
+#toc li {
+    margin: 0.25rem 0;
+}
+
+#toc li.h3 {
+    padding-left: 0.8rem;
+    font-size: 0.95rem;
+}
+
+#toc a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.toc-container.open #toc ul {
+    display: flex;
+}
+
+.reading-time {
+    background: #e8e8e8;
 }
 
 /* ===================================
@@ -1115,6 +1173,36 @@ blockquote::before {
     margin-top: 0;
     font-size: 1.2rem;
     margin-bottom: 0.6rem;
+}
+
+.related-section {
+    margin: 2rem 0 2.5rem;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.8rem;
+}
+
+.related-card {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.9rem 1rem;
+    text-decoration: none;
+    color: var(--color-text);
+    background: var(--color-card-bg);
+    transition: box-shadow var(--transition-normal), transform var(--transition-fast);
+}
+
+.related-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.related-title {
+    margin: 0.2rem 0 0;
+    font-weight: 600;
 }
 
 .post-detail-content p:first-child::first-letter {
