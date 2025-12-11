@@ -41,12 +41,13 @@
             <div class="dropdown">
                 <a class="dropdown-toggle">Categories ▼</a>
                 <div class="dropdown-menu">
-                    <a href="{{ url_for('category_routes.category_page', name='Review') }}">Review</a>
-                    <a href="{{ url_for('category_routes.category_page', name='Scene Analysis') }}">Scene Analysis</a>
-                    <a href="{{ url_for('category_routes.category_page', name='Themes') }}">Themes</a>
-                    <a href="{{ url_for('category_routes.category_page', name='Character Study') }}">Character Study</a>
-                    <a href="{{ url_for('category_routes.category_page', name='Film Theory') }}">Film Theory</a>
-                    <a href="{{ url_for('category_routes.category_page', name='Directors') }}">Directors</a>
+                    {% if nav_categories %}
+                        {% for cat in nav_categories %}
+                            <a href="{{ url_for('category_routes.category_page', name=cat['name']) }}">{{ cat['name'] }}</a>
+                        {% endfor %}
+                    {% else %}
+                        <span style="display:block;padding:0.6rem 1rem;color:#888;">尚無分類</span>
+                    {% endif %}
                 </div>
             </div>
 

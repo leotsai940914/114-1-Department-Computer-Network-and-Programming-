@@ -13,6 +13,7 @@ from routes.admin_routes import admin_bp
 from models.database import create_tables, init_categories
 from models.post_model import PostModel
 from models.settings_model import SettingsModel   # ← 要 import
+from models.category_model import CategoryModel
 
 
 def create_app():
@@ -74,7 +75,10 @@ def create_app():
     # ---------- 全站注入 settings ----------
     @app.context_processor
     def inject_settings():
-        return dict(settings=SettingsModel.get_settings())
+        return dict(
+            settings=SettingsModel.get_settings(),
+            nav_categories=CategoryModel.get_all_categories()
+        )
 
     return app
 

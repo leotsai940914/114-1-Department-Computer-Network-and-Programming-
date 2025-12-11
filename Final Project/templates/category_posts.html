@@ -30,7 +30,7 @@
         {% endfor %}
     {% else %}
         <div class="empty-state">
-            <p>這個分類目前沒有文章。</p>
+            <p>這個分類目前沒有文章，快來寫下第一篇吧。</p>
             {% if session.get('role') == 'admin' %}
                 <a class="hero-btn" href="{{ url_for('post_routes.new_post') }}">撰寫第一篇</a>
             {% else %}

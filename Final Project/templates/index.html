@@ -41,33 +41,52 @@
 
 <!-- ========== 最新文章列表 ========== -->
 <section class="post-section">
-    <h2 class="section-title">最新文章</h2>
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">Latest</p>
+            <h2 class="section-title">最新文章</h2>
+            <p class="section-subtitle">每篇都是一段影像筆記，帶你快速回顧近期更新。</p>
+        </div>
+        {% if session.get('role') == 'admin' %}
+        <a class="hero-btn" href="{{ url_for('post_routes.new_post') }}">撰寫新文章</a>
+        {% endif %}
+    </div>
 
     {% if posts %}
-        {% for post in posts %}
-        <div class="post-card">
+        <div class="post-grid">
+            {% for post in posts %}
+            <article class="post-card">
 
-            <h3 class="post-title">
-                {% if loop.first and hero_post and hero_post.id == post['id'] %}
-                    <span class="post-badge">主打</span>
-                {% endif %}
-                <a href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
-                    {{ post['title'] }}
+                {% if post['cover_image_url'] %}
+                <a class="post-thumb" href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
+                    <img src="{{ post['cover_image_url'] }}" alt="{{ post['title'] }}">
                 </a>
-            </h3>
+                {% endif %}
 
-            <div class="meta-row">
-                <span class="meta-chip">{{ post['category_name'] }}</span>
-                <span>{{ post['created_at'] }}</span>
-            </div>
+                <div class="post-body">
+                    <div class="meta-row">
+                        <span class="meta-chip">{{ post['category_name'] }}</span>
+                        <span>{{ post['created_at'] }}</span>
+                        {% if loop.first and hero_post and hero_post.id == post['id'] %}
+                            <span class="meta-chip featured">主打</span>
+                        {% endif %}
+                    </div>
 
-            <p class="post-excerpt">
-                {{ post['content'] | striptags | truncate(100, True, '…') }}
-            </p>
-            <a class="inline-more" href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">閱讀更多 →</a>
+                    <h3 class="post-title">
+                        <a href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
+                            {{ post['title'] }}
+                        </a>
+                    </h3>
 
+                    <p class="post-excerpt">
+                        {{ post['content'] | striptags | truncate(120, True, '…') }}
+                    </p>
+                    <a class="inline-more" href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">閱讀更多 →</a>
+                </div>
+
+            </article>
+            {% endfor %}
         </div>
-        {% endfor %}
     {% else %}
         <div class="empty-state">
             <p>目前尚無文章。</p>
