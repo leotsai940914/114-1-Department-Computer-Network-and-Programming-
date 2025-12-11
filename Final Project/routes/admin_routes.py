@@ -106,7 +106,11 @@ def upload_image():
     os.makedirs(upload_dir, exist_ok=True)
     new_name = f"{uuid.uuid4().hex}.{ext}"
     save_path = os.path.join(upload_dir, new_name)
-    file.save(save_path)
+    # 以 werkzeug 嚴格存檔，並重新檢查副檔名
+    try:
+        file.save(save_path)
+    except Exception:
+        return jsonify({"error": "檔案儲存失敗"}), 500
 
     url = url_for("static", filename=f"uploads/{new_name}", _external=False)
     return jsonify({"url": url})

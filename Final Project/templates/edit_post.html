@@ -111,6 +111,22 @@
 
     </form>
 
+    <!-- 即時預覽 -->
+    <section class="preview-section">
+        <h3 class="section-title">即時預覽</h3>
+        <div class="preview-card">
+            <div class="preview-cover" id="previewCover">封面預覽</div>
+            <div class="preview-body">
+                <div class="meta-row">
+                    <span class="meta-chip" id="previewCategory">分類</span>
+                    <span class="meta-chip" id="previewReading">約 1 分鐘讀完</span>
+                </div>
+                <h3 class="post-title" id="previewTitle">尚未輸入標題</h3>
+                <p class="post-excerpt" id="previewExcerpt">開始輸入內容，預覽會同步更新。</p>
+            </div>
+        </div>
+    </section>
+
 </div>
 
 <!-- ===============================
@@ -162,6 +178,44 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         document.getElementById("contentInput-edit").value = html;
     };
+
+    // 即時預覽
+    const titleInput = document.querySelector("input[name='title']");
+    const categorySelect = document.querySelector("select[name='category_id']");
+    const coverInput = document.querySelector("input[name='cover_image']");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewExcerpt = document.getElementById("previewExcerpt");
+    const previewCategory = document.getElementById("previewCategory");
+    const previewReading = document.getElementById("previewReading");
+    const previewCover = document.getElementById("previewCover");
+
+    function updatePreview() {
+        previewTitle.textContent = titleInput.value.trim() || "尚未輸入標題";
+
+        const plain = quill.getText().trim();
+        const words = plain ? plain.split(/\\s+/).length : 0;
+        const minutes = Math.max(1, Math.round(words / 220));
+        previewReading.textContent = `約 ${minutes} 分鐘讀完`;
+        previewExcerpt.textContent = plain ? (plain.slice(0, 120) + (plain.length > 120 ? "…" : "")) : "開始輸入內容，預覽會同步更新。";
+
+        const categoryText = categorySelect.options[categorySelect.selectedIndex]?.text || "分類";
+        previewCategory.textContent = categoryText;
+
+        const coverUrl = coverInput.value.trim();
+        if (coverUrl) {
+            previewCover.innerHTML = `<img src=\"${coverUrl}\" alt=\"cover preview\">`;
+        } else {
+            previewCover.textContent = "封面預覽";
+            previewCover.innerHTML = "";
+            previewCover.textContent = "封面預覽";
+        }
+    }
+
+    titleInput.addEventListener("input", updatePreview);
+    categorySelect.addEventListener("change", updatePreview);
+    coverInput.addEventListener("input", updatePreview);
+    quill.on("text-change", updatePreview);
+    updatePreview();
 
 });
 </script>

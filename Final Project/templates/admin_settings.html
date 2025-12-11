@@ -147,42 +147,50 @@ document.addEventListener("DOMContentLoaded", function () {
                 container: "#toolbar",
                 handlers: {
                     image: function () {
-                        const input = document.createElement("input");
-                        input.type = "file";
-                        input.accept = "image/*";
-                        input.onchange = async () => {
-                            const file = input.files[0];
-                            if (!file) return;
-
-                            // 簡單前端檔案大小限制（與後端 MAX_CONTENT_LENGTH 相同）
-                            const MAX_BYTES = 5 * 1024 * 1024;
-                            if (file.size > MAX_BYTES) {
-                                alert("圖片檔案需小於 5 MB");
-                                return;
-                            }
-
-                            const formData = new FormData();
-                            formData.append("file", file);
-
-                            try {
-                            const res = await fetch("{{ url_for('admin_routes.upload_image') }}", {
-                                method: "POST",
-                                body: formData,
-                                headers: { "X-CSRFToken": csrfToken },
-                            });
-                                const data = await res.json();
-                                if (!res.ok || !data.url) {
-                                    throw new Error(data.error || "上傳失敗");
+                                const choice = prompt("輸入圖片網址，或直接按確定選擇本地檔");
+                                if (choice && choice.trim()) {
+                                    const range = quill.getSelection(true);
+                                    quill.insertEmbed(range.index, "image", choice.trim());
+                                    quill.setSelection(range.index + 1);
+                                    return;
                                 }
 
-                                const range = quill.getSelection(true);
-                                quill.insertEmbed(range.index, "image", data.url);
-                                quill.setSelection(range.index + 1);
-                            } catch (err) {
-                                alert(err.message || "圖片上傳失敗");
-                            }
-                        };
-                        input.click();
+                                const input = document.createElement("input");
+                                input.type = "file";
+                                input.accept = "image/*";
+                                input.onchange = async () => {
+                                    const file = input.files[0];
+                                    if (!file) return;
+
+                                    // 簡單前端檔案大小限制（與後端 MAX_CONTENT_LENGTH 相同）
+                                    const MAX_BYTES = 5 * 1024 * 1024;
+                                    if (file.size > MAX_BYTES) {
+                                        alert("圖片檔案需小於 5 MB");
+                                        return;
+                                    }
+
+                                    const formData = new FormData();
+                                    formData.append("file", file);
+
+                                    try {
+                                        const res = await fetch("{{ url_for('admin_routes.upload_image') }}", {
+                                            method: "POST",
+                                            body: formData,
+                                            headers: { "X-CSRFToken": csrfToken },
+                                        });
+                                        const data = await res.json();
+                                        if (!res.ok || !data.url) {
+                                            throw new Error(data.error || "上傳失敗");
+                                        }
+
+                                        const range = quill.getSelection(true);
+                                        quill.insertEmbed(range.index, "image", data.url);
+                                        quill.setSelection(range.index + 1);
+                                    } catch (err) {
+                                        alert(err.message || "圖片上傳失敗");
+                                    }
+                                };
+                                input.click();
                     }
                 }
             }
