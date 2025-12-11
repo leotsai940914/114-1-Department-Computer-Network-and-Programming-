@@ -79,6 +79,45 @@
         {% endfor %}
     </div>
 
+    <hr class="divider">
+
+    <h3 style="margin-top: 1.5rem;">使用者角色管理</h3>
+    <div class="post-card" style="margin-top: 1rem;">
+        <table style="width:100%; border-collapse: collapse; font-size:0.95rem;">
+            <thead>
+                <tr style="text-align:left;">
+                    <th style="padding:0.5rem 0.3rem;">ID</th>
+                    <th style="padding:0.5rem 0.3rem;">帳號</th>
+                    <th style="padding:0.5rem 0.3rem;">Email</th>
+                    <th style="padding:0.5rem 0.3rem;">角色</th>
+                    <th style="padding:0.5rem 0.3rem;">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr style="border-top:1px solid var(--color-border);">
+                    <td style="padding:0.4rem 0.3rem;">{{ u.id }}</td>
+                    <td style="padding:0.4rem 0.3rem;">{{ u.username }}</td>
+                    <td style="padding:0.4rem 0.3rem;">{{ u.email }}</td>
+                    <td style="padding:0.4rem 0.3rem;">{{ u.role }}</td>
+                    <td style="padding:0.4rem 0.3rem;">
+                        <form method="POST" action="{{ url_for('admin_routes.update_user_role', user_id=u.id) }}" style="display:flex; gap:0.4rem; align-items:center;">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                            <select name="role" class="form-input" style="padding:0.35rem 0.5rem; width:110px;">
+                                <option value="visitor" {% if u.role=='visitor' %}selected{% endif %}>Visitor</option>
+                                <option value="author" {% if u.role=='author' %}selected{% endif %}>Author</option>
+                                <option value="admin" {% if u.role=='admin' %}selected{% endif %}>Admin</option>
+                                <option value="developer" {% if u.role=='developer' %}selected{% endif %}>Developer</option>
+                            </select>
+                            <button type="submit" class="submit-btn" style="padding:0.35rem 0.8rem;">更新</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 {% endblock %}

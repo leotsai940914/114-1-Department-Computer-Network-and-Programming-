@@ -55,7 +55,9 @@
             <a href="{{ url_for('category_routes.about') }}">About</a>
 
             {% if session.get('user_id') %}
-                <a href="{{ url_for('post_routes.new_post') }}">New Post</a>
+                {% if session.get('role') in ['admin', 'author', 'developer'] %}
+                    <a href="{{ url_for('post_routes.new_post') }}">New Post</a>
+                {% endif %}
                 <a href="{{ url_for('auth_routes.logout') }}">Logout</a>
             {% else %}
                 <a href="{{ url_for('auth_routes.login') }}">Login</a>
@@ -64,7 +66,7 @@
 
             <a href="{{ url_for('post_routes.authors_index') }}">Authors</a>
 
-            {% if session.get('role') == 'admin' %}
+            {% if session.get('role') in ['admin', 'developer'] %}
                 <div class="admin-menu">
                     <button class="admin-toggle">☰</button>
                     <div class="admin-dropdown">

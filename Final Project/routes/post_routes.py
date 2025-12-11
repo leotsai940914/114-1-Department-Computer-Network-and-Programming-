@@ -131,7 +131,7 @@ def authors_index():
 # =============================
 @post_bp.route("/new_post", methods=["GET", "POST"])
 def new_post():
-    if session.get("role") != "admin":
+    if session.get("role") not in ("admin", "author", "developer"):
         abort(403)
 
     if request.method == "GET":
@@ -182,7 +182,7 @@ def new_post():
 # =============================
 @post_bp.route("/post/<int:post_id>/delete", methods=["POST"])
 def delete_post(post_id):
-    if session.get("role") != "admin":
+    if session.get("role") not in ("admin", "developer"):
         abort(403)
 
     post = PostModel.get_post_by_id(post_id)
@@ -198,12 +198,18 @@ def delete_post(post_id):
 # =============================
 @post_bp.route("/post/<int:post_id>/edit", methods=["GET"])
 def edit_post(post_id):
-    if session.get("role") != "admin":
+    role = session.get("role")
+    user_id = session.get("user_id")
+    if role not in ("admin", "author", "developer"):
         abort(403)
 
     post = PostModel.get_post_by_id(post_id)
     if not post:
         return render_template("error.html", message="文章不存在"), 404
+
+    # 作者只能編輯自己的文章
+    if role == "author" and post["user_id"] != user_id:
+        abort(403)
 
     categories = CategoryModel.get_all_categories()
 
@@ -219,7 +225,9 @@ def edit_post(post_id):
 # =============================
 @post_bp.route("/post/<int:post_id>/edit", methods=["POST"])
 def update_post(post_id):
-    if session.get("role") != "admin":
+    role = session.get("role")
+    user_id = session.get("user_id")
+    if role not in ("admin", "author", "developer"):
         abort(403)
 
     title = request.form.get("title")
@@ -252,6 +260,11 @@ def update_post(post_id):
             categories=categories,
             error="分類不存在，請重新選擇"
         )
+
+    # 只有作者本人或管理員可以更新
+    post = PostModel.get_post_by_id(post_id)
+    if role == "author" and post and post["user_id"] != user_id:
+        abort(403)
 
     # 更新 DB
     PostModel.update_post(

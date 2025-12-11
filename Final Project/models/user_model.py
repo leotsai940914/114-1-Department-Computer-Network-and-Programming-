@@ -58,6 +58,15 @@ class UserModel:
         return rows
 
     @staticmethod
+    def get_all_users():
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT id, username, email, role FROM users ORDER BY role DESC, username")
+        rows = cur.fetchall()
+        conn.close()
+        return rows
+
+    @staticmethod
     def update_profile(user_id, avatar_url=None, bio=None):
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -66,5 +75,17 @@ class UserModel:
             SET avatar_url = ?, bio = ?
             WHERE id = ?
         """, (avatar_url, bio, user_id))
+        conn.commit()
+        conn.close()
+
+    @staticmethod
+    def update_role(user_id, role):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            UPDATE users
+            SET role = ?
+            WHERE id = ?
+        """, (role, user_id))
         conn.commit()
         conn.close()

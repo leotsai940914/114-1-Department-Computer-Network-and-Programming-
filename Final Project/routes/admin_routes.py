@@ -18,7 +18,7 @@ admin_bp = Blueprint("admin_routes", __name__)
 # ===============================
 @admin_bp.route("/admin")
 def admin_home():
-    if session.get("role") != "admin":
+    if session.get("role") not in ("admin", "developer"):
         abort(403)
 
     # 所有文章
@@ -28,6 +28,7 @@ def admin_home():
     # 統計數據
     total_comments = CommentModel.count_all()      # 在 CommentModel 中實作
     total_categories = CategoryModel.count_all()   # 在 CategoryModel 中實作
+    users = UserModel.get_all_users()
 
     return render_template(
         "admin_home.html",
@@ -35,6 +36,7 @@ def admin_home():
         total_posts=total_posts,
         total_comments=total_comments,
         total_categories=total_categories,
+        users=users,
     )
 
 
@@ -43,7 +45,7 @@ def admin_home():
 # ===============================
 @admin_bp.route("/admin/settings", methods=["GET", "POST"])
 def admin_settings():
-    if session.get("role") != "admin":
+    if session.get("role") not in ("admin", "developer"):
         abort(403)
 
     if request.method == "POST":
@@ -96,7 +98,7 @@ def admin_settings():
 # ===============================
 @admin_bp.route("/admin/upload_image", methods=["POST"])
 def upload_image():
-    if session.get("role") != "admin":
+    if session.get("role") not in ("admin", "developer"):
         abort(403)
 
     if "file" not in request.files:
@@ -126,3 +128,19 @@ def upload_image():
 
     url = url_for("static", filename=f"uploads/{new_name}", _external=False)
     return jsonify({"url": url})
+
+
+# ===============================
+# 變更使用者角色（Admin Only）
+# ===============================
+@admin_bp.route("/admin/users/<int:user_id>/role", methods=["POST"])
+def update_user_role(user_id):
+    if session.get("role") not in ("admin", "developer"):
+        abort(403)
+
+    new_role = request.form.get("role")
+    if new_role not in ("admin", "author", "visitor", "developer"):
+        return abort(400)
+
+    UserModel.update_role(user_id, new_role)
+    return redirect(url_for("admin_routes.admin_home"))
