@@ -5,7 +5,7 @@ from datetime import datetime
 class PostModel:
 
     @staticmethod
-    def create_post(title, content, category_id, user_id, cover_image_url=None):
+    def create_post(title, content, category_id, user_id, cover_image_url=None, status="published"):
         """Create a new post with timestamp."""
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -13,9 +13,9 @@ class PostModel:
         created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         cursor.execute("""
-            INSERT INTO posts (title, content, category_id, user_id, created_at, cover_image_url)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (title, content, category_id, user_id, created_at, cover_image_url))
+            INSERT INTO posts (title, content, category_id, user_id, created_at, cover_image_url, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (title, content, category_id, user_id, created_at, cover_image_url, status))
 
         conn.commit()
         new_id = cursor.lastrowid
@@ -24,18 +24,23 @@ class PostModel:
 
 
     @staticmethod
-    def get_all_posts():
+    def get_all_posts(include_unpublished=False):
         """Fetch all posts with category name."""
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute("""
+        base_sql = """
             SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar
             FROM posts
             JOIN categories ON posts.category_id = categories.id
             JOIN users ON posts.user_id = users.id
-            ORDER BY created_at DESC
-        """)
+        """
+        if include_unpublished:
+            base_sql += " ORDER BY created_at DESC"
+            cursor.execute(base_sql)
+        else:
+            base_sql += " WHERE status = 'published' ORDER BY created_at DESC"
+            cursor.execute(base_sql)
 
         posts = cursor.fetchall()
         conn.close()
@@ -43,57 +48,73 @@ class PostModel:
 
 
     @staticmethod
-    def get_posts_by_category(category_id):
+    def get_posts_by_category(category_id, include_unpublished=False):
         """Fetch posts filtered by category ID."""
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute("""
+        sql = """
             SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar
             FROM posts
             JOIN categories ON posts.category_id = categories.id
             JOIN users ON posts.user_id = users.id
             WHERE category_id = ?
-            ORDER BY created_at DESC
-        """, (category_id,))
+        """
+        params = [category_id]
+        if not include_unpublished:
+            sql += " AND status = 'published'"
+        sql += " ORDER BY created_at DESC"
+        cursor.execute(sql, params)
 
         posts = cursor.fetchall()
         conn.close()
         return posts
 
     @staticmethod
-    def get_posts_by_user(user_id):
+    def get_posts_by_user(user_id, include_unpublished=False):
         """Fetch posts by author."""
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("""
+        sql = """
             SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar
             FROM posts
             JOIN categories ON posts.category_id = categories.id
             JOIN users ON posts.user_id = users.id
             WHERE user_id = ?
-            ORDER BY created_at DESC
-        """, (user_id,))
+        """
+        params = [user_id]
+        if not include_unpublished:
+            sql += " AND status = 'published'"
+        sql += " ORDER BY created_at DESC"
+        cursor.execute(sql, params)
         rows = cursor.fetchall()
         conn.close()
         return rows
 
     @staticmethod
-    def get_posts_by_user_paginated(user_id, limit, offset):
+    def get_posts_by_user_paginated(user_id, limit, offset, include_unpublished=False):
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("""
+        sql = """
             SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar
             FROM posts
             JOIN categories ON posts.category_id = categories.id
             JOIN users ON posts.user_id = users.id
             WHERE user_id = ?
-            ORDER BY created_at DESC
-            LIMIT ? OFFSET ?
-        """, (user_id, limit, offset))
+        """
+        params = [user_id]
+        if not include_unpublished:
+            sql += " AND status = 'published'"
+        sql += " ORDER BY created_at DESC LIMIT ? OFFSET ?"
+        params.extend([limit, offset])
+        cur.execute(sql, params)
         rows = cur.fetchall()
 
-        cur.execute("SELECT COUNT(*) AS cnt FROM posts WHERE user_id = ?", (user_id,))
+        count_sql = "SELECT COUNT(*) AS cnt FROM posts WHERE user_id = ?"
+        count_params = [user_id]
+        if not include_unpublished:
+            count_sql += " AND status = 'published'"
+        cur.execute(count_sql, count_params)
         total = cur.fetchone()["cnt"]
         conn.close()
         return rows, total
@@ -137,5 +158,13 @@ class PostModel:
             WHERE id = ?
         """, (title, content, category_id, cover_image_url, post_id))
 
+        conn.commit()
+        conn.close()
+
+    @staticmethod
+    def update_status(post_id, status):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("UPDATE posts SET status = ? WHERE id = ?", (status, post_id))
         conn.commit()
         conn.close()

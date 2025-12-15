@@ -30,9 +30,9 @@
                 {% endif %}
 
                 <div class="post-body">
-                    <div class="meta-row">
+                    <div class="meta-row meta-row-inline">
                         <span class="meta-chip">{{ post['category_name'] }}</span>
-                        <span>{{ post['created_at'] }}</span>
+                        <span class="meta-chip">{{ post['created_at'] }}</span>
                     </div>
                     <h3 class="post-title">
                         <a href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">

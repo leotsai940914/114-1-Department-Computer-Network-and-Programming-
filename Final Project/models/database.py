@@ -55,10 +55,16 @@ def create_tables():
             user_id INTEGER NOT NULL,
             created_at TEXT NOT NULL,
             cover_image_url TEXT,
+            status TEXT NOT NULL DEFAULT 'published',
             FOREIGN KEY (category_id) REFERENCES categories(id),
             FOREIGN KEY (user_id) REFERENCES users(id)
         );
     """)
+    # 補 posts.status 欄位
+    cur.execute("PRAGMA table_info(posts)")
+    post_cols = {row["name"] for row in cur.fetchall()}
+    if "status" not in post_cols:
+        cur.execute("ALTER TABLE posts ADD COLUMN status TEXT NOT NULL DEFAULT 'published'")
 
     # comments
     cur.execute("""

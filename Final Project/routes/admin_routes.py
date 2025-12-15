@@ -22,7 +22,7 @@ def admin_home():
         abort(403)
 
     # 所有文章
-    posts = PostModel.get_all_posts()
+    posts = PostModel.get_all_posts(include_unpublished=True)
     total_posts = len(posts)
 
     # 統計數據
@@ -142,5 +142,24 @@ def update_user_role(user_id):
     if new_role not in ("admin", "author", "visitor", "developer"):
         return abort(400)
 
+    # 保護 Developer 角色不被降級（至少要另一個 admin/developer）
+    target = UserModel.find_by_id(user_id)
+    if target and target["role"] == "developer" and new_role != "developer":
+        return abort(403)
+
     UserModel.update_role(user_id, new_role)
+    return redirect(url_for("admin_routes.admin_home"))
+
+
+# ===============================
+# 調整文章狀態（Admin/Developer）
+# ===============================
+@admin_bp.route("/admin/posts/<int:post_id>/status", methods=["POST"])
+def update_post_status(post_id):
+    if session.get("role") not in ("admin", "developer"):
+        abort(403)
+    status = request.form.get("status")
+    if status not in ("draft", "published"):
+        abort(400)
+    PostModel.update_status(post_id, status)
     return redirect(url_for("admin_routes.admin_home"))

@@ -166,7 +166,7 @@ button,
     align-items: center;
     position: relative;
     z-index: 1300;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .nav-links a {
@@ -177,27 +177,33 @@ button,
 
 .burger-toggle {
     display: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
     border: 1px solid var(--color-border);
     background: #fff;
     cursor: pointer;
-    margin-right: 0.8rem;
+    margin-right: 0.5rem;
     box-shadow: var(--shadow-sm);
     font-size: 1.1rem;
 }
 
 .theme-toggle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
     border: 1px solid var(--color-border);
     background: #fff;
     cursor: pointer;
-    margin-left: 0.5rem;
+    margin-left: 0.4rem;
     box-shadow: var(--shadow-sm);
     font-size: 1rem;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .dark-mode .burger-toggle,
@@ -262,6 +268,65 @@ button,
     .icon-after {
         display: none;
     }
+}
+
+.id-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f7f7f7, #eceff4);
+    color: #111;
+    font-size: 0.9rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.dark-mode .id-chip {
+    background: linear-gradient(135deg, #131a26, #0f172a);
+    color: #e8ecf2;
+}
+
+.role-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.role-admin { background: #d97706; }
+.role-author { background: #2563eb; }
+.role-developer { background: #16a34a; }
+.role-visitor { background: #6b7280; }
+
+.id-line {
+    font-weight: 600;
+    line-height: 1.2;
+}
+.id-sub {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.pill-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: #fff;
+    color: var(--color-text);
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.pill-btn:hover {
+    background: var(--color-border-soft);
+}
+
+.pill-btn.ghost {
+    background: transparent;
 }
 .logo a {
     font-size: 1.6rem;
@@ -343,6 +408,55 @@ button,
 }
 
 .admin-dropdown a:hover {
+    background: var(--color-border-soft);
+}
+
+.identity-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem var(--space-md);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+    background: rgba(255,255,255,0.7);
+}
+
+.dark-mode .identity-banner {
+    background: rgba(15,17,23,0.7);
+}
+
+.id-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: #eef1f6;
+    color: #111;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.dark-mode .id-badge {
+    background: #1d2432;
+    color: #e8ecf2;
+}
+
+.id-user {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.id-link {
+    color: var(--color-text);
+    text-decoration: none;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+}
+
+.id-link:hover {
     background: var(--color-border-soft);
 }
 
@@ -519,6 +633,15 @@ button,
     gap: 1rem;
 }
 
+.meta-row-inline {
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+
+.meta-row-inline .meta-chip {
+    white-space: nowrap;
+}
+
 .post-card .post-thumb {
     display: block;
     margin: -1.2rem -1.4rem 0.9rem;
@@ -579,11 +702,15 @@ button,
 
 .meta-row {
     display: flex;
-    gap: 0.6rem;
-    align-items: center;
     flex-wrap: wrap;
+    column-gap: 0.5rem;
+    row-gap: 0.3rem;
+    align-items: center;
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
+    min-height: 1.9rem;
+    margin: 0.2rem 0;
+    line-height: 1.5;
 }
 
 .meta-chip {
@@ -594,6 +721,9 @@ button,
     letter-spacing: 0.01em;
     text-decoration: none;
     color: var(--color-text);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .dark-mode .meta-chip {
@@ -613,6 +743,12 @@ button,
 .meta-chip.featured {
     background: #111;
     color: #fff;
+}
+
+.meta-row-inline .meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .post-excerpt {

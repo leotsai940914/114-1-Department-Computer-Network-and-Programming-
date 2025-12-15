@@ -64,9 +64,9 @@
                 {% endif %}
 
                 <div class="post-body">
-                    <div class="meta-row">
+                    <div class="meta-row meta-row-inline">
                         <span class="meta-chip">{{ post['category_name'] }}</span>
-                        <span>{{ post['created_at'] }}</span>
+                        <span class="meta-chip">{{ post['created_at'] }}</span>
                         {% if post['author_name'] %}
                         <a class="meta-chip" href="{{ url_for('post_routes.author_page', username=post['author_name']) }}">作者：{{ post['author_name'] }}</a>
                         {% endif %}

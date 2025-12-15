@@ -31,9 +31,6 @@
             </a>
         </div>
 
-        <button class="burger-toggle" aria-label="Toggle navigation">☰</button>
-        <button class="theme-toggle" aria-label="Toggle theme">☾</button>
-
         <nav class="nav-links">
             <a href="{{ url_for('index') }}">Home</a>
 
@@ -76,6 +73,24 @@
                 </div>
             {% endif %}
         </nav>
+
+        <div class="nav-actions">
+            <button class="burger-toggle" aria-label="Toggle navigation">☰</button>
+            <button class="theme-toggle" aria-label="Toggle theme">☾</button>
+            {% if current_user %}
+            <div class="id-chip">
+                <span class="role-dot role-{{ current_role|lower }}"></span>
+                <div>
+                    <div class="id-line">{{ current_user.username }}</div>
+                    <div class="id-sub">{{ current_role|title }}</div>
+                </div>
+            </div>
+            <a class="pill-btn" href="{{ url_for('auth_routes.logout') }}">Logout</a>
+            {% else %}
+            <a class="pill-btn" href="{{ url_for('auth_routes.login') }}">Login</a>
+            <a class="pill-btn ghost" href="{{ url_for('auth_routes.register') }}">Register</a>
+            {% endif %}
+        </div>
 
     </div>
 </header>

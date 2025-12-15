@@ -44,7 +44,7 @@
             </h3>
 
             <p class="post-meta">
-                {{ p.created_at }} ｜ 分類：{{ p.category_name }}
+                {{ p.created_at }} ｜ 分類：{{ p.category_name }} ｜ 狀態：{{ p.status }}
             </p>
 
             <div style="display: flex; gap: 1rem;">
@@ -55,6 +55,21 @@
                    style="padding: 0.4rem 0.8rem;">
                     編輯
                 </a>
+
+                <!-- 發布 / 草稿 -->
+                {% if p.status != 'published' %}
+                <form method="POST" action="{{ url_for('admin_routes.update_post_status', post_id=p.id) }}">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="status" value="published">
+                    <button class="submit-btn" style="padding:0.4rem 0.8rem;">發布</button>
+                </form>
+                {% else %}
+                <form method="POST" action="{{ url_for('admin_routes.update_post_status', post_id=p.id) }}">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="status" value="draft">
+                    <button class="submit-btn" style="padding:0.4rem 0.8rem; background:#666;">轉為草稿</button>
+                </form>
+                {% endif %}
 
                 <!-- 刪除 -->
                 <form method="POST"

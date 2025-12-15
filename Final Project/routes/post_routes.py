@@ -26,9 +26,17 @@ def post_detail(post_id):
     if not post:
         return render_template("error.html", message="文章不存在"), 404
 
+    # 未發布文章保護：僅作者本人或管理者可看
+    role = session.get("role")
+    user_id = session.get("user_id")
+    if post["status"] != "published":
+        if not (role in ("admin", "developer") or (role == "author" and user_id == post["user_id"])):
+            return render_template("error.html", message="文章尚未發布"), 403
+
     comments = CommentModel.get_comments_by_post(post_id)
     reading_time = _estimate_reading_time(post["content"])
-    author = UserModel.find_by_id(post["user_id"]) if post.get("user_id") else None
+    user_fk = post["user_id"]
+    author = UserModel.find_by_id(user_fk) if user_fk else None
 
     # 取得前後文章 + 同分類推薦
     all_posts = list(PostModel.get_all_posts())
@@ -73,7 +81,11 @@ def author_page(username):
     per_page = 6
     offset = (page - 1) * per_page
 
-    posts, total = PostModel.get_posts_by_user_paginated(user["id"], per_page, offset)
+    include_unpublished = False
+    if session.get("role") in ("admin", "developer") or (session.get("role") == "author" and session.get("user_id") == user["id"]):
+        include_unpublished = True
+
+    posts, total = PostModel.get_posts_by_user_paginated(user["id"], per_page, offset, include_unpublished=include_unpublished)
     total_pages = max(1, -(-total // per_page))
     return render_template(
         "author_posts.html",
@@ -166,12 +178,15 @@ def new_post():
             categories=categories
         )
 
+    status = "published" if session.get("role") in ("admin", "developer") else "draft"
+
     new_id = PostModel.create_post(
         title=title,
         content=content,
         category_id=category_id_int,
         user_id=session["user_id"],
-        cover_image_url=cover_image_url
+        cover_image_url=cover_image_url,
+        status=status
     )
 
     return redirect(url_for("post_routes.post_detail", post_id=new_id))

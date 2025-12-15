@@ -14,6 +14,7 @@ from models.database import create_tables, init_categories
 from models.post_model import PostModel
 from models.settings_model import SettingsModel   # ← 要 import
 from models.category_model import CategoryModel
+from models.user_model import UserModel
 
 
 def create_app():
@@ -75,9 +76,14 @@ def create_app():
     # ---------- 全站注入 settings ----------
     @app.context_processor
     def inject_settings():
+        user_obj = None
+        if session.get("user_id"):
+            user_obj = UserModel.find_by_id(session["user_id"])
         return dict(
             settings=SettingsModel.get_settings(),
-            nav_categories=CategoryModel.get_all_categories()
+            nav_categories=CategoryModel.get_all_categories(),
+            current_user=user_obj,
+            current_role=session.get("role") or "visitor"
         )
 
     return app
