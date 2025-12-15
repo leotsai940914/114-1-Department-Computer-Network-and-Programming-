@@ -3,6 +3,7 @@ Final Project/
 ├── app.py                      # Flask 主程式
 ├── config.py                   # 設定檔（包含 DB 路徑、secret key 等）
 ├── requirements.txt
+├── Procfile                    # 部署設定檔
 ├── .gitignore
 ├── instance/
 │   └── blog.db                 # SQLite 資料庫

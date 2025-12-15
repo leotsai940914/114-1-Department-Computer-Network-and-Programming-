@@ -531,4 +531,25 @@ Hero（2.2rem）、Section Title（1.6rem）、Card Title（1.2rem）、正文�
 - 行為符合一般 CMS 對文章刪除的 UX 標準
 
 
+[2025-12-15]
+完成 Step 6-4：部署準備與環境設定（Production Ready）
+
+- 建立 Procfile：
+    • 設定 web: gunicorn app:app，正式支援 Render / Railway 等 PaaS 部署
+- 更新 requirements.txt：
+    • 新增 gunicorn (WSGI Server)
+    • 確認所有依賴套件版本鎖定 (Blinker, Flask, Jinja2, etc.)
+- 優化 app.py 設定：
+    • 實作環境變數檢測 (FLASK_ENV / APP_ENV)
+    • 自動切換 DevelopmentConfig / ProductionConfig
+    • 強化 CSRF Protection：全站 POST 請求皆需驗證 Token
+    • 綁定 Port 8011 (Group 11)
+- 更新 README.md：
+    • 補全 Project Status、Tech Stack 與部署指令
+    • 文件完整度提升，方便其他人接手或評分
+
+此階段完成後，專案已完全符合正式上線標準，隨時可推送到雲端平台。
+
+
+
 
