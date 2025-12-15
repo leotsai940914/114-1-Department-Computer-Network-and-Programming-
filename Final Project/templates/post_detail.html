@@ -15,16 +15,15 @@
         <span class="meta-chip">{{ post.created_at }}</span>
         <span class="meta-chip reading-time">約 {{ reading_time }} 分鐘讀完</span>
         {% if author %}
-        <a class="meta-chip" href="{{ url_for('post_routes.author_page', username=author.username) }}">作者：{{ author.username }}</a>
+        <a class="meta-chip" href="{{ url_for('post_routes.author_page', username=author.username) }}">作者：{{
+            author.username }}</a>
         {% endif %}
     </div>
 
     <!-- ====== 封面圖片（若有） ====== -->
     {% if post.cover_image_url %}
-    <img src="{{ post.cover_image_url }}" 
-         alt="Cover Image"
-         style="width:100%; border-radius:6px; margin-bottom:1.5rem;"
-         class="cover-image">
+    <img src="{{ post.cover_image_url }}" alt="Cover Image" style="width:100%; border-radius:6px; margin-bottom:1.5rem;"
+        class="cover-image">
     {% endif %}
 
     {% if author %}
@@ -63,8 +62,10 @@
         <div class="share-label">分享這篇文章</div>
         <div class="share-buttons">
             <button type="button" class="share-btn" data-share="copy">複製連結</button>
-            <a class="share-btn" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}">Facebook</a>
-            <a class="share-btn" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url={{ request.url }}&text={{ post.title }}">X/Twitter</a>
+            <a class="share-btn" target="_blank" rel="noopener"
+                href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}">Facebook</a>
+            <a class="share-btn" target="_blank" rel="noopener"
+                href="https://twitter.com/intent/tweet?url={{ request.url }}&text={{ post.title }}">X/Twitter</a>
         </div>
     </section>
 
@@ -104,9 +105,7 @@
         {% endif %}
 
         <!-- 留言表單 -->
-        <form class="comment-form" 
-              method="POST"
-              action="{{ url_for('comment_routes.add_comment', post_id=post.id) }}">
+        <form class="comment-form" method="POST" action="{{ url_for('comment_routes.add_comment', post_id=post.id) }}">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
 
             <label>
@@ -125,15 +124,15 @@
         <!-- ====== 留言列表 ====== -->
         <div class="comment-list">
             {% if comments %}
-                {% for c in comments %}
-                <div class="comment-item">
-                    <p class="comment-author">{{ c.nickname }}：</p>
-                    <p class="comment-text">{{ c.content }}</p>
-                    <p style="font-size:0.8rem; color:#999;">{{ c.created_at }}</p>
-                </div>
-                {% endfor %}
+            {% for c in comments %}
+            <div class="comment-item">
+                <p class="comment-author">{{ c.nickname }}：</p>
+                <p class="comment-text">{{ c.content }}</p>
+                <p style="font-size:0.8rem; color:#999;">{{ c.created_at }}</p>
+            </div>
+            {% endfor %}
             {% else %}
-                <p style="color:#666;">還沒有留言，成為第一位留言的人吧！</p>
+            <p style="color:#666;">還沒有留言，成為第一位留言的人吧！</p>
             {% endif %}
         </div>
 
@@ -148,14 +147,14 @@
 </div>
 
 
-<!-- ====== Admin 控制按鈕（編輯 / 刪除） ====== -->
-{% if session.get("role") == "admin" %}
+<!-- ====== Admin / Author 控制按鈕（編輯 / 刪除） ====== -->
+{% if session.get("role") in ["admin", "developer"] or (session.get("role") == "author" and current_user and
+current_user.id == post.user_id) %}
 <div style="margin-top: 2rem;" class="container">
     <div style="display:flex; gap:1rem;">
 
         <!-- 編輯文章 -->
-        <a href="{{ url_for('post_routes.edit_post', post_id=post.id) }}"
-           style="
+        <a href="{{ url_for('post_routes.edit_post', post_id=post.id) }}" style="
                background:#222;
                color:#fff;
                padding:0.5rem 1rem;
@@ -167,9 +166,8 @@
         </a>
 
         <!-- 刪除文章 -->
-        <form method="POST"
-              action="{{ url_for('post_routes.delete_post', post_id=post.id) }}"
-              onsubmit="return confirm('確定要刪除這篇文章嗎？此動作無法復原。');">
+        <form method="POST" action="{{ url_for('post_routes.delete_post', post_id=post.id) }}"
+            onsubmit="return confirm('確定要刪除這篇文章嗎？此動作無法復原。');">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
 
             <button type="submit" style="

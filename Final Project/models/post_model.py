@@ -48,6 +48,54 @@ class PostModel:
 
 
     @staticmethod
+    def get_all_posts_paginated(limit, offset):
+        """Fetch all published posts with pagination."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        sql = """
+            SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar
+            FROM posts
+            JOIN categories ON posts.category_id = categories.id
+            JOIN users ON posts.user_id = users.id
+            WHERE status = 'published'
+            ORDER BY created_at DESC
+            LIMIT ? OFFSET ?
+        """
+        cursor.execute(sql, (limit, offset))
+        posts = cursor.fetchall()
+
+        count_sql = "SELECT COUNT(*) as valid_count FROM posts WHERE status = 'published'"
+        cursor.execute(count_sql)
+        total = cursor.fetchone()["valid_count"]
+
+        conn.close()
+        return posts, total
+
+
+    @staticmethod
+    def search_posts(query):
+        """Search published posts by title or content."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        sql = """
+            SELECT posts.*, categories.name AS category_name, users.username AS author_name, users.avatar_url AS author_avatar
+            FROM posts
+            JOIN categories ON posts.category_id = categories.id
+            JOIN users ON posts.user_id = users.id
+            WHERE status = 'published'
+            AND (title LIKE ? OR content LIKE ?)
+            ORDER BY created_at DESC
+        """
+        like_query = f"%{query}%"
+        cursor.execute(sql, (like_query, like_query))
+        posts = cursor.fetchall()
+        conn.close()
+        return posts
+
+
+    @staticmethod
     def get_posts_by_category(category_id, include_unpublished=False):
         """Fetch posts filtered by category ID."""
         conn = get_db_connection()

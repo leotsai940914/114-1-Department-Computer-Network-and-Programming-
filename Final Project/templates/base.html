@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="zh-Hant">
+
 <head>
     <meta charset="utf-8" />
 
@@ -18,48 +19,49 @@
 <body>
 
 
-<!-- =============================
+    <!-- =============================
      NAVBAR
 ============================== -->
-<header class="site-header">
-    <div class="container nav-container">
+    <header class="site-header">
+        <div class="container nav-container">
 
-        <!-- 動態網站名稱（後台可編輯） -->
-        <div class="logo">
-            <a href="{{ url_for('index') }}">
-                {{ settings.site_title or "LumenFilm" }}
-            </a>
-        </div>
-
-        <nav class="nav-links">
-            <a href="{{ url_for('index') }}">Home</a>
-
-            <!-- Categories -->
-            <div class="dropdown">
-                <a class="dropdown-toggle">Categories ▼</a>
-                <div class="dropdown-menu">
-                    {% if nav_categories %}
-                        {% for cat in nav_categories %}
-                            <a href="{{ url_for('category_routes.category_page', name=cat['name']) }}">{{ cat['name'] }}</a>
-                        {% endfor %}
-                    {% else %}
-                        <span style="display:block;padding:0.6rem 1rem;color:#888;">尚無分類</span>
-                    {% endif %}
-                </div>
+            <!-- 動態網站名稱（後台可編輯） -->
+            <div class="logo">
+                <a href="{{ url_for('index') }}">
+                    {{ settings.site_title or "LumenFilm" }}
+                </a>
             </div>
 
-            <!-- 動態 About 頁 -->
-            <a href="{{ url_for('category_routes.about') }}">About</a>
+            <nav class="nav-links">
+                <a href="{{ url_for('index') }}">Home</a>
 
-            {% if session.get('user_id') %}
+                <!-- Categories -->
+                <div class="dropdown">
+                    <a class="dropdown-toggle">Categories ▼</a>
+                    <div class="dropdown-menu">
+                        {% if nav_categories %}
+                        {% for cat in nav_categories %}
+                        <a href="{{ url_for('category_routes.category_page', name=cat['name']) }}">{{ cat['name'] }}</a>
+                        {% endfor %}
+                        {% else %}
+                        <span style="display:block;padding:0.6rem 1rem;color:#888;">尚無分類</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- 動態 About 頁 -->
+                <a href="{{ url_for('category_routes.about') }}">About</a>
+
+                {% if session.get('user_id') %}
                 {% if session.get('role') in ['admin', 'author', 'developer'] %}
-                    <a href="{{ url_for('post_routes.new_post') }}">New Post</a>
+                <a href="{{ url_for('post_routes.new_post') }}">New Post</a>
                 {% endif %}
-            {% endif %}
+                {% endif %}
 
-            <a href="{{ url_for('post_routes.authors_index') }}">Authors</a>
+                <a href="{{ url_for('post_routes.authors_index') }}">Authors</a>
+                <a href="{{ url_for('post_routes.search') }}">Search</a>
 
-            {% if session.get('role') in ['admin', 'developer'] %}
+                {% if session.get('role') in ['admin', 'developer'] %}
                 <div class="admin-menu">
                     <button class="admin-toggle">☰</button>
                     <div class="admin-dropdown">
@@ -67,64 +69,65 @@
                         <a href="{{ url_for('admin_routes.admin_settings') }}">Settings</a>
                     </div>
                 </div>
-            {% endif %}
-        </nav>
+                {% endif %}
+            </nav>
 
-        <div class="nav-actions">
-            <button class="burger-toggle" aria-label="Toggle navigation">☰</button>
-            <button class="theme-toggle" aria-label="Toggle theme">☾</button>
-            {% if current_user %}
-            <div class="id-chip">
-                <span class="role-dot role-{{ current_role|lower }}"></span>
-                <div>
-                    <div class="id-line">{{ current_user.username }}</div>
-                    <div class="id-sub">{{ current_role|title }}</div>
+            <div class="nav-actions">
+                <button class="burger-toggle" aria-label="Toggle navigation">☰</button>
+                <button class="theme-toggle" aria-label="Toggle theme">☾</button>
+                {% if current_user %}
+                <div class="id-chip">
+                    <span class="role-dot role-{{ current_role|lower }}"></span>
+                    <div>
+                        <div class="id-line">{{ current_user.username }}</div>
+                        <div class="id-sub">{{ current_role|title }}</div>
+                    </div>
                 </div>
+                <a class="pill-btn" href="{{ url_for('auth_routes.logout') }}">Logout</a>
+                {% else %}
+                <a class="pill-btn" href="{{ url_for('auth_routes.login') }}">Login</a>
+                <a class="pill-btn ghost" href="{{ url_for('auth_routes.register') }}">Register</a>
+                {% endif %}
             </div>
-            <a class="pill-btn" href="{{ url_for('auth_routes.logout') }}">Logout</a>
-            {% else %}
-            <a class="pill-btn" href="{{ url_for('auth_routes.login') }}">Login</a>
-            <a class="pill-btn ghost" href="{{ url_for('auth_routes.register') }}">Register</a>
-            {% endif %}
+
         </div>
+    </header>
 
-    </div>
-</header>
-
-<div id="navOverlay"></div>
+    <div id="navOverlay"></div>
 
 
-<!-- =============================
+    <!-- =============================
      MAIN CONTENT
 ============================== -->
-<main class="container main-content">
-    {% block content %}
-    {% endblock %}
-</main>
+    <main class="container main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
 
 
-<!-- =============================
+    <!-- =============================
      FOOTER（動態）
 ============================== -->
-<footer class="site-footer">
-    <div class="container footer-content">
-        <p class="footer-text">
-            {{ settings.footer_text or "寫下每一部電影留給我們的影像與思考" }}<br>
-            © {{ settings.site_title or "LumenFilm" }} 2025
-        </p>
-    </div>
-</footer>
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <p class="footer-text">
+                {{ settings.footer_text or "寫下每一部電影留給我們的影像與思考" }}<br>
+                © {{ settings.site_title or "LumenFilm" }} 2025
+            </p>
+        </div>
+    </footer>
 
 
-<!-- =============================
+    <!-- =============================
      SCRIPTS
 ============================== -->
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
-<!-- Lightbox Overlay -->
-<div id="lightboxOverlay">
-    <img id="lightboxImage" src="">
-</div>
+    <!-- Lightbox Overlay -->
+    <div id="lightboxOverlay">
+        <img id="lightboxImage" src="">
+    </div>
 
 </body>
+
 </html>

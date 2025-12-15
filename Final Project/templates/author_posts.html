@@ -17,55 +17,61 @@
         </div>
     </div>
 
-    <h2 class="section-title" style="margin-top:1.5rem;">{{ author.username }} 的文章</h2>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem;">
+        <h2 class="section-title" style="margin:0;">{{ author.username }} 的文章</h2>
+        <a href="{{ url_for('post_routes.author_rss', username=author.username) }}" target="_blank"
+            style="font-size:0.9rem; color:var(--color-text-muted); text-decoration:none;">
+            RSS 訂閱
+        </a>
+    </div>
 
     {% if posts %}
-        <div class="post-grid" style="margin-top:1rem;">
-            {% for post in posts %}
-            <article class="post-card">
-                {% if post['cover_image_url'] %}
-                <a class="post-thumb" href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
-                    <img src="{{ post['cover_image_url'] }}" alt="{{ post['title'] }}">
-                </a>
-                {% endif %}
+    <div class="post-grid" style="margin-top:1rem;">
+        {% for post in posts %}
+        <article class="post-card">
+            {% if post['cover_image_url'] %}
+            <a class="post-thumb" href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
+                <img src="{{ post['cover_image_url'] }}" alt="{{ post['title'] }}">
+            </a>
+            {% endif %}
 
-                <div class="post-body">
-                    <div class="meta-row meta-row-inline">
-                        <span class="meta-chip">{{ post['category_name'] }}</span>
-                        <span class="meta-chip">{{ post['created_at'] }}</span>
-                    </div>
-                    <h3 class="post-title">
-                        <a href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
-                            {{ post['title'] }}
-                        </a>
-                    </h3>
-                    <p class="post-excerpt">
-                        {{ post['content'] | striptags | truncate(120, True, '…') }}
-                    </p>
-                    <a class="inline-more" href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">閱讀更多 →</a>
+            <div class="post-body">
+                <div class="meta-row meta-row-inline">
+                    <span class="meta-chip">{{ post['category_name'] }}</span>
+                    <span class="meta-chip">{{ post['created_at'] }}</span>
                 </div>
-            </article>
-            {% endfor %}
-        </div>
+                <h3 class="post-title">
+                    <a href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
+                        {{ post['title'] }}
+                    </a>
+                </h3>
+                <p class="post-excerpt">
+                    {{ post['content'] | striptags | truncate(120, True, '…') }}
+                </p>
+                <a class="inline-more" href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">閱讀更多 →</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
 
-        {% if total_pages > 1 %}
-        <div class="pagination">
-            {% if page > 1 %}
-            <a href="{{ url_for('post_routes.author_page', username=author.username, page=page-1) }}">上一頁</a>
-            {% endif %}
-            <span>第 {{ page }} / {{ total_pages }} 頁</span>
-            {% if page < total_pages %}
-            <a href="{{ url_for('post_routes.author_page', username=author.username, page=page+1) }}">下一頁</a>
-            {% endif %}
-        </div>
+    {% if total_pages > 1 %}
+    <div class="pagination">
+        {% if page > 1 %}
+        <a href="{{ url_for('post_routes.author_page', username=author.username, page=page-1) }}">上一頁</a>
         {% endif %}
-    {% else %}
-        <div class="empty-state">
-            <p>這位作者還沒有文章。</p>
-            {% if session.get('role') == 'admin' and session.get('user_id') == author.id %}
-                <a class="hero-btn" href="{{ url_for('post_routes.new_post') }}">撰寫第一篇</a>
+        <span>第 {{ page }} / {{ total_pages }} 頁</span>
+        {% if page < total_pages %} <a
+            href="{{ url_for('post_routes.author_page', username=author.username, page=page+1) }}">下一頁</a>
             {% endif %}
-        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <p>這位作者還沒有文章。</p>
+        {% if session.get('role') == 'admin' and session.get('user_id') == author.id %}
+        <a class="hero-btn" href="{{ url_for('post_routes.new_post') }}">撰寫第一篇</a>
+        {% endif %}
+    </div>
     {% endif %}
 
 </div>

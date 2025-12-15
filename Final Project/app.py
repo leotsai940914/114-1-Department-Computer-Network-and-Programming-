@@ -64,14 +64,21 @@ def create_app():
     # ---------- 首頁 ----------
     @app.route("/")
     def index():
-        posts = PostModel.get_all_posts()
+        page = request.args.get("page", 1, type=int)
+        per_page = 9  # Index per page
+        offset = (page - 1) * per_page
+        
+        posts, total = PostModel.get_all_posts_paginated(per_page, offset)
+        total_pages = max(1, -(-total // per_page))
+
         settings = SettingsModel.get_settings()
         hero_post = None
         if settings:
             featured_id = settings["featured_post_id"]
             if featured_id:
                 hero_post = PostModel.get_post_by_id(featured_id)
-        return render_template("index.html", posts=posts, hero_post=hero_post)
+        
+        return render_template("index.html", posts=posts, hero_post=hero_post, page=page, total_pages=total_pages)
 
     # ---------- 全站注入 settings ----------
     @app.context_processor

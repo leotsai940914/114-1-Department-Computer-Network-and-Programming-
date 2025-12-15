@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding-top:2rem;">
+
+    <h1 class="section-title">搜尋結果</h1>
+    <p class="section-subtitle">關鍵字：{{ query }}</p>
+
+    <div style="margin-bottom:2rem;">
+        <form action="{{ url_for('post_routes.search') }}" method="GET" class="search-form-page">
+            <input type="text" name="q" value="{{ query }}" placeholder="再次搜尋..." class="search-input-page">
+            <button type="submit" class="hero-btn">搜尋</button>
+        </form>
+    </div>
+
+    {% if message %}
+    <p style="color:#666;">{{ message }}</p>
+    {% elif posts %}
+    <div class="post-grid">
+        {% for post in posts %}
+        <article class="post-card">
+            {% if post['cover_image_url'] %}
+            <a class="post-thumb" href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
+                <img src="{{ post['cover_image_url'] }}" alt="{{ post['title'] }}">
+            </a>
+            {% endif %}
+
+            <div class="post-body">
+                <div class="meta-row meta-row-inline">
+                    <span class="meta-chip">{{ post['category_name'] }}</span>
+                    <span class="meta-chip">{{ post['created_at'] }}</span>
+                </div>
+                <h3 class="post-title">
+                    <a href="{{ url_for('post_routes.post_detail', post_id=post['id']) }}">
+                        {{ post['title'] }}
+                    </a>
+                </h3>
+                <p class="post-excerpt">
+                    {{ post['content'] | striptags | truncate(100, True, '…') }}
+                </p>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>沒有找到與「{{ query }}」相關的文章。</p>
+    {% endif %}
+
+</div>
+
+<style>
+    .search-form-page {
+        display: flex;
+        gap: 0.5rem;
+        max-width: 500px;
+    }
+
+    .search-input-page {
+        flex: 1;
+        padding: 0.6rem 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        font-size: 1rem;
+        background: var(--color-card-bg);
+        color: var(--color-text);
+    }
+</style>
+{% endblock %}

@@ -17,6 +17,20 @@ def _estimate_reading_time(html):
     return minutes
 
 
+
+# =============================
+# 搜尋文章
+# =============================
+@post_bp.route("/search")
+def search():
+    query = request.args.get("q", "")
+    if not query:
+        return render_template("search.html", posts=[], query="", message="請輸入關鍵字")
+    
+    posts = PostModel.search_posts(query)
+    return render_template("search.html", posts=posts, query=query)
+
+
 # =============================
 # 單篇文章頁（含留言）
 # =============================
