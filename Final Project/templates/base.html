@@ -55,10 +55,6 @@
                 {% if session.get('role') in ['admin', 'author', 'developer'] %}
                     <a href="{{ url_for('post_routes.new_post') }}">New Post</a>
                 {% endif %}
-                <a href="{{ url_for('auth_routes.logout') }}">Logout</a>
-            {% else %}
-                <a href="{{ url_for('auth_routes.login') }}">Login</a>
-                <a href="{{ url_for('auth_routes.register') }}">Register</a>
             {% endif %}
 
             <a href="{{ url_for('post_routes.authors_index') }}">Authors</a>
