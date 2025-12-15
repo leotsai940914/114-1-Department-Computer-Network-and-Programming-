@@ -98,4 +98,5 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True)
+    # Group 11: Port 8011
+    app.run(host='0.0.0.0', port=8011, debug=True)
